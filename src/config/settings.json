@@ -1,0 +1,13 @@
+{
+  "title": "Arco Pro",
+  "navbar": true,
+  "tabbar": false,
+  "device": "desktop",
+  "theme": "light",
+  "menu": true,
+  "hideMenu": false,
+  "menuCollapse": false,
+  "menuWidth": 220,
+  "footer": true,
+  "settingVisible": false
+}
