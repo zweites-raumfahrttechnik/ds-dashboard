@@ -18,11 +18,12 @@
     }
   },
   "include": [
+    "mock/**/*.ts",
     "src/**/*.ts",
     "src/**/*.d.ts",
     "src/**/*.tsx",
     "src/**/*.vue",
-    "./auto-imports.d.ts"
+    "auto-imports.d.ts"
   ],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

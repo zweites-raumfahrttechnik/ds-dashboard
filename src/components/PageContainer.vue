@@ -14,5 +14,7 @@ const props = defineProps<{ items?: string[] }>();
 <style lang="less" scoped>
 .container {
   padding: 0 20px 20px;
+  flex-direction: column;
+  display: flex;
 }
 </style>
