@@ -1,27 +1,29 @@
 <script lang="ts" setup>
-import { Spin, Card } from '@arco-design/web-vue';
+import { Card } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
 
 import Form from './components/AddConnectForm.vue';
 import Success from './components/AddConnectSuccess.vue';
 
 const step = ref(0);
+
+const changeStep = (idx: number) => {
+  step.value = idx;
+};
 </script>
 
 <template>
   <PageContainer>
-    <Spin>
-      <Card>
-        <template #title>添加数据库连接</template>
+    <Card>
+      <template #title>添加数据库连接</template>
 
-        <div class="wrap">
-          <KeepAlive>
-            <Form v-if="step === 0" />
-            <Success v-else-if="step === 1" />
-          </KeepAlive>
-        </div>
-      </Card>
-    </Spin>
+      <div class="wrap">
+        <KeepAlive>
+          <Form v-if="step === 0" @change-step="changeStep" />
+          <Success v-else-if="step === 1" @change-step="changeStep" />
+        </KeepAlive>
+      </div>
+    </Card>
   </PageContainer>
 </template>
 

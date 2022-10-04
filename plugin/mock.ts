@@ -3,7 +3,8 @@ import { viteMockServe } from 'vite-plugin-mock';
 function createMockPlugin() {
   return [
     viteMockServe({
-      ignore: /^_*./,
+      ignore: /^_/,
+      mockPath: 'mock',
     }),
   ];
 }

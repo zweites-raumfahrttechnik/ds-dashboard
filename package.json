@@ -31,6 +31,7 @@
     "@arco-design/web-vue": "^2.37.4",
     "@types/nprogress": "^0.2.0",
     "@vueuse/core": "^9.3.0",
+    "@vueuse/integrations": "^9.3.0",
     "axios": "^0.27.2",
     "nprogress": "^0.2.0",
     "vue": "^3.2.40",

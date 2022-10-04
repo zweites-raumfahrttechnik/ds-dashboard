@@ -8,6 +8,7 @@ specifiers:
   '@vitejs/plugin-vue': ^3.1.2
   '@vitejs/plugin-vue-jsx': ^2.0.1
   '@vueuse/core': ^9.3.0
+  '@vueuse/integrations': ^9.3.0
   axios: ^0.27.2
   consola: ^2.15.3
   eslint: ^8.24.0
@@ -42,6 +43,7 @@ dependencies:
   '@arco-design/web-vue': 2.37.4_vue@3.2.40
   '@types/nprogress': 0.2.0
   '@vueuse/core': 9.3.0_vue@3.2.40
+  '@vueuse/integrations': 9.3.0_utnibork7z3tfwsuiw7p2cwkdm
   axios: 0.27.2
   nprogress: 0.2.0
   vue: 3.2.40
@@ -938,6 +940,51 @@ packages:
     transitivePeerDependencies:
       - '@vue/composition-api'
       - vue
+
+  /@vueuse/integrations/9.3.0_utnibork7z3tfwsuiw7p2cwkdm:
+    resolution: {integrity: sha512-KkJpC97VioZUpSw7rvgnqoLgTztLlLLGdYp6WQKn69cJiItsJVSRZrmI+X9YVxPBzuLvRymYZfp0RMyISVFHTw==}
+    peerDependencies:
+      async-validator: '*'
+      axios: '*'
+      change-case: '*'
+      drauu: '*'
+      focus-trap: '*'
+      fuse.js: '*'
+      jwt-decode: '*'
+      nprogress: '*'
+      qrcode: '*'
+      universal-cookie: '*'
+    peerDependenciesMeta:
+      async-validator:
+        optional: true
+      axios:
+        optional: true
+      change-case:
+        optional: true
+      drauu:
+        optional: true
+      focus-trap:
+        optional: true
+      fuse.js:
+        optional: true
+      jwt-decode:
+        optional: true
+      nprogress:
+        optional: true
+      qrcode:
+        optional: true
+      universal-cookie:
+        optional: true
+    dependencies:
+      '@vueuse/core': 9.3.0_vue@3.2.40
+      '@vueuse/shared': 9.3.0_vue@3.2.40
+      axios: 0.27.2
+      nprogress: 0.2.0
+      vue-demi: 0.13.11_vue@3.2.40
+    transitivePeerDependencies:
+      - '@vue/composition-api'
+      - vue
+    dev: false
 
   /@vueuse/metadata/9.3.0:
     resolution: {integrity: sha512-GnnfjbzIPJIh9ngL9s9oGU1+Hx/h5/KFqTfJykzh/1xjaHkedV9g0MASpdmPZIP+ynNhKAcEfA6g5i8KXwtoMA==}
