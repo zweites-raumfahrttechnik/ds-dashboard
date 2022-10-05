@@ -29,6 +29,7 @@ const connect: RouteRecordRaw = {
     requireAuth: true,
     locale: '数据库连接',
     icon: 'icon-bookmark',
+    order: 2,
   },
 };
 

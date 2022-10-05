@@ -3,7 +3,5 @@ import PageContainer from '@/components/PageContainer.vue';
 </script>
 
 <template>
-  <PageContainer>
-    <div>welcome 1</div>
-  </PageContainer>
+  <PageContainer> state </PageContainer>
 </template>

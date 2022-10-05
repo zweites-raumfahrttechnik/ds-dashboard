@@ -14,12 +14,12 @@ interface TabModelState {
   cached: Set<string>;
 }
 
-const DEFAULT_NAME = 'Welcome';
+const DEFAULT_NAME = 'Overview';
 
 const DEFAULT_ROUTE = {
   title: '欢迎',
   name: DEFAULT_NAME,
-  fullPath: '/dashboard/welcome',
+  fullPath: '/dashboard/overview',
 };
 
 const BAN_LIST = [REDIRECT_NAME, DEFAULT_NAME];
