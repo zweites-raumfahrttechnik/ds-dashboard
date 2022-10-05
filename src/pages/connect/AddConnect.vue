@@ -14,7 +14,7 @@ const changeStep = (idx: number) => {
 
 <template>
   <PageContainer>
-    <Card>
+    <Card class="general-card" :bordered="false">
       <template #title>添加数据库连接</template>
 
       <div class="wrap">

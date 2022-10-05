@@ -125,7 +125,7 @@ const handleDeleteConnect = (uuid: string) => {
 
 <template>
   <PageContainer>
-    <Card>
+    <Card class="general-card" :bordered="false">
       <template #title>查看数据库连接</template>
 
       <Row>
