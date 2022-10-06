@@ -24,3 +24,9 @@ export interface ChartValue {
   growth: number;
   value: number[];
 }
+
+export interface ConcurrentChartValue {
+  xAxis: string[];
+  concurrent: number[];
+  through: number[];
+}

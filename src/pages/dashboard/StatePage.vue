@@ -9,6 +9,8 @@ import { GetListData, GetListDataItem } from '@/api/types';
 import PageContainer from '@/components/PageContainer.vue';
 
 import ChainChart from './components/ChainChart.vue';
+import OccupyChart from './components/OccupyChart.vue';
+import ConcurrentChart from './components/ConcurrentChart.vue';
 
 const form = reactive<{ type: number; uuid: string; pg: number }>({ type: 1, uuid: '', pg: 1 });
 const dbs = ref<GetListDataItem[]>([]);
@@ -113,21 +115,9 @@ const selectLoadMore = () => {
 
       <ChainChart :uuid="form.uuid" />
 
-      <Row :gutter="16">
-        <Col :span="12">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
+      <OccupyChart :uuid="form.uuid" />
 
-        <Col :span="12">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
-      </Row>
-
-      <Row :gutter="16">
-        <Col :span="24">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
-      </Row>
+      <ConcurrentChart :uuid="form.uuid" />
     </Space>
   </PageContainer>
 </template>

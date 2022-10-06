@@ -15,11 +15,15 @@ const props = defineProps<{
   chartType: 'bar' | 'line';
 }>();
 
-const { data, execute } = useAxios<ResponseWrap<ChartValue>>(props.url, {}, instance);
+const { data, execute } = useAxios<ResponseWrap<ChartValue>>(
+  props.url,
+  { params: { uuid: props.uuid } },
+  instance,
+);
 
 watch(
   () => props.uuid,
-  () => execute(),
+  () => execute({ params: { uuid: props.uuid } }),
 );
 
 const growth = computed(() => {
