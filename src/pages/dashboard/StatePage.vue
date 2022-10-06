@@ -8,6 +8,8 @@ import { GetListData, GetListDataItem } from '@/api/types';
 
 import PageContainer from '@/components/PageContainer.vue';
 
+import ChainChart from './components/ChainChart.vue';
+
 const form = reactive<{ type: number; uuid: string; pg: number }>({ type: 1, uuid: '', pg: 1 });
 const dbs = ref<GetListDataItem[]>([]);
 
@@ -109,23 +111,7 @@ const selectLoadMore = () => {
         </Form>
       </Card>
 
-      <Row :gutter="16">
-        <Col :span="6">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
-
-        <Col :span="6">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
-
-        <Col :span="6">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
-
-        <Col :span="6">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
-      </Row>
+      <ChainChart :uuid="form.uuid" />
 
       <Row :gutter="16">
         <Col :span="12">
@@ -138,11 +124,7 @@ const selectLoadMore = () => {
       </Row>
 
       <Row :gutter="16">
-        <Col :span="12">
-          <Card class="general-card" :bordered="false"></Card>
-        </Col>
-
-        <Col :span="12">
+        <Col :span="24">
           <Card class="general-card" :bordered="false"></Card>
         </Col>
       </Row>

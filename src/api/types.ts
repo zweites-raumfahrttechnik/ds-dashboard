@@ -18,3 +18,9 @@ export interface GetListData {
   count: number;
   data: GetListDataItem[];
 }
+
+export interface ChartValue {
+  count: number;
+  growth: number;
+  value: number[];
+}
