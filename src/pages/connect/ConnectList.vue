@@ -21,25 +21,15 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 
 import { instance, ResponseWrap } from '@/api';
 import { CONNECT_URL } from '@/api/url';
+import { GetConnectListParams, GetListData } from '@/api/types';
 
 import PageContainer from '@/components/PageContainer.vue';
 
-interface SearchParams {
-  pg: number;
-  size: number;
-  ip?: string;
-  username?: string;
-  type?: 1 | 2 | 3 | 4 | 5 | 6;
-}
-
-interface GetListData {
-  count: number;
-  data: { uuid: string; username: string; ip: string; port: number; type: number }[];
-}
+type SearchParams = GetConnectListParams;
 
 const searchFormRef = ref<FormInstance>();
 
-const searchFormdata = reactive<{ ip?: string; username?: string; type?: 1 | 2 | 3 | 4 | 5 | 6 }>({
+const searchFormdata = reactive<Pick<SearchParams, 'ip' | 'username' | 'type'>>({
   ip: '',
   username: '',
 });
