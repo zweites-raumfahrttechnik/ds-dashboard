@@ -1,6 +1,6 @@
 import { createApp } from 'vue';
 import ArcoVueIcon from '@arco-design/web-vue/es/icon';
-
+import '@arco-design/web-vue/dist/arco.css';
 import App from './App.vue';
 import bootstrapRouter from './router';
 

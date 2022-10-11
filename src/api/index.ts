@@ -26,3 +26,4 @@ instance.interceptors.response.use(
 export type { ResponseWrap };
 
 export { instance };
+

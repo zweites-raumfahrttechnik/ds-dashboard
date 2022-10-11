@@ -8,3 +8,5 @@ export const BANDWIDTH_CHART_URL = `${v1}/chart/bandwidth`;
 export const POOL_CHART_URL = `${v1}/chart/pool`;
 export const STORAGE_CHART_URL = `${v1}/chart/storage`;
 export const CONCURRENT_CHART_URL = `${v1}/chart/concurrent`;
+
+export const Userlist_Account = `${v1}/userlist`;

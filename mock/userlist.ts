@@ -4,35 +4,36 @@ import { successResp } from './_utils';
 
 const requests: MockMethod[] = [
   {
-    url: '/api/v1/connect',
+    //返回
+    url: '/api/v1/userlist',
     method: 'post',
     response: () => {
       return successResp();
     },
   },
   {
-    url: '/api/v1/connect',
+    //获取用户列表
+    url: '/api/v1/userlist',
     method: 'get',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
+    response: () => {
       return successResp({
-        count: 500,
-        data: Array(size)
+        data: Array(60)
           .fill(1)
           .map(() => {
             return {
-              uuid: Random.id(),
+              uuid: '@uuid',
+              type: Random.pick([ 1,2,3]),
               username: Random.name(),
-              ip: Random.ip(),
-              port: Random.integer(1000, 50000),
-              type: Random.pick([1, 2, 3, 4, 5, 6]),
+              host: Random.ip(),
+              password: Random.integer(100000, 5000000),
             };
           }),
       });
     },
   },
   {
-    url: '/api/v1/connect',
+    //删除
+    url: '/api/v1/userlist',
     method: 'delete',
     response: () => {
       return successResp();
