@@ -15,15 +15,7 @@ const connect: RouteRecordRaw = {
         locale: '用户列表',
       },
     },
-    {
-      path: 'userpermissions',
-      name: 'Userpermissions',
-      component: () => import('@/pages/usermanage/Userpermissions.vue'),
-      meta: {
-        requireAuth: true,
-        locale: '测试',
-      },
-    },
+   
   ],
   meta: {
     requireAuth: true,

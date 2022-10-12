@@ -11,6 +11,26 @@ const requests: MockMethod[] = [
       return successResp();
     },
   },
+  {
+    //获取用户列表
+    url: '/api/v1/sql/user/add',
+    method: 'get',
+    response: () => {
+      return successResp({
+        data: Array(11)
+          .fill(1)
+          .map(() => {
+            return {
+              uuid: '@uuid',
+              type: Random.pick([1,2,3]),
+              username: Random.name(),
+              host: Random.ip(),
+              password: Random.integer(100000, 5000000),
+            };
+          }),
+      });
+    },
+  },
   //修改
   {
     //返回

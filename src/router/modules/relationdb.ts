@@ -2,14 +2,14 @@ import { RouteRecordRaw } from 'vue-router';
 import { MAIN_LAYOUT } from '@/router/constant';
 
 const connect: RouteRecordRaw = {
-  path: '/usermanage',
-  name: 'Usermanage',
+  path: '/relationdatabase',
+  name: 'relationdatabase',
   component: MAIN_LAYOUT,
   children: [
     {
-      path: 'userlist',
-      name: 'Userlist',
-      component: () => import('@/pages/usermanage/Userlist.vue'),
+      path: 'tableInqueryPage',
+      name: 'tableInqueryPage',
+      component: () => import('@/pages/relationdatabase/TableInqueryPage.vue'),
       meta: {
         requireAuth: true,
         locale: '单表查询',
@@ -18,7 +18,7 @@ const connect: RouteRecordRaw = {
   meta: {
     requireAuth: true,
     locale: '数据库管理',
-    icon: 'icon-list',
+    icon: 'icon-apps',
     order: 4,
   },
 };

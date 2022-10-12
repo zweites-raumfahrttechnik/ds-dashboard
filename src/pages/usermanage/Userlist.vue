@@ -18,31 +18,18 @@ import {
 } from '@arco-design/web-vue';
 import { reactive, ref } from 'vue';
 import PageContainer from '@/components/PageContainer.vue';
-
+import Formlist from './components/Adduserdata.vue';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
-import { Userlist_Account } from '@/api/url';
+import { Add_Userlist } from '@/api/url';
 //引入传回参数
 import { UserlistData } from '@/api/types';
 
 const visible1 = ref(false);
 const visible2 = ref(false);
 
-const { data } = useAxios<ResponseWrap<UserlistData>>(
-  Userlist_Account,
-  { method: 'GET' },
-  instance,
-);
+const { data } = useAxios<ResponseWrap<UserlistData>>(Add_Userlist, { method: 'GET' }, instance);
 
-const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
-  Userlist_Account,
-  { method: 'DELETE' },
-  instance,
-  {
-    immediate: false,
-  },
-);
- 
 const tableData = computed(() => {
   return data.value?.data?.data;
 });
@@ -62,8 +49,7 @@ const changeuserdata = () => {
   visible2.value = true;
 };
 //删除用户数据
-const handleDeleteAccount = (uuid: string) => {
-};
+const handleDeleteAccount = (uuid: string) => {};
 </script>
 
 <template>
@@ -132,7 +118,11 @@ const handleDeleteAccount = (uuid: string) => {
           <TableColumn title="操作">
             <template #cell="{ record }">
               <!--点击确认时，执行deleteuserdata方法-->
-              <Popconfirm content="请确认是否删除此用户数据" @ok="() => handleDeleteAccount(record.uuid)" type="warning">
+              <Popconfirm
+                content="请确认是否删除此用户数据"
+                @ok="() => handleDeleteAccount(record.uuid)"
+                type="warning"
+              >
                 <Button status="warning">删除</Button>
               </Popconfirm>
             </template>
@@ -145,32 +135,13 @@ const handleDeleteAccount = (uuid: string) => {
         </template>
       </Table>
     </Card>
+
     <!--对话框-添加用户-->
     <Modal v-model:visible="visible1">
       <template #title> 添加用户 </template>
-      <Form>
-        <FormItem label="用户类型">
-          <Select>
-            <Option :value="1" label="MySQL">MySQL</Option>
-            <Option :value="2" label="DM">达梦数据库</Option>
-            <Option :value="3" label="Kingbase">金仓数据库</Option>
-          </Select>
-        </FormItem>
-        <FormItem label="用户名">
-          <Input placeholder="请输入用户名" />
-        </FormItem>
-        <FormItem label="主机地址">
-          <Input placeholder="请输入用户主机地址" />
-        </FormItem>
-        <FormItem label="密码">
-          <Input placeholder="请输入用户密码" />
-        </FormItem>
-      </Form>
-      <template #footer>
-        <Button type="primary">取消</Button>
-        <Button type="primary">确认</Button>
-      </template>
+      <Formlist></Formlist>
     </Modal>
+
     <!--修改用户信息-->
     <Modal v-model:visible="visible2">
       <template #title> 修改用户信息 </template>
