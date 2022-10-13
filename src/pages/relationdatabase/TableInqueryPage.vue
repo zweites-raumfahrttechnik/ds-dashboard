@@ -18,6 +18,7 @@ import {
   Tag
 } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
+
 </script>
 <template>
   <PageContainer>
@@ -28,8 +29,8 @@ import PageContainer from '@/components/PageContainer.vue';
           <Col :flex="1">
             <Form :label-col-props="{ span: 6 }" :wrapper-col-props="{ span: 18 }">
               <Row :gutter="16">
-                <Col :span="8">
-                  <FormItem label="数据库">
+                <Col :span="7">
+                  <FormItem label="数据库" required>
                     <Select placeholder="请选择数据库">
                       <Option :value="1">MySQL</Option>
                       <Option :value="2">达梦数据库</Option>
@@ -37,9 +38,44 @@ import PageContainer from '@/components/PageContainer.vue';
                     </Select>
                   </FormItem>
                 </Col>
-                <Col :span="8">
-                  <FormItem label="表名">
-                    <Select placeholder="选择表查看表数据"> </Select>
+                <Col :span="7">
+                  <FormItem label="表名" required>
+                    <Input placeholder="请输入查询的表名"/>
+                  </FormItem>
+                </Col>
+                <Col :span="10">
+                  <FormItem label="查询条件-列名">
+                    <Input placeholder="请输入查询条件"/>
+                  </FormItem>
+                </Col>
+                <Col :span="10">
+                  <FormItem label="查询条件-运算符">
+                    <Input placeholder="请输入查询条件"/>
+                  </FormItem>
+                </Col>
+                <Col :span="10">
+                  <FormItem label="查询条件-值">
+                    <Input placeholder="请输入查询条件"/>
+                  </FormItem>
+                </Col>
+                <Col :span="10">
+                  <FormItem label="分组指定列1">
+                    <Input placeholder="请输入列名1"/>
+                  </FormItem>
+                </Col>
+                <Col :span="10">
+                  <FormItem label="分组指定列2">
+                    <Input placeholder="请输入列名2"/>
+                  </FormItem>
+                </Col>
+                <Col :span="10">
+                  <FormItem label="排序类型">
+                    <Input placeholder="请输入排序类型"/>
+                  </FormItem>
+                </Col>
+                <Col :span="10">
+                  <FormItem label="指定排序列">
+                    <Input placeholder="请输入列名"/>
                   </FormItem>
                 </Col>
               </Row>
@@ -47,30 +83,7 @@ import PageContainer from '@/components/PageContainer.vue';
           </Col>
         </Row>
       </Card>
-      <Card>
-        <Space>
-          <Tag color="green">
-            <template #icon>
-              <icon-play-arrow />
-            </template>
-          </Tag>
-          <Tag color="orangered">
-            <template #icon>
-              <icon-sun-fill />
-            </template>
-          </Tag>
-          <Tag color="blue">
-            <template #icon>
-              <icon-check />
-            </template>
-          </Tag>
-          <Tag color="arcoblue">
-            <template #icon>
-              <icon-drive-file />
-            </template>
-          </Tag>
-        </Space>
-      </Card>
+     
     </Space>
   </PageContainer>
 </template>

@@ -3,7 +3,7 @@ import { Random } from 'mockjs';
 import { successResp } from './_utils';
 
 const requests: MockMethod[] = [
-    //添加
+  //添加
   {
     url: '/api/v1/sql/user/add',
     method: 'post',
@@ -11,8 +11,8 @@ const requests: MockMethod[] = [
       return successResp();
     },
   },
+  //自定义添加
   {
-    //获取用户列表
     url: '/api/v1/sql/user/add',
     method: 'get',
     response: () => {
@@ -22,7 +22,7 @@ const requests: MockMethod[] = [
           .map(() => {
             return {
               uuid: '@uuid',
-              type: Random.pick([1,2,3]),
+              type: Random.pick([1, 2, 3]),
               username: Random.name(),
               host: Random.ip(),
               password: Random.integer(100000, 5000000),

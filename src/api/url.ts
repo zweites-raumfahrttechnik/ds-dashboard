@@ -10,4 +10,5 @@ export const STORAGE_CHART_URL = `${v1}/chart/storage`;
 export const CONCURRENT_CHART_URL = `${v1}/chart/concurrent`;
 
 export const Add_Userlist=`${v1}/sql/user/add`;
+export const RelationInqurey=`${v1}/table/query`
 
