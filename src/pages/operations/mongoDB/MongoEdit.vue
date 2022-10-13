@@ -21,7 +21,7 @@ import { reactive, ref } from 'vue';
 
 const selectedKeys = ref(['1', '2']);
 const size = ref('medium');
-const show = ref(true)
+const show = ref(true);
 
 const rowSelection = reactive({
   type: 'checkbox',
@@ -158,7 +158,7 @@ const options = [
             @cancel="handleCancel"
             @before-ok="handleBeforeOk"
           >
-            <Form :model="Modal_add_form" >
+            <Form :model="Modal_add_form">
               <FormItem field="project" label="项目">
                 <Select v-model="Modal_add_form.project" placeholder="请选择项目"> </Select>
               </FormItem>
@@ -257,19 +257,21 @@ const options = [
         :pagination="false"
         v-model:selectedKeys="selectedKeys"
       >
-      <template #操作="{ record }">
-      <Button @click="$modal.info({ 
-        title:'项目', content:record.project })">
-        数据库</Button>
-    </template>
+        <template #操作="{ record }">
+          <Button
+            @click="
+              $modal.info({
+                title: '项目',
+                content: record.project,
+              })
+            "
+          >
+            数据库</Button
+          >
+        </template>
       </Table>
 
-      <Pagination
-        :total="50"
-        show-total
-        show-jumper
-      />
+      <Pagination :total="50" show-total show-jumper />
     </Space>
   </PageContainer>
 </template>
-

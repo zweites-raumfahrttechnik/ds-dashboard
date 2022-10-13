@@ -20,8 +20,8 @@ const breadcrumbs = computed(() => {
 <template>
   <Breadcrumb class="breadcrumb">
     <BreadcrumbItem>
-      <IconHome />
-      首页
+    
+    
     </BreadcrumbItem>
 
     <BreadcrumbItem v-for="item in breadcrumbs" :key="item">{{ item }}</BreadcrumbItem>
