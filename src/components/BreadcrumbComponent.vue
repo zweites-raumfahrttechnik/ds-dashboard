@@ -36,7 +36,7 @@ const breadcrumbs = computed(() => {
     color: rgb(var(--gray-6));
 
     &:last-child {
-      color: rgb(var(--gray-6));
+      color: rgb(var(--gray-8));
     }
   }
 }

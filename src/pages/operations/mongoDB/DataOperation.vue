@@ -15,8 +15,6 @@ import {
   Button,
   Popconfirm,
   Modal,
-  Link,
-  Statistic,
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
@@ -25,6 +23,15 @@ import { instance, ResponseWrap } from '@/api';
 import { CONNECT_URL } from '@/api/url';
 import { GetConnectListParams, GetListData } from '@/api/types';
 import { reactive, ref } from 'vue';
+import {
+  DB_URL,
+  COLLECTION_URL,
+  DOC_URL,
+  INDEX_URL,
+  ATTR_URL,
+  QUERY_URL,
+  READ_URL,
+} from '@/api/url';
 import PageContainer from '@/components/PageContainer.vue';
 
 type SearchParams = GetConnectListParams;
@@ -115,28 +122,28 @@ const handlePageChange = (page: number) => {
   pagination.current = page;
 };
 
-const Db_visible = ref(false);
-const Db_form = reactive({
+const DB_visible = ref(false);
+const DB_form = reactive({
   name: '',
   size: '',
   null: '',
   op: '',
 });
 
-const Gather_visible = ref(false);
-const Gather_form = reactive({
+const Collection_visible = ref(false);
+const Collection_form = reactive({
   name: '',
   op: '',
 });
 
-const Documents_visible = ref(false);
-const Documents_form = reactive({
+const Doc_visible = ref(false);
+const Doc_form = reactive({
   name: '',
   op: '',
 });
 
-const Property_visible = ref(false);
-const Property_form = reactive({
+const Attr_visible = ref(false);
+const Attr_form = reactive({
   name: '',
   op: '',
 });
@@ -147,8 +154,8 @@ const Index_form = reactive({
   op: '',
 });
 
-const handleDb = () => {
-  Db_visible.value = true;
+const handleDB = () => {
+  DB_visible.value = true;
 };
 
 const handlestatsOne = () => {
@@ -171,76 +178,76 @@ const handlestatsFive = () => {
   statsFive_visible.value = true;
 };
 
-const handledeleteGather = () => {
-  deleteGather_visible.value = true;
+const handledeleteCollection = () => {
+  deleteCollection_visible.value = true;
 };
-const deleteGather_visible = ref(false);
+const deleteCollection_visible = ref(false);
 
-const handledeleteDocuments = () => {
-  deleteDocuments_visible.value = true;
+const handledeleteDoc = () => {
+  deleteDoc_visible.value = true;
 };
-const deleteDocuments_visible = ref(false);
+const deleteDoc_visible = ref(false);
 
-const handledeleteProperty = () => {
-  deleteProperty_visible.value = true;
+const handledeleteAttr = () => {
+  deleteAttr_visible.value = true;
 };
-const deleteProperty_visible = ref(false);
+const deleteAttr_visible = ref(false);
 
 const handledeleteIndex = () => {
   deleteIndex_visible.value = true;
 };
 const deleteIndex_visible = ref(false);
 
-const Gather_add = () => {
-  Gather_visible.value = true;
+const Collection_add = () => {
+  Collection_visible.value = true;
 };
-const handleGather = () => {
-  Gather_visible.value = true;
-};
-
-const Documents_add = () => {
-  Documents_visible.value = true;
-};
-const handleDocuments = () => {
-  Documents_visible.value = true;
+const handleCollection = () => {
+  Collection_visible.value = true;
 };
 
-const Property_add = () => {
-  Property_visible.value = true;
+const Doc_add = () => {
+  Doc_visible.value = true;
 };
-const handleProperty = () => {
-  Property_visible.value = true;
+const handleDoc = () => {
+  Doc_visible.value = true;
+};
+
+const Attr_add = () => {
+  Attr_visible.value = true;
+};
+const handleAttr = () => {
+  Attr_visible.value = true;
 };
 
 const Index_add = () => {
-  Property_visible.value = true;
+  Index_visible.value = true;
 };
 const handleIndex = () => {
   Index_visible.value = true;
 };
 
-const newGather_visible = ref(false);
-const newGather_form = reactive({
+const newCollection_visible = ref(false);
+const newCollection_form = reactive({
   name: ' ',
 });
-const newGather = () => {
-  newGather_visible.value = true;
+const newCollection = () => {
+  newCollection_visible.value = true;
 };
 
-const newDocuments_visible = ref(false);
-const newDocuments_form = reactive({
+const newDoc_visible = ref(false);
+const newDoc_form = reactive({
   name: ' ',
 });
-const newDocuments = () => {
-  newDocuments_visible.value = true;
+const newDoc = () => {
+  newDoc_visible.value = true;
 };
 
-const newProperty_visible = ref(false);
-const newProperty_form = reactive({
+const newAttr_visible = ref(false);
+const newAttr_form = reactive({
   name: ' ',
 });
-const newProperty = () => {
-  newProperty_visible.value = true;
+const newAttr = () => {
+  newAttr_visible.value = true;
 };
 
 const newIndex_visible = ref(false);
@@ -251,26 +258,25 @@ const newIndex = () => {
   newIndex_visible.value = true;
 };
 
-const handlenewGatherOk = () => {
-  newGather_visible.value = false;
+const handlenewCollectionOk = () => {
+  newCollection_visible.value = false;
 };
-const handlenewGatherCancel = () => {
-  newGather_visible.value = false;
-};
-
-const handlenewDocumentsOk = () => {
-  newDocuments_visible.value = false;
-};
-const handlenewDocumentsCancel = () => {
-  newDocuments_visible.value = false;
+const handlenewCollectioncancel = () => {
+  newCollection_visible.value = false;
 };
 
-
-const handlenewPropertyOk = () => {
-  newProperty_visible.value = false;
+const handlenewDocOk = () => {
+  newDoc_visible.value = false;
 };
-const handlenewPropertyCancel = () => {
-  newProperty_visible.value = false;
+const handlenewDocCancel = () => {
+  newDoc_visible.value = false;
+};
+
+const handlenewAttrOk = () => {
+  newAttr_visible.value = false;
+};
+const handlenewAttrCancel = () => {
+  newAttr_visible.value = false;
 };
 
 const handlenewIndexOk = () => {
@@ -286,7 +292,7 @@ const rowSelection = reactive({
   onlyCurrent: false,
 });
 
-const Db_columns = [
+const DB_columns = [
   {
     title: 'uuid',
     dataIndex: 'uuid',
@@ -308,13 +314,13 @@ const Db_columns = [
     slotName: 'optional',
   },
 ];
-const Db_data = reactive([
+const DB_data = reactive([
   {
     key: '1',
     uuid: 'admin',
     dbName: 'asd',
     collectionName: 'qwe',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -322,7 +328,7 @@ const Db_data = reactive([
     uuid: 'config',
     dbName: 'zxc',
     collectionName: 'vbn',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -330,7 +336,7 @@ const Db_data = reactive([
     uuid: 'lacal',
     dbName: 'fgh',
     collectionName: 'defr',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -338,7 +344,7 @@ const Db_data = reactive([
     uuid: 'test1',
     dbName: 'tyui',
     collectionName: 'fsdfg',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -346,12 +352,12 @@ const Db_data = reactive([
     uuid: 'test2',
     dbName: 'ght',
     collectionName: 'frvc',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
 ]);
 
-const Gather_columns = [
+const Collection_columns = [
   {
     title: '名称',
     dataIndex: 'name',
@@ -361,7 +367,7 @@ const Gather_columns = [
     slotName: 'opOne',
   },
 ];
-const Gather_data = reactive([
+const Collection_data = reactive([
   {
     key: '1',
     name: 'test3',
@@ -379,7 +385,7 @@ const Gather_data = reactive([
   },
 ]);
 
-const Documents_columns = [
+const Doc_columns = [
   {
     title: '名称',
     dataIndex: 'name',
@@ -389,7 +395,7 @@ const Documents_columns = [
     slotName: 'opTwo',
   },
 ];
-const Documents_data = reactive([
+const Doc_data = reactive([
   {
     key: '1',
     name: 'test3',
@@ -407,7 +413,7 @@ const Documents_data = reactive([
   },
 ]);
 
-const Property_columns = [
+const Attr_columns = [
   {
     title: '名称',
     dataIndex: 'name',
@@ -417,7 +423,7 @@ const Property_columns = [
     slotName: 'opThree',
   },
 ];
-const Property_data = reactive([
+const Attr_data = reactive([
   {
     key: '1',
     name: 'test3',
@@ -534,14 +540,14 @@ const statsFive_form = reactive({
         <Modal
           width="900px"
           :hide-cancel="false"
-          v-model:visible="Db_visible"
+          v-model:visible="DB_visible"
           title="数据库列表"
           :footer="False"
         >
           <Table
             row-key="name"
-            :columns="Db_columns"
-            :data="Db_data"
+            :columns="DB_columns"
+            :data="DB_data"
             :pagination="pagination"
             :bordered="false"
             v-model:selectedKeys="selectedKeys"
@@ -549,9 +555,9 @@ const statsFive_form = reactive({
             <template #optional>
               <Space :size="18">
                 <Button @click="handlestatsOne()" type="text" status="success">stats</Button>
-                <Button @click="handleGather()" type="text">集合</Button>
-                <Button @click="handleDocuments()" type="text">文档</Button>
-                <Button @click="handleProperty()" type="text">属性</Button>
+                <Button @click="handleCollection()" type="text">集合</Button>
+                <Button @click="handleDoc()" type="text">文档</Button>
+                <Button @click="handleAttr()" type="text">属性</Button>
                 <Button @click="handleIndex()" type="text">索引</Button>
               </Space>
             </template>
@@ -608,32 +614,32 @@ const statsFive_form = reactive({
         <Modal
           width="700px"
           :hide-cancel="false"
-          v-model:visible="Gather_visible"
+          v-model:visible="Collection_visible"
           title="集合"
           :footer="False"
         >
-          <Button @click="newGather()" type="primary">
+          <Button @click="newCollection()" type="primary">
             <template #icon>
               <icon-plus />
             </template>
             添加
           </Button>
           <Modal
-            v-model:visible="newGather_visible"
+            v-model:visible="newCollection_visible"
             title="新建集合"
-            @cancel="handlenewGatherCancel()"
-            @ok="handlenewGatherOk()"
+            @cancel="handlenewCollectioncancel()"
+            @ok="handlenewCollectionOk()"
           >
-            <Form :model="newGather_form">
+            <Form :model="newCollection_form">
               <FormItem field="name" label="集合名">
-                <Input v-model="newGather_form.name" />
+                <Input v-model="newCollection_form.name" />
               </FormItem>
             </Form>
           </Modal>
           <Table
             row-key="name"
-            :columns="Gather_columns"
-            :data="Gather_data"
+            :columns="Collection_columns"
+            :data="Collection_data"
             :pagination="false"
             :bordered="false"
             v-model:selectedKeys="selectedKeys"
@@ -643,7 +649,11 @@ const statsFive_form = reactive({
                 <Button @click="handlestatsTwo()" type="text" status="success">stats</Button>
               </Space>
 
-              <Popconfirm content="确认删除该集合？" @ok="() => handledeleteGather()">
+              <Popconfirm
+                type="warning"
+                content="确认删除该集合？"
+                @ok="() => handledeleteCollection()"
+              >
                 <Button type="text" status="danger">删除</Button>
               </Popconfirm>
             </template>
@@ -689,33 +699,33 @@ const statsFive_form = reactive({
         <Modal
           width="700px"
           :hide-cancel="false"
-          v-model:visible="Documents_visible"
+          v-model:visible="Doc_visible"
           title="文档"
           :footer="False"
         >
-          <Button @click="newDocuments()" type="primary">
+          <Button @click="newDoc()" type="primary">
             <template #icon>
               <icon-plus />
             </template>
             新建
           </Button>
           <Modal
-            v-model:visible="newDocuments_visible"
+            v-model:visible="newDoc_visible"
             title="新建文档"
-            @cancel="handlenewDocumentsCancel()"
-            @ok="handlenewDocumentsOk()"
+            @cancel="handlenewDocCancel()"
+            @ok="handlenewDocOk()"
           >
-            <Form :model="newDocuments_form">
+            <Form :model="newDoc_form">
               <FormItem field="name" label="文档名">
-                <Input v-model="newDocuments_form.name" />
+                <Input v-model="newDoc_form.name" />
               </FormItem>
             </Form>
           </Modal>
 
           <Table
             row-key="name"
-            :columns="Documents_columns"
-            :data="Documents_data"
+            :columns="Doc_columns"
+            :data="Doc_data"
             :pagination="false"
             :bordered="false"
             v-model:selectedKeys="selectedKeys"
@@ -723,79 +733,79 @@ const statsFive_form = reactive({
             <template #opTwo>
               <Space :size="18">
                 <Button @click="handlestatsThree()" type="text" status="success">stats</Button>
-                <Modal
-                  width="700px"
-                  :hide-cancel="false"
-                  v-model:visible="statsThree_visible"
-                  title="文档状态信息"
-                  :footer="False"
-                >
-                  <Form :model="statsThree_form">
-                    <Form-item field="ns" label="ns">
-                      <Input v-model="statsThree_form.ns" />
-                    </Form-item>
-                    <Form-item field="avgObjSize" label="avgObjSize">
-                      <Input v-model="statsThree_form.avgObjSize" />
-                    </Form-item>
-                    <Form-item field="totalSize" label="totalSize">
-                      <Input v-model="statsThree_form.totalSize" />
-                    </Form-item>
-                    <Form-item field="nindexes" label="nindexes">
-                      <Input v-model="statsThree_form.nindexes" />
-                    </Form-item>
-                    <Form-item field="storageSize" label="storageSize">
-                      <Input v-model="statsThree_form.storageSize" />
-                    </Form-item>
-                    <Form-item field="Count" label="Count">
-                      <Input v-model="statsThree_form.Count" />
-                    </Form-item>
-                    <Form-item field="size" label="size">
-                      <Input v-model="statsThree_form.size" />
-                    </Form-item>
-                    <Form-item field="freeStorageSize" label="freeStorageSize">
-                      <Input v-model="statsThree_form.freeStorageSize" />
-                    </Form-item>
-                  </Form>
-                </Modal>
               </Space>
 
-              <Popconfirm content="确认删除该文档？" @ok="() => handledeleteDocuments()">
+              <Popconfirm type="warning" content="确认删除该文档？" @ok="() => handledeleteDoc()">
                 <Button type="text" status="danger">删除</Button>
               </Popconfirm>
             </template>
           </Table>
+        </Modal>
+        <Modal
+          width="700px"
+          :hide-cancel="false"
+          v-model:visible="statsThree_visible"
+          title="文档状态信息"
+          :footer="False"
+        >
+          <Form :model="statsThree_form">
+            <Form-item field="ns" label="ns">
+              <Input v-model="statsThree_form.ns" />
+            </Form-item>
+            <Form-item field="avgObjSize" label="avgObjSize">
+              <Input v-model="statsThree_form.avgObjSize" />
+            </Form-item>
+            <Form-item field="totalSize" label="totalSize">
+              <Input v-model="statsThree_form.totalSize" />
+            </Form-item>
+            <Form-item field="nindexes" label="nindexes">
+              <Input v-model="statsThree_form.nindexes" />
+            </Form-item>
+            <Form-item field="storageSize" label="storageSize">
+              <Input v-model="statsThree_form.storageSize" />
+            </Form-item>
+            <Form-item field="Count" label="Count">
+              <Input v-model="statsThree_form.Count" />
+            </Form-item>
+            <Form-item field="size" label="size">
+              <Input v-model="statsThree_form.size" />
+            </Form-item>
+            <Form-item field="freeStorageSize" label="freeStorageSize">
+              <Input v-model="statsThree_form.freeStorageSize" />
+            </Form-item>
+          </Form>
         </Modal>
       </template>
       <template>
         <Modal
           width="700px"
           :hide-cancel="false"
-          v-model:visible="Property_visible"
+          v-model:visible="Attr_visible"
           title="属性"
           :footer="False"
         >
-          <Button @click="newProperty()" type="primary">
+          <Button @click="newAttr()" type="primary">
             <template #icon>
               <icon-plus />
             </template>
             新建
           </Button>
           <Modal
-            v-model:visible="newProperty_visible"
+            v-model:visible="newAttr_visible"
             title="新建属性"
-            @cancel="handlenewPropertyCancel()"
-            @ok="handlenewPropertyOk()"
+            @cancel="handlenewAttrCancel()"
+            @ok="handlenewAttrOk()"
           >
-            <Form :model="newProperty_form">
+            <Form :model="newAttr_form">
               <FormItem field="name" label="属性名">
-                <Input v-model="newProperty_form.name" />
+                <Input v-model="newAttr_form.name" />
               </FormItem>
             </Form>
           </Modal>
           <Table
             row-key="name"
-            :columns="Property_columns"
-            :data="Property_data"
+            :columns="Attr_columns"
+            :data="Attr_data"
             :pagination="false"
             :bordered="false"
             v-model:selectedKeys="selectedKeys"
@@ -803,46 +813,46 @@ const statsFive_form = reactive({
             <template #opThree>
               <Space :size="18">
                 <Button @click="handlestatsFour()" type="text" status="success">stats</Button>
-                <Modal
-                  width="700px"
-                  :hide-cancel="false"
-                  v-model:visible="statsFour_visible"
-                  title="属性状态信息"
-                  :footer="False"
-                >
-                  <Form :model="statsFour_form">
-                    <Form-item field="ns" label="ns">
-                      <Input v-model="statsFour_form.ns" />
-                    </Form-item>
-                    <Form-item field="avgObjSize" label="avgObjSize">
-                      <Input v-model="statsFour_form.avgObjSize" />
-                    </Form-item>
-                    <Form-item field="totalSize" label="totalSize">
-                      <Input v-model="statsFour_form.totalSize" />
-                    </Form-item>
-                    <Form-item field="nindexes" label="nindexes">
-                      <Input v-model="statsFour_form.nindexes" />
-                    </Form-item>
-                    <Form-item field="storageSize" label="storageSize">
-                      <Input v-model="statsFour_form.storageSize" />
-                    </Form-item>
-                    <Form-item field="Count" label="Count">
-                      <Input v-model="statsFour_form.Count" />
-                    </Form-item>
-                    <Form-item field="size" label="size">
-                      <Input v-model="statsFour_form.size" />
-                    </Form-item>
-                    <Form-item field="freeStorageSize" label="freeStorageSize">
-                      <Input v-model="statsFour_form.freeStorageSize" />
-                    </Form-item>
-                  </Form>
-                </Modal>
               </Space>
-              <Popconfirm content="确认删除该属性？" @ok="() => handledeleteProperty()">
+              <Popconfirm type="warning" content="确认删除该属性？" @ok="() => handledeleteAttr()">
                 <Button type="text" status="danger">删除</Button>
               </Popconfirm>
             </template>
           </Table>
+        </Modal>
+        <Modal
+          width="700px"
+          :hide-cancel="false"
+          v-model:visible="statsFour_visible"
+          title="属性状态信息"
+          :footer="False"
+        >
+          <Form :model="statsFour_form">
+            <Form-item field="ns" label="ns">
+              <Input v-model="statsFour_form.ns" />
+            </Form-item>
+            <Form-item field="avgObjSize" label="avgObjSize">
+              <Input v-model="statsFour_form.avgObjSize" />
+            </Form-item>
+            <Form-item field="totalSize" label="totalSize">
+              <Input v-model="statsFour_form.totalSize" />
+            </Form-item>
+            <Form-item field="nindexes" label="nindexes">
+              <Input v-model="statsFour_form.nindexes" />
+            </Form-item>
+            <Form-item field="storageSize" label="storageSize">
+              <Input v-model="statsFour_form.storageSize" />
+            </Form-item>
+            <Form-item field="Count" label="Count">
+              <Input v-model="statsFour_form.Count" />
+            </Form-item>
+            <Form-item field="size" label="size">
+              <Input v-model="statsFour_form.size" />
+            </Form-item>
+            <Form-item field="freeStorageSize" label="freeStorageSize">
+              <Input v-model="statsFour_form.freeStorageSize" />
+            </Form-item>
+          </Form>
         </Modal>
       </template>
 
@@ -883,50 +893,50 @@ const statsFive_form = reactive({
             <template #opFour>
               <Space :size="18">
                 <Button @click="handlestatsFive()" type="text" status="success">stats</Button>
-                <Modal
-                  width="700px"
-                  :hide-cancel="false"
-                  v-model:visible="statsFive_visible"
-                  title="索引状态信息"
-                  :footer="False"
-                >
-                  <Form :model="statsFive_form">
-                    <Form-item field="ns" label="ns">
-                      <Input v-model="statsFive_form.ns" />
-                    </Form-item>
-                    <Form-item field="avgObjSize" label="avgObjSize">
-                      <Input v-model="statsFive_form.avgObjSize" />
-                    </Form-item>
-                    <Form-item field="totalSize" label="totalSize">
-                      <Input v-model="statsFive_form.totalSize" />
-                    </Form-item>
-                    <Form-item field="nindexes" label="nindexes">
-                      <Input v-model="statsFive_form.nindexes" />
-                    </Form-item>
-                    <Form-item field="storageSize" label="storageSize">
-                      <Input v-model="statsFive_form.storageSize" />
-                    </Form-item>
-                    <Form-item field="Count" label="Count">
-                      <Input v-model="statsFive_form.Count" />
-                    </Form-item>
-                    <Form-item field="size" label="size">
-                      <Input v-model="statsFive_form.size" />
-                    </Form-item>
-                    <Form-item field="freeStorageSize" label="freeStorageSize">
-                      <Input v-model="statsFive_form.freeStorageSize" />
-                    </Form-item>
-                  </Form>
-                </Modal>
               </Space>
-              <Popconfirm content="确认删除该索引？" @ok="() => handledeleteIndex()">
+              <Popconfirm type="warning" content="确认删除该索引？" @ok="() => handledeleteIndex()">
                 <Button type="text" status="danger">删除</Button>
               </Popconfirm>
             </template>
           </Table>
         </Modal>
+        <Modal
+          width="700px"
+          :hide-cancel="false"
+          v-model:visible="statsFive_visible"
+          title="索引状态信息"
+          :footer="False"
+        >
+          <Form :model="statsFive_form">
+            <Form-item field="ns" label="ns">
+              <Input v-model="statsFive_form.ns" />
+            </Form-item>
+            <Form-item field="avgObjSize" label="avgObjSize">
+              <Input v-model="statsFive_form.avgObjSize" />
+            </Form-item>
+            <Form-item field="totalSize" label="totalSize">
+              <Input v-model="statsFive_form.totalSize" />
+            </Form-item>
+            <Form-item field="nindexes" label="nindexes">
+              <Input v-model="statsFive_form.nindexes" />
+            </Form-item>
+            <Form-item field="storageSize" label="storageSize">
+              <Input v-model="statsFive_form.storageSize" />
+            </Form-item>
+            <Form-item field="Count" label="Count">
+              <Input v-model="statsFive_form.Count" />
+            </Form-item>
+            <Form-item field="size" label="size">
+              <Input v-model="statsFive_form.size" />
+            </Form-item>
+            <Form-item field="freeStorageSize" label="freeStorageSize">
+              <Input v-model="statsFive_form.freeStorageSize" />
+            </Form-item>
+          </Form>
+        </Modal>
       </tempalate>
 
-      <template #title>查看数据库连接</template>
+      <template #title>数据库操作</template>
 
       <Row>
         <Col :flex="1">
@@ -1011,7 +1021,7 @@ const statsFive_form = reactive({
 
           <TableColumn title="操作" title-align="left">
             <template #cell>
-              <Button @click="handleDb()" type="text">数据库</Button>
+              <Button @click="handleDB()" type="text">数据库</Button>
             </template>
           </TableColumn>
         </template>

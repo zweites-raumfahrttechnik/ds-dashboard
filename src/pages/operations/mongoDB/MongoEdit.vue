@@ -16,8 +16,40 @@ import {
   Form,
   Alert,
   FormItem,
+  Link,
+  Divider,
+  Tabs,
+  TabPane,
+  Option,
+  Popconfirm,
+  CardGrid,
 } from '@arco-design/web-vue';
 import { reactive, ref } from 'vue';
+
+let count = 5;
+
+const data = ref([
+  {
+    key: '1',
+    title: 'test_coll',
+  },
+  {
+    key: '2',
+    title: 'test3',
+  },
+  {
+    key: '3',
+    title: 'test_info',
+  },
+]);
+
+const handleAdd = () => {
+  const number = count++;
+  data.value = data.value.concat({
+    key: `${number}`,
+    title: `New Collection ${number}`,
+  });
+};
 
 const selectedKeys = ref(['1', '2']);
 const size = ref('medium');
@@ -30,248 +62,257 @@ const rowSelection = reactive({
 });
 const pagination = { pageSize: 7 };
 
+const database_visible = ref(false);
+
+const collection_visible = ref(false);
+
+const findCommand_visible = ref(false);
+const findCommand = () => {
+  findCommand_visible.value = true;
+};
+
+const newCollection_visible = ref(false);
+const newCollection = () => {
+  newCollection_visible.value = true;
+};
+
+const onJsonEditor_visible = ref(false);
+const onJsonEditor = () => {
+  onJsonEditor_visible.value = true;
+};
+const save_visible = ref(false);
+const save = () => {
+  save_visible.value = true;
+};
+const jsonEditor_visible = ref(false);
+const jsonEditor = () => {
+  jsonEditor_visible.value = true;
+};
+const handlenewCollectionOk = () => {
+  newCollection_visible.value = false;
+};
+const handlenewCollectionCancel = () => {
+  newCollection_visible.value = false;
+};
+const handleDelete_visible = ref(false);
+const handleDelete = () => {
+  handleDelete_visible.value = true;
+};
+const searchFormRef_visible = ref(false);
+const searchFormRef = () => {
+  searchFormRef_visible.value = true;
+};
+const search_visible = ref(false);
+const search = () => {
+  search_visible.value = true;
+};
+
+const doc_visible = ref(false);
+const doc = () => {
+  doc_visible.value = true;
+};
+const attr_visible = ref(false);
+const attr = () => {
+  attr_visible.value = true;
+};
+const index_visible = ref(false);
+const index = () => {
+  index_visible.value = true;
+};
+
+const handledeleteDocOk = () => {};
+const handledeleteDocCancel = () => {};
+
 const visible = ref(false);
-const Modal_add_visible = ref(false);
-const Modal_edit_visible = ref(false);
-const Modal_delete_visible = ref(false);
-const Modal_add_form = reactive({
-  project: '',
-  env: '',
-  name: '',
-  url: '',
-});
-const Modal_edit_form = reactive({
-  project: '',
-  env: '',
-  name: '',
-  url: '',
-});
 
-const Modal_add = () => {
-  Modal_add_visible.value = true;
+const openModal = () => {
+  visible.value = true;
 };
-const Modal_edit = () => {
-  Modal_edit_visible.value = true;
-};
-
-const Modal_delete = () => {
-  Modal_delete_visible.value = true;
-};
-const handleBeforeOk = done => {
-  console.log(Modal_add_form);
-  window.setTimeout(() => {
-    done();
-    // prevent close
-    // done(false)
-  }, 3000);
+const handleOk = () => {
+  visible.value = false;
 };
 const handleCancel = () => {
   visible.value = false;
 };
-
-const columns = [
-  {
-    title: '项目',
-    dataIndex: 'project',
-  },
-  {
-    title: '环境',
-    dataIndex: 'env',
-  },
-  {
-    title: '名称',
-    dataIndex: 'name',
-  },
-  {
-    title: '连接url',
-    dataIndex: 'url',
-  },
-  {
-    title: '创建时间',
-    dataIndex: 'time',
-  },
-  {
-    title: '创建人',
-    dataIndex: 'person',
-  },
-
-  {
-    title: '操作',
-    dataIndex: 'operation',
-  },
-];
-const data = reactive([
-  {
-    key: '1',
-    project: 'arco pro',
-    env: 'prod',
-    name: '测试mongo',
-    url: '114.67.67.10:27017',
-    time: '2022-10-09 19:15',
-    person: 'yanghan',
-    operation: '数据库',
-  },
-  {
-    key: '2',
-    project: 'element',
-    env: 'abc',
-    name: '测试element',
-    url: '115.76.76.20:25874',
-    time: '2022-10-09 21:37',
-    person: 'monica',
-    operation: '数据库',
-  },
-]);
-
-const options = [
-  {
-    value: '项目',
-    label: '项目',
-    children: [
-      {
-        value: 'arco pro',
-        label: 'arco pro',
-      },
-      {
-        value: 'element',
-        label: 'element',
-      },
-    ],
-  },
-];
 </script>
 
 <template>
   <PageContainer>
     <Card>
-      <Row justify="start" :gutter="20">
-        <Col :span="2">
-          <Button @click="Modal_add" type="primary">
-            <template #icon>
-              <icon-plus />
-            </template>
-            添加
-          </Button>
-          <Modal
-            v-model:visible="Modal_add_visible"
-            title="新增mongoDB"
-            @cancel="handleCancel"
-            @before-ok="handleBeforeOk"
-          >
-            <Form :model="Modal_add_form">
-              <FormItem field="project" label="项目">
-                <Select v-model="Modal_add_form.project" placeholder="请选择项目"> </Select>
-              </FormItem>
+      <template>
+        <Modal v-model:visible="visible" @ok="handleOk" @cancel="handleCancel">
+          <template #title> find参数 </template>
+        </Modal>
+      </template>
+      <template>
+        <Modal
+          v-model:visible="jsonEditor_visible"
+          width="70%"
+          title="json编辑器"
+          @focus="openModal()"
+        >
 
-              <FormItem field="env" label="环境">
-                <Select v-model="Modal_add_form.env" placeholder="请选择环境"> </Select>
-              </FormItem>
+        </Modal>
+        >
+      </template>
+      <Form ref="searchFormRef" v-model:visible="searchFormRef_visible" label-align="left">
+        <Row>
+          <Col :span="5">
+            <Form-item label="库" label-width="40px">
+              <Select v-model:visible="database_visible" placeholder="请选择库" allow-clear>
+                <Option :value="1">MySQL</Option>
+                <Option :value="2">达梦数据库</Option>
+                <Option :value="3">金仓数据库</Option>
+                <Option :value="4">Redis</Option>
+                <Option :value="5">MongoDB</Option>
+                <Option :value="6">Elasticsearch</Option>
+              </Select>
+            </Form-item>
+          </Col>
+          <Col :span="5">
+            <Form-item label="集合" label-width="40px">
+              <Select v-model:visible="collection_visible" placeholder="请选择集合">
+                <Option :value="1">test3</Option>
+                <Option :value="2">test_coll</Option>
+                <Option :value="3">test_info</Option>
+              </Select>
+            </Form-item>
+          </Col>
+          <Col :span="5">
+            <Form-item label="文档" label-width="40px">
+              <Select v-model:visible="doc_visible" placeholder="请选择文档">
+                <Option :value="1">qwe</Option>
+                <Option :value="2">sfdc</Option>
+                <Option :value="3">fcsoa</Option>
+              </Select>
+            </Form-item>
+          </Col>
+          <Col :span="4">
+            <Form-item label="属性" label-width="40px">
+              <Select v-model:visible="attr_visible" placeholder="请选择属性">
+                <Option :value="1">hdye</Option>
+                <Option :value="2">msaygc</Option>
+                <Option :value="3">nvcnhd</Option>
+              </Select>
+            </Form-item>
+          </Col>
+          <Col :span="5">
+            <Form-item label="索引" label-width="40px">
+              <Select v-model:visible="index_visible" placeholder="请选择索引">
+                <Option :value="1">mcdkjnv</Option>
+                <Option :value="2">dswf</Option>
+                <Option :value="3">cbhbya</Option>
+              </Select>
+            </Form-item>
+          </Col>
+        </Row>
+      </Form>
 
-              <FormItem field="name" label="名称">
-                <Select v-model="Modal_add_form.name" placeholder="请输入名称"> </Select>
-              </FormItem>
+      <Tabs :editable="true" @add="handleAdd" @delete="handleDelete" show-add-button auto-switch>
+        <Tab-pane
+          v-for="(item, index) of data"
+          :key="item.key"
+          :title="item.title"
+          :closable="index !== 2"
+        >
+        </Tab-pane>
+      </Tabs>
 
-              <FormItem field="url" label="url">
-                <Select v-model="Modal_add_form.url" placeholder="请输入url"> </Select>
-              </FormItem>
-            </Form>
-          </Modal>
-        </Col>
-
-        <Col :span="2">
-          <Button @click="Modal_edit" type="primary">
-            <template #icon>
-              <IconLaunch />
-            </template>
-            编辑
-          </Button>
-          <Modal
-            v-model:visible="Modal_edit_visible"
-            title="编辑mongoDB"
-            @cancel="handleCancel"
-            @before-ok="handleBeforeOk"
-          >
-            <Form :model="Modal_edit_form">
-              <FormItem field="projrct" label="项目">
-                <Select v-model="Modal_edit_form.project" placeholder="请选择项目"> </Select>
-              </FormItem>
-
-              <FormItem field="env" label="环境">
-                <Select v-model="Modal_edit_form.env" placeholder="请选择环境"> </Select>
-              </FormItem>
-
-              <FormItem field="name" label="名称">
-                <Select v-model="Modal_edit_form.name" placeholder="请输入名称"> </Select>
-              </FormItem>
-
-              <FormItem field="url" label="url">
-                <Select v-model="Modal_edit_form.url" placeholder="请输入url"> </Select>
-              </FormItem>
-            </Form>
-          </Modal>
-        </Col>
-
-        <Col :span="2">
-          <Button @click="Modal_delete" status="danger">
-            <template #icon>
-              <IconDelete />
-            </template>
-            删除
-          </Button>
-          <Modal
-            v-model:visible="Modal_delete_visible"
-            title="提示"
-            @cancel="handleCancel"
-            @before-ok="handleBeforeOk"
-          >
-            <Alert type="warning"> 确认删除该项目？</Alert>
-          </Modal>
-        </Col>
-
-        <Col :span="13"></Col>
-        <Col :span="1">
-          <Cascader
-            :options="options"
-            :style="{ width: '300px' }"
-            placeholder="请选择项目"
-            search-button
-          />
-        </Col>
-
-        <Col :span="4" style="text-align: right">
-          <Button type="primary">
-            <template #icon>
-              <IconSearch />
-            </template>
-            搜索
-          </Button>
-        </Col>
+      <Row>
+        <Link @click="findCommand()" :underline="false">
+          <template #icon>
+            <icon-refresh size="15" />
+          </template>
+        </Link>
+        <Link @click="newCollection()" type="primary" :underline="false">
+          <template #icon>
+            <icon-plus size="15" />
+          </template>
+        </Link>
+        <Modal
+          v-model:visible="newCollection_visible"
+          title="新增'test_coll'集合文档'"
+          @cancel="handlenewCollectionCancel()"
+          @ok="handlenewCollectionOk()"
+        >
+        </Modal>
       </Row>
-    </Card>
-    <Space direction="vertical" size="large" fill>
-      <Table
-        row-key="name"
-        :columns="columns"
-        :data="data"
-        :row-selection="rowSelection"
-        :pagination="false"
-        v-model:selectedKeys="selectedKeys"
-      >
-        <template #操作="{ record }">
-          <Button
-            @click="
-              $modal.info({
-                title: '项目',
-                content: record.project,
-              })
-            "
-          >
-            数据库</Button
-          >
-        </template>
-      </Table>
 
-      <Pagination :total="50" show-total show-jumper />
-    </Space>
+      <Row>
+        <Input
+          v-model:visible="search_visible"
+          placeholder=""
+          model-value="{'filter':'{}','sort':'{id}'}"
+          @focus="openModal()"
+        >
+          <template #prepend>查询参数</template>
+        </Input>
+      </Row>
+
+      <div
+        :style="{
+          boxSizing: 'border-box',
+          width: '300%',
+          padding: '10px',
+        }"
+      >
+        <Row :gutter="20">
+          <Col :span="8">
+            <Card
+              :bordered="true"
+              :style="{ width: '100%', marginLeft: '0px', marginRight: '0px' }"
+            >
+              <CardGrid v-for="(_, index) in new Array(12)" :key="index" :style="{ width: '25%' }">
+                <Card class="card-demo" :bordered="true">
+                  <template #extra>
+                    <Link @click="onJsonEditor()" type="success" :underline="false">
+                      <template #icon>
+                        <icon-search size="15" />
+                      </template>
+                    </Link>
+                    <Link @click="save()" type="primary" :underline="false">
+                      <template #icon>
+                        <icon-file size="15" />
+                      </template>
+                    </Link>
+                    <Popconfirm
+                      type="warning"
+                      content="确认删除该文档？"
+                      @cancel="handledeleteDocCancel()"
+                      @ok="handledeleteDocOk()"
+                    >
+                      <Link @click="handleDelete()" status="danger" :underline="false">
+                        <template #icon>
+                          <icon-delete size="15" />
+                        </template>
+                      </Link>
+                    </Popconfirm>
+                  </template>
+                  { "_id":"123456789",<br />
+                  "df":{},<br />
+                  "x":"\"1212"\",<br />
+                  "y":{<br />
+                  "age":23154564545<br />
+                  "name":3157487484<br />
+                  }<br />
+                  } <br />
+                </Card>
+              </CardGrid>
+            </Card>
+          </Col>
+        </Row>
+      </div>
+    </Card>
   </PageContainer>
 </template>
+<Divider style="height: 34px" direction="vertical" />
+<style scoped>
+.card-demo {
+  width: 100%;
+  margin-right: 24px;
+  transition-property: all;
+}
+.card-demo :deep(.arco-card-header) {
+  border: none;
+}
+</style>

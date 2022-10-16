@@ -15,9 +15,9 @@ const operations: RouteRecordRaw = {
     },
   children: [
     {
-      path: 'dataoperation',
-      name: 'DataOperation',
-      component: () => import('@/pages/operations/mongoDB/DataOperation.vue'),
+      path: 'edit',
+      name: 'DataEdit',
+      component: () => import('@/pages/operations/mongoDB/MongoEdit.vue'),
       meta: {
         requireAuth: true,
         locale: '数据操作',
@@ -25,9 +25,9 @@ const operations: RouteRecordRaw = {
       },
     },
     {
-      path: 'mongoedit',
-      name: 'MongoEdit',
-      component: () => import('@/pages/operations/mongoDB/MongoEdit.vue'),
+      path: 'operation',
+      name: 'DataOperation',
+      component: () => import('@/pages/operations/mongoDB/DataOperation.vue'),
       meta: {
         requireAuth: true,
         locale: 'Mongo管理',
