@@ -198,7 +198,7 @@ const handleDeleteConnect = (uuid: string) => {
               <span v-else>Elasticsearch</span>
             </template>
           </TableColumn>
-          <TableColumn title="操作" >
+          <TableColumn title="操作">
             <template #cell="{ record }">
               <Popconfirm
                 content="请确认是否删除此数据库连接"
