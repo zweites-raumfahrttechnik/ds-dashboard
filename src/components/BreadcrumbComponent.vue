@@ -20,7 +20,8 @@ const breadcrumbs = computed(() => {
 <template>
   <Breadcrumb class="breadcrumb">
     <BreadcrumbItem>
-      <IconApps />
+    
+    
     </BreadcrumbItem>
 
     <BreadcrumbItem v-for="item in breadcrumbs" :key="item">{{ item }}</BreadcrumbItem>
@@ -35,7 +36,7 @@ const breadcrumbs = computed(() => {
     color: rgb(var(--gray-6));
 
     &:last-child {
-      color: rgb(var(--gray-8));
+      color: rgb(var(--gray-6));
     }
   }
 }
