@@ -15,8 +15,6 @@ import {
   Button,
   Popconfirm,
   Modal,
-  Link,
-  Statistic,
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
@@ -100,12 +98,9 @@ const handleSearch = () => {
   execute({ params });
 };
 
-const True = ref(true);
 const False = ref(false);
 
 const selectedKeys = ref(['1', '2']);
-const size = ref('medium');
-const show = ref(true);
 
 const handleFromReset = () => {
   searchFormRef.value?.resetFields();
@@ -116,36 +111,14 @@ const handlePageChange = (page: number) => {
 };
 
 const Db_visible = ref(false);
-const Db_form = reactive({
-  name: '',
-  size: '',
-  null: '',
-  op: '',
-});
 
 const Gather_visible = ref(false);
-const Gather_form = reactive({
-  name: '',
-  op: '',
-});
 
 const Documents_visible = ref(false);
-const Documents_form = reactive({
-  name: '',
-  op: '',
-});
 
 const Property_visible = ref(false);
-const Property_form = reactive({
-  name: '',
-  op: '',
-});
 
 const Index_visible = ref(false);
-const Index_form = reactive({
-  name: '',
-  op: '',
-});
 
 const handleDb = () => {
   Db_visible.value = true;
@@ -191,30 +164,18 @@ const handledeleteIndex = () => {
 };
 const deleteIndex_visible = ref(false);
 
-const Gather_add = () => {
-  Gather_visible.value = true;
-};
 const handleGather = () => {
   Gather_visible.value = true;
 };
 
-const Documents_add = () => {
-  Documents_visible.value = true;
-};
 const handleDocuments = () => {
   Documents_visible.value = true;
 };
 
-const Property_add = () => {
-  Property_visible.value = true;
-};
 const handleProperty = () => {
   Property_visible.value = true;
 };
 
-const Index_add = () => {
-  Property_visible.value = true;
-};
 const handleIndex = () => {
   Index_visible.value = true;
 };
@@ -265,7 +226,6 @@ const handlenewDocumentsCancel = () => {
   newDocuments_visible.value = false;
 };
 
-
 const handlenewPropertyOk = () => {
   newProperty_visible.value = false;
 };
@@ -279,12 +239,6 @@ const handlenewIndexOk = () => {
 const handlenewIndexCancel = () => {
   newIndex_visible.value = false;
 };
-
-const rowSelection = reactive({
-  type: 'checkbox',
-  showCheckedAll: true,
-  onlyCurrent: false,
-});
 
 const Db_columns = [
   {
@@ -314,7 +268,7 @@ const Db_data = reactive([
     uuid: 'admin',
     dbName: 'asd',
     collectionName: 'qwe',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -322,7 +276,7 @@ const Db_data = reactive([
     uuid: 'config',
     dbName: 'zxc',
     collectionName: 'vbn',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -330,7 +284,7 @@ const Db_data = reactive([
     uuid: 'lacal',
     dbName: 'fgh',
     collectionName: 'defr',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -338,7 +292,7 @@ const Db_data = reactive([
     uuid: 'test1',
     dbName: 'tyui',
     collectionName: 'fsdfg',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
   {
@@ -346,7 +300,7 @@ const Db_data = reactive([
     uuid: 'test2',
     dbName: 'ght',
     collectionName: 'frvc',
-    docName:'pouy',
+    docName: 'pouy',
     optional: '集合',
   },
 ]);
@@ -532,27 +486,27 @@ const statsFive_form = reactive({
     <Card class="general-card" :bordered="false">
       <template>
         <Modal
+          v-model:visible="Db_visible"
           width="900px"
           :hide-cancel="false"
-          v-model:visible="Db_visible"
           title="数据库列表"
           :footer="False"
         >
           <Table
+            v-model:selectedKeys="selectedKeys"
             row-key="name"
             :columns="Db_columns"
             :data="Db_data"
             :pagination="pagination"
             :bordered="false"
-            v-model:selectedKeys="selectedKeys"
           >
             <template #optional>
               <Space :size="18">
-                <Button @click="handlestatsOne()" type="text" status="success">stats</Button>
-                <Button @click="handleGather()" type="text">集合</Button>
-                <Button @click="handleDocuments()" type="text">文档</Button>
-                <Button @click="handleProperty()" type="text">属性</Button>
-                <Button @click="handleIndex()" type="text">索引</Button>
+                <Button type="text" status="success" @click="handlestatsOne()">stats</Button>
+                <Button type="text" @click="handleGather()">集合</Button>
+                <Button type="text" @click="handleDocuments()">文档</Button>
+                <Button type="text" @click="handleProperty()">属性</Button>
+                <Button type="text" @click="handleIndex()">索引</Button>
               </Space>
             </template>
           </Table>
@@ -560,9 +514,9 @@ const statsFive_form = reactive({
       </template>
       <template>
         <Modal
+          v-model:visible="statsOne_visible"
           width="700px"
           :hide-cancel="false"
-          v-model:visible="statsOne_visible"
           title="数据库状态信息"
           :footer="False"
         >
@@ -606,13 +560,13 @@ const statsFive_form = reactive({
 
       <template>
         <Modal
+          v-model:visible="Gather_visible"
           width="700px"
           :hide-cancel="false"
-          v-model:visible="Gather_visible"
           title="集合"
           :footer="False"
         >
-          <Button @click="newGather()" type="primary">
+          <Button type="primary" @click="newGather()">
             <template #icon>
               <icon-plus />
             </template>
@@ -631,16 +585,16 @@ const statsFive_form = reactive({
             </Form>
           </Modal>
           <Table
+            v-model:selectedKeys="selectedKeys"
             row-key="name"
             :columns="Gather_columns"
             :data="Gather_data"
             :pagination="false"
             :bordered="false"
-            v-model:selectedKeys="selectedKeys"
           >
             <template #opOne>
               <Space :size="18">
-                <Button @click="handlestatsTwo()" type="text" status="success">stats</Button>
+                <Button type="text" status="success" @click="handlestatsTwo()">stats</Button>
               </Space>
 
               <Popconfirm content="确认删除该集合？" @ok="() => handledeleteGather()">
@@ -650,9 +604,9 @@ const statsFive_form = reactive({
           </Table>
         </Modal>
         <Modal
+          v-model:visible="statsTwo_visible"
           width="700px"
           :hide-cancel="false"
-          v-model:visible="statsTwo_visible"
           title="集合状态信息"
           :footer="False"
         >
@@ -687,13 +641,13 @@ const statsFive_form = reactive({
 
       <template>
         <Modal
+          v-model:visible="Documents_visible"
           width="700px"
           :hide-cancel="false"
-          v-model:visible="Documents_visible"
           title="文档"
           :footer="False"
         >
-          <Button @click="newDocuments()" type="primary">
+          <Button type="primary" @click="newDocuments()">
             <template #icon>
               <icon-plus />
             </template>
@@ -713,20 +667,20 @@ const statsFive_form = reactive({
           </Modal>
 
           <Table
+            v-model:selectedKeys="selectedKeys"
             row-key="name"
             :columns="Documents_columns"
             :data="Documents_data"
             :pagination="false"
             :bordered="false"
-            v-model:selectedKeys="selectedKeys"
           >
             <template #opTwo>
               <Space :size="18">
-                <Button @click="handlestatsThree()" type="text" status="success">stats</Button>
+                <Button type="text" status="success" @click="handlestatsThree()">stats</Button>
                 <Modal
+                  v-model:visible="statsThree_visible"
                   width="700px"
                   :hide-cancel="false"
-                  v-model:visible="statsThree_visible"
                   title="文档状态信息"
                   :footer="False"
                 >
@@ -768,13 +722,13 @@ const statsFive_form = reactive({
       </template>
       <template>
         <Modal
+          v-model:visible="Property_visible"
           width="700px"
           :hide-cancel="false"
-          v-model:visible="Property_visible"
           title="属性"
           :footer="False"
         >
-          <Button @click="newProperty()" type="primary">
+          <Button type="primary" @click="newProperty()">
             <template #icon>
               <icon-plus />
             </template>
@@ -793,20 +747,20 @@ const statsFive_form = reactive({
             </Form>
           </Modal>
           <Table
+            v-model:selectedKeys="selectedKeys"
             row-key="name"
             :columns="Property_columns"
             :data="Property_data"
             :pagination="false"
             :bordered="false"
-            v-model:selectedKeys="selectedKeys"
           >
             <template #opThree>
               <Space :size="18">
-                <Button @click="handlestatsFour()" type="text" status="success">stats</Button>
+                <Button type="text" status="success" @click="handlestatsFour()">stats</Button>
                 <Modal
+                  v-model:visible="statsFour_visible"
                   width="700px"
                   :hide-cancel="false"
-                  v-model:visible="statsFour_visible"
                   title="属性状态信息"
                   :footer="False"
                 >
@@ -848,13 +802,13 @@ const statsFive_form = reactive({
 
       <tempalate>
         <Modal
+          v-model:visible="Index_visible"
           width="700px"
           :hide-cancel="false"
-          v-model:visible="Index_visible"
           title="索引"
           :footer="False"
         >
-          <Button @click="newIndex()" type="primary">
+          <Button type="primary" @click="newIndex()">
             <template #icon>
               <icon-plus />
             </template>
@@ -873,20 +827,20 @@ const statsFive_form = reactive({
             </Form>
           </Modal>
           <Table
+            v-model:selectedKeys="selectedKeys"
             row-key="name"
             :columns="Index_columns"
             :data="Index_data"
             :pagination="false"
             :bordered="false"
-            v-model:selectedKeys="selectedKeys"
           >
             <template #opFour>
               <Space :size="18">
-                <Button @click="handlestatsFive()" type="text" status="success">stats</Button>
+                <Button type="text" status="success" @click="handlestatsFive()">stats</Button>
                 <Modal
+                  v-model:visible="statsFive_visible"
                   width="700px"
                   :hide-cancel="false"
-                  v-model:visible="statsFive_visible"
                   title="索引状态信息"
                   :footer="False"
                 >
@@ -1011,7 +965,7 @@ const statsFive_form = reactive({
 
           <TableColumn title="操作" title-align="left">
             <template #cell>
-              <Button @click="handleDb()" type="text">数据库</Button>
+              <Button type="text" @click="handleDb()">数据库</Button>
             </template>
           </TableColumn>
         </template>

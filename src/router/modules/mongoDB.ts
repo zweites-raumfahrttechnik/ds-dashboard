@@ -2,40 +2,34 @@ import { RouteRecordRaw } from 'vue-router';
 import { MAIN_LAYOUT } from '@/router/constant';
 
 const operations: RouteRecordRaw = {
-  path: '/operations',
-  name: 'Operations',
+  path: '/mongoDB',
+  name: 'MongoDB',
   component: MAIN_LAYOUT,
-  meta: { requireAuth: true, locale: '运维', icon: 'IconDesktop'},
-  children:[
-    {
-    path:'mongoDB',
-    name:'MongoDB',
-    meta:{
-      requireAuth:true, locale:'MongoDB', icon: 'IconDriveFile'
-    },
+  meta: {
+    requireAuth: true,
+    locale: 'MongoDB',
+    icon: 'IconDriveFile',
+  },
   children: [
     {
-      path: 'dataoperation',
-      name: 'DataOperation',
-      component: () => import('@/pages/operations/mongoDB/DataOperation.vue'),
+      path: 'operation',
+      name: 'MongoDBOperation',
+      component: () => import('@/pages/mongoDB/MongoDBOperation.vue'),
       meta: {
         requireAuth: true,
         locale: '数据操作',
-        icon: 'IconDriveFile'
       },
     },
     {
-      path: 'mongoedit',
-      name: 'MongoEdit',
-      component: () => import('@/pages/operations/mongoDB/MongoEdit.vue'),
+      path: 'edit',
+      name: 'MongoDBEdit',
+      component: () => import('@/pages/mongoDB/MongoDBEdit.vue'),
       meta: {
         requireAuth: true,
-        locale: 'Mongo管理',
-        icon: 'IconApps'
+        locale: '管理',
       },
     },
   ],
-},
-  ],
 };
+
 export default operations;

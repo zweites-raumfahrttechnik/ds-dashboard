@@ -2,7 +2,6 @@
 import PageContainer from '@/components/PageContainer.vue';
 import {
   Space,
-  Switch,
   Table,
   Button,
   Modal,
@@ -10,7 +9,6 @@ import {
   Card,
   Row,
   Col,
-  Input,
   Pagination,
   Cascader,
   Form,
@@ -146,7 +144,7 @@ const options = [
     <Card>
       <Row justify="start" :gutter="20">
         <Col :span="2">
-          <Button @click="Modal_add" type="primary">
+          <Button type="primary" @click="Modal_add">
             <template #icon>
               <icon-plus />
             </template>
@@ -179,7 +177,7 @@ const options = [
         </Col>
 
         <Col :span="2">
-          <Button @click="Modal_edit" type="primary">
+          <Button type="primary" @click="Modal_edit">
             <template #icon>
               <IconLaunch />
             </template>
@@ -212,7 +210,7 @@ const options = [
         </Col>
 
         <Col :span="2">
-          <Button @click="Modal_delete" status="danger">
+          <Button status="danger" @click="Modal_delete">
             <template #icon>
               <IconDelete />
             </template>
@@ -250,12 +248,12 @@ const options = [
     </Card>
     <Space direction="vertical" size="large" fill>
       <Table
+        v-model:selectedKeys="selectedKeys"
         row-key="name"
         :columns="columns"
         :data="data"
         :row-selection="rowSelection"
         :pagination="false"
-        v-model:selectedKeys="selectedKeys"
       >
         <template #操作="{ record }">
           <Button
