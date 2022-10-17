@@ -7,14 +7,20 @@ const requests: MockMethod[] = [
     url: '/api/v1/mgdb/query',
     method: 'post',
     response: () => {
-      return successResp();
+      return successResp({
+        count: 100,
+        data: {},
+      });
     },
   },
   {
     url: '/api/v1/mgdb/read',
     method: 'post',
     response: () => {
-      return successResp();
+      return successResp({
+        count: 100,
+        data: {},
+      });
     },
   },
   {
@@ -22,13 +28,8 @@ const requests: MockMethod[] = [
     method: 'put',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
-
       return successResp({
-        items: Array(size)
-          .fill(1)
-          .map(() => {
-      
-          }),
+        items: Array(size),
       });
     },
   },
@@ -40,3 +41,5 @@ const requests: MockMethod[] = [
     },
   },
 ];
+
+export default requests;

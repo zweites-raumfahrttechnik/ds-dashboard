@@ -26,17 +26,7 @@ const requests: MockMethod[] = [
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
-
-      return successResp({
-        count: 500,
-        data: Array(size)
-          .fill(1)
-          .map(() => {
-            return {
-         //     db: Random.db(),
-            };
-          }),
-      });
+      return successResp({});
     },
   },
   {
@@ -45,16 +35,7 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
 
-      return successResp({
-        count: 500,
-        data: Array(size)
-          .fill(1)
-          .map(() => {
-            return {
-            //  document: Random.document(),
-            };
-          }),
-      });
+      return successResp({});
     },
   },
   {
@@ -63,16 +44,7 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
 
-      return successResp({
-        count: 500,
-        data: Array(size)
-          .fill(1)
-          .map(() => {
-            return {
-            //  document: Random.document(),
-            };
-          }),
-      });
+      return successResp({});
     },
   },
   {
@@ -81,16 +53,7 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
 
-      return successResp({
-        count: 500,
-        data: Array(size)
-          .fill(1)
-          .map(() => {
-            return {
-          //    document: Random.document(),
-            };
-          }),
-      });
+      return successResp({});
     },
   },
   {
@@ -99,16 +62,7 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
 
-      return successResp({
-        count: 500,
-        data: Array(size)
-          .fill(1)
-          .map(() => {
-            return {
-             // document: Random.document(),
-            };
-          }),
-      });
+      return successResp({});
     },
   },
 ];
