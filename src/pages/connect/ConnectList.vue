@@ -39,9 +39,10 @@ const pagination = reactive<{ current: number; pageSize: number; total?: number 
   current: 1,
   pageSize: 15,
 });
-//
+//data的内容同GetListData
 const { data, isLoading, execute } = useAxios<ResponseWrap<GetListData>>(
   CONNECT_URL,
+
   { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize } },
   instance,
 );
@@ -83,7 +84,7 @@ watch(
 const tableData = computed(() => {
   return data.value?.data?.data;
 });
-
+//搜索
 const handleSearch = () => {
   const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
   if (searchFormdata.ip && searchFormdata.ip !== '') {

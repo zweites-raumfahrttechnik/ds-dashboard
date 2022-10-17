@@ -7,7 +7,15 @@ const requests: MockMethod[] = [
     url: '/api/v1/table/query',
     method: 'post',
     response: () => {
-      return successResp();
+      return successResp({
+        columnList:{
+          columnName:,
+          columnTypeName:,
+        },
+        data:{
+          
+        }
+      });
     },
   },
 ];
