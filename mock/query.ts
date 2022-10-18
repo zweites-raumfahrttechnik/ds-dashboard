@@ -8,8 +8,10 @@ const requests: MockMethod[] = [
     method: 'post',
     response: () => {
       return successResp({
-        count: 100,
-        data: {},
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
       });
     },
   },
@@ -18,8 +20,10 @@ const requests: MockMethod[] = [
     method: 'post',
     response: () => {
       return successResp({
-        count: 100,
-        data: {},
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
       });
     },
   },
@@ -29,7 +33,10 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
       return successResp({
-        items: Array(size),
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
       });
     },
   },
@@ -37,7 +44,12 @@ const requests: MockMethod[] = [
     url: '/api/v1/mgdb/query',
     method: 'delete',
     response: () => {
-      return successResp();
+      return successResp({
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
+      });
     },
   },
 ];

@@ -19,41 +19,41 @@ const selectedKeys = ref(['1', '2']);
 const size = ref('medium');
 const show = ref(true);
 
-const collectionvisible = ref(false);
-const collectionform = reactive({
+const CollectionVisible = ref(false);
+const CollectionForm = reactive({
   name: '',
   op: '',
 });
 
 //新建集合
-const newcollection = () => {
-  newcollectionvisible.value = true;
+const NewCollection = () => {
+  NewCollectionVisible.value = true;
 };
 
-const newcollectionvisible = ref(false);
-const newcollectionform = reactive({
+const NewCollectionVisible = ref(false);
+const NewCollectionForm = reactive({
   name: ' ',
 });
 
-const handlenewcollectionok = () => {
-  newcollectionvisible.value = false;
+const handleNewCollectionOk = () => {
+  NewCollectionVisible.value = false;
 };
-const handlenewcollectioncancel = () => {
-  newcollectionvisible.value = false;
+const handleNewCollectionCancel = () => {
+  NewCollectionVisible.value = false;
 };
 
 //删除集合
-const handledeletecollection = () => {
-  deletecollectionvisible.value = true;
+const handleDeleteCollection = () => {
+  DeleteCollectionVisible.value = true;
 };
-const deletecollectionvisible = ref(false);
+const DeleteCollectionVisible = ref(false);
 
 //集合数据
-const handlestatstwo = () => {
-  statstwovisible.value = true;
+const handleStatsTwo = () => {
+  StatsTwoVisible.value = true;
 };
 
-const collectioncolumns = [
+const CollectionColumns = [
   {
     title: '名称',
     dataIndex: 'name',
@@ -64,7 +64,7 @@ const collectioncolumns = [
   },
 ];
 
-const collectiondata = reactive([
+const CollectionData = reactive([
   {
     key: '1',
     name: 'test3',
@@ -82,8 +82,8 @@ const collectiondata = reactive([
   },
 ]);
 
-const statstwovisible = ref(false);
-const statstwoform = reactive({
+const StatsTwoVisible = ref(false);
+const StatsTwoForm = reactive({
   ns: 'test_coll',
   avgObjSize: '81.00KB',
   totalSize: '72.00KB',
@@ -96,7 +96,7 @@ const statstwoform = reactive({
 </script>
 
 <template>
-  <Button @click="newcollection()" type="primary">
+  <Button @click="NewCollection()" type="primary">
     <template #icon>
       <icon-plus />
     </template>
@@ -104,18 +104,18 @@ const statstwoform = reactive({
   </Button>
   <Table
     row-key="name"
-    :columns="collectioncolumns"
-    :data="collectiondata"
+    :columns="CollectionColumns"
+    :data="CollectionData"
     :pagination="false"
     :bordered="false"
     v-model:selectedKeys="selectedKeys"
   >
     <template #opOne>
       <Space :size="18">
-        <Button @click="handlestatstwo()" type="text" status="success">stats</Button>
+        <Button @click="handleStatsTwo()" type="text" status="success">stats</Button>
       </Space>
 
-      <Popconfirm type="warning" content="确认删除该集合？" @ok="() => handledeletecollection()">
+      <Popconfirm type="warning" content="确认删除该集合？" @ok="() => handleDeleteCollection()">
         <Button type="text" status="danger">删除</Button>
       </Popconfirm>
     </template>
@@ -124,47 +124,47 @@ const statstwoform = reactive({
   <Modal
     width="700px"
     :hide-cancel="false"
-    v-model:visible="statstwovisible"
+    v-model:visible="StatsTwoVisible"
     title="集合状态信息"
     :footer="False"
   >
-    <Form :model="statstwoform">
+    <Form :model="StatsTwoForm">
       <Form-item field="ns" label="ns">
-        <Input v-model="statstwoform.ns" />
+        <Input v-model="StatsTwoForm.ns" />
       </Form-item>
       <Form-item field="avgObjSize" label="avgObjSize">
-        <Input v-model="statstwoform.avgObjSize" />
+        <Input v-model="StatsTwoForm.avgObjSize" />
       </Form-item>
       <Form-item field="totalSize" label="totalSize">
-        <Input v-model="statstwoform.totalSize" />
+        <Input v-model="StatsTwoForm.totalSize" />
       </Form-item>
       <Form-item field="nindexes" label="nindexes">
-        <Input v-model="statstwoform.nindexes" />
+        <Input v-model="StatsTwoForm.nindexes" />
       </Form-item>
       <Form-item field="storageSize" label="storageSize">
-        <Input v-model="statstwoform.storageSize" />
+        <Input v-model="StatsTwoForm.storageSize" />
       </Form-item>
       <Form-item field="Count" label="Count">
-        <Input v-model="statstwoform.Count" />
+        <Input v-model="StatsTwoForm.Count" />
       </Form-item>
       <Form-item field="size" label="size">
-        <Input v-model="statstwoform.size" />
+        <Input v-model="StatsTwoForm.size" />
       </Form-item>
       <Form-item field="freeStorageSize" label="freeStorageSize">
-        <Input v-model="statstwoform.freeStorageSize" />
+        <Input v-model="StatsTwoForm.freeStorageSize" />
       </Form-item>
     </Form>
   </Modal>
 
   <Modal
-    v-model:visible="newcollectionvisible"
+    v-model:visible="NewCollectionVisible"
     title="新建集合"
-    @cancel="handlenewcollectioncancel()"
-    @ok="handlenewcollectionok()"
+    @cancel="handleNewCollectionCancel()"
+    @ok="handleNewCollectionOk()"
   >
-    <Form :model="newcollectionform">
+    <Form :model="NewCollectionForm">
       <FormItem field="name" label="集合名">
-        <Input v-model="newcollectionform.name" />
+        <Input v-model="NewCollectionForm.name" />
       </FormItem>
     </Form>
   </Modal>

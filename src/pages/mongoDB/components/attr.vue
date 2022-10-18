@@ -19,42 +19,42 @@ const selectedKeys = ref(['1', '2']);
 const size = ref('medium');
 const show = ref(true);
 
-const attrvisible = ref(false);
-const attrform = reactive({
+const AttrVisible = ref(false);
+const AttrForm = reactive({
   name: '',
   op: '',
 });
 
 //新建属性
-const newattrvisible = ref(false);
-const newattrform = reactive({
+const NewAttrVisible = ref(false);
+const NewAttrForm = reactive({
   name: ' ',
 });
 
-const newattr = () => {
-  newattrvisible.value = true;
+const NewAttr = () => {
+  NewAttrVisible.value = true;
 };
 
-const handlenewattrok = () => {
-  newattrvisible.value = false;
+const handleNewAttrOk = () => {
+  NewAttrVisible.value = false;
 };
 
 //删除属性
-const handlenewattrcancel = () => {
-  newattrvisible.value = false;
+const handleNewAttrCancel = () => {
+  NewAttrVisible.value = false;
 };
 
-const handledeleteattr = () => {
-  deleteattrvisible.value = true;
+const handleDeleteAttr = () => {
+  DeleteAttrVisible.value = true;
 };
-const deleteattrvisible = ref(false);
+const DeleteAttrVisible = ref(false);
 
 //属性数据
-const handlestatsfour = () => {
-  statsfourvisible.value = true;
+const handleStatsFour = () => {
+  StatsFourVisible.value = true;
 };
 
-const attrcolumns = [
+const AttrColumns = [
   {
     title: '名称',
     dataIndex: 'name',
@@ -64,7 +64,7 @@ const attrcolumns = [
     slotName: 'opThree',
   },
 ];
-const attrdata = reactive([
+const AttrData = reactive([
   {
     key: '1',
     name: 'test3',
@@ -82,8 +82,8 @@ const attrdata = reactive([
   },
 ]);
 
-const statsfourvisible = ref(false);
-const statsfourform = reactive({
+const StatsFourVisible = ref(false);
+const StatsFourForm = reactive({
   ns: 'test_coll',
   avgObjSize: '81.00KB',
   totalSize: '72.00KB',
@@ -98,7 +98,7 @@ const statsfourform = reactive({
 <!--属性-->
 
 <template>
-  <Button @click="newattr()" type="primary">
+  <Button @click="NewAttr()" type="primary">
     <template #icon>
       <icon-plus />
     </template>
@@ -107,18 +107,18 @@ const statsfourform = reactive({
 
   <Table
     row-key="name"
-    :columns="attrcolumns"
-    :data="attrdata"
+    :columns="AttrColumns"
+    :data="AttrData"
     :pagination="false"
     :bordered="false"
     v-model:selectedKeys="selectedKeys"
   >
     <template #opThree>
       <Space :size="18">
-        <Button @click="handlestatsfour()" type="text" status="success">stats</Button>
+        <Button @click="handleStatsFour()" type="text" status="success">stats</Button>
       </Space>
 
-      <Popconfirm type="warning" content="确认删除该属性？" @ok="() => handledeleteattr()">
+      <Popconfirm type="warning" content="确认删除该属性？" @ok="() => handleDeleteAttr()">
         <Button type="text" status="danger">删除</Button>
       </Popconfirm>
     </template>
@@ -127,47 +127,47 @@ const statsfourform = reactive({
   <Modal
     width="700px"
     :hide-cancel="false"
-    v-model:visible="statsfourvisible"
+    v-model:visible="StatsFourVisible"
     title="属性状态信息"
     :footer="False"
   >
-    <Form :model="statsfourform">
+    <Form :model="StatsFourForm">
       <Form-item field="ns" label="ns">
-        <Input v-model="statsfourform.ns" />
+        <Input v-model="StatsFourForm.ns" />
       </Form-item>
       <Form-item field="avgObjSize" label="avgObjSize">
-        <Input v-model="statsfourform.avgObjSize" />
+        <Input v-model="StatsFourForm.avgObjSize" />
       </Form-item>
       <Form-item field="totalSize" label="totalSize">
-        <Input v-model="statsfourform.totalSize" />
+        <Input v-model="StatsFourForm.totalSize" />
       </Form-item>
       <Form-item field="nindexes" label="nindexes">
-        <Input v-model="statsfourform.nindexes" />
+        <Input v-model="StatsFourForm.nindexes" />
       </Form-item>
       <Form-item field="storageSize" label="storageSize">
-        <Input v-model="statsfourform.storageSize" />
+        <Input v-model="StatsFourForm.storageSize" />
       </Form-item>
       <Form-item field="Count" label="Count">
-        <Input v-model="statsfourform.Count" />
+        <Input v-model="StatsFourForm.Count" />
       </Form-item>
       <Form-item field="size" label="size">
-        <Input v-model="statsfourform.size" />
+        <Input v-model="StatsFourForm.size" />
       </Form-item>
       <Form-item field="freeStorageSize" label="freeStorageSize">
-        <Input v-model="statsfourform.freeStorageSize" />
+        <Input v-model="StatsFourForm.freeStorageSize" />
       </Form-item>
     </Form>
   </Modal>
   <!--新建窗口对话框-->
   <Modal
-    v-model:visible="newattrvisible"
+    v-model:visible="NewAttrVisible"
     title="新建属性"
-    @cancel="handlenewattrcancel()"
-    @ok="handlenewattrok()"
+    @cancel="handleNewAttrCancel()"
+    @ok="handleNewAttrOk()"
   >
-    <Form :model="newattrform">
+    <Form :model="NewAttrForm">
       <FormItem field="name" label="属性名">
-        <Input v-model="newattrform.name" />
+        <Input v-model="NewAttrForm.name" />
       </FormItem>
     </Form>
   </Modal>

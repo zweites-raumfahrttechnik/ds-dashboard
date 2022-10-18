@@ -19,41 +19,41 @@ const selectedKeys = ref(['1', '2']);
 const size = ref('medium');
 const show = ref(true);
 
-const indexvisible = ref(false);
-const indexform = reactive({
+const IndexVisible = ref(false);
+const IndexForm = reactive({
   name: '',
   op: '',
 });
 
 //新增属性
-const newindexvisible = ref(false);
-const newindexform = reactive({
+const NewIndexVisible = ref(false);
+const NewIndexForm = reactive({
   name: ' ',
 });
 
-const newindex = () => {
-  newindexvisible.value = true;
+const NewIndex = () => {
+  NewIndexVisible.value = true;
 };
 
-const handlenewindexok = () => {
-  newindexvisible.value = false;
+const handleNewIndexOk = () => {
+  NewIndexVisible.value = false;
 };
 
-const handlenewindexcancel = () => {
-  newindexvisible.value = false;
+const handleNewIndexCancel = () => {
+  NewIndexVisible.value = false;
 };
 
-const handledeleteindex = () => {
-  deleteindexvisible.value = true;
+const handleDeleteIndex = () => {
+  DeleteIndexVisible.value = true;
 };
-const deleteindexvisible = ref(false);
+const DeleteIndexVisible = ref(false);
 
 //属性数据
-const handlestatsfive = () => {
-  statsfivevisible.value = true;
+const handleStatsFive = () => {
+  StatsFiveVisible.value = true;
 };
 
-const indexcolumns = [
+const IndexColumns = [
   {
     title: '名称',
     dataIndex: 'name',
@@ -64,7 +64,7 @@ const indexcolumns = [
   },
 ];
 
-const indexdata = reactive([
+const IndexData = reactive([
   {
     key: '1',
     name: 'test3',
@@ -82,8 +82,8 @@ const indexdata = reactive([
   },
 ]);
 
-const statsfivevisible = ref(false);
-const statsfiveform = reactive({
+const StatsFiveVisible = ref(false);
+const StatsFiveForm = reactive({
   ns: 'test_coll',
   avgObjSize: '81.00KB',
   totalSize: '72.00KB',
@@ -97,37 +97,37 @@ const statsfiveform = reactive({
 
 <template>
   <tempalate>
-    <Button @click="newindex()" type="primary">
+    <Button @click="NewIndex()" type="primary">
       <template #icon>
         <icon-plus />
       </template>
       新建
     </Button>
     <Modal
-      v-model:visible="newindexvisible"
+      v-model:visible="NewIndexVisible"
       title="新建索引"
-      @cancel="handlenewindexcancel()"
-      @ok="handlenewindexok()"
+      @cancel="handleNewIndexCancel()"
+      @ok="handleNewIndexOk()"
     >
-      <Form :model="newindexform">
+      <Form :model="NewIndexForm">
         <FormItem field="name" label="索引名">
-          <Input v-model="newindexform.name" />
+          <Input v-model="NewIndexForm.name" />
         </FormItem>
       </Form>
     </Modal>
     <Table
       row-key="name"
-      :columns="indexcolumns"
-      :data="indexdata"
+      :columns="IndexColumns"
+      :data="IndexData"
       :pagination="false"
       :bordered="false"
       v-model:selectedKeys="selectedKeys"
     >
       <template #opFour>
         <Space :size="18">
-          <Button @click="handlestatsfive()" type="text" status="success">stats</Button>
+          <Button @click="handleStatsFive()" type="text" status="success">stats</Button>
         </Space>
-        <Popconfirm type="warning" content="确认删除该索引？" @ok="() => handledeleteindex()">
+        <Popconfirm type="warning" content="确认删除该索引？" @ok="() => handleDeleteIndex()">
           <Button type="text" status="danger">删除</Button>
         </Popconfirm>
       </template>
@@ -135,34 +135,34 @@ const statsfiveform = reactive({
     <Modal
       width="700px"
       :hide-cancel="false"
-      v-model:visible="statsfivevisible"
+      v-model:visible="StatsFiveVisible"
       title="索引状态信息"
       :footer="False"
     >
-      <Form :model="statsfiveform">
+      <Form :model="StatsFiveForm">
         <Form-item field="ns" label="ns">
-          <Input v-model="statsfiveform.ns" />
+          <Input v-model="StatsFiveForm.ns" />
         </Form-item>
         <Form-item field="avgObjSize" label="avgObjSize">
-          <Input v-model="statsfiveform.avgObjSize" />
+          <Input v-model="StatsFiveForm.avgObjSize" />
         </Form-item>
         <Form-item field="totalSize" label="totalSize">
-          <Input v-model="statsfiveform.totalSize" />
+          <Input v-model="StatsFiveForm.totalSize" />
         </Form-item>
         <Form-item field="nindexes" label="nindexes">
-          <Input v-model="statsfiveform.nindexes" />
+          <Input v-model="StatsFiveForm.nindexes" />
         </Form-item>
         <Form-item field="storageSize" label="storageSize">
-          <Input v-model="statsfiveform.storageSize" />
+          <Input v-model="StatsFiveForm.storageSize" />
         </Form-item>
         <Form-item field="Count" label="Count">
-          <Input v-model="statsfiveform.Count" />
+          <Input v-model="StatsFiveForm.Count" />
         </Form-item>
         <Form-item field="size" label="size">
-          <Input v-model="statsfiveform.size" />
+          <Input v-model="StatsFiveForm.size" />
         </Form-item>
         <Form-item field="freeStorageSize" label="freeStorageSize">
-          <Input v-model="statsfiveform.freeStorageSize" />
+          <Input v-model="StatsFiveForm.freeStorageSize" />
         </Form-item>
       </Form>
     </Modal>

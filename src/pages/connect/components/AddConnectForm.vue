@@ -12,10 +12,8 @@ import {
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
-
 import { instance } from '@/api';
 import { CONNECT_URL } from '@/api/url';
-
 import { FormModel, defaultFromValue } from './types';
 
 const emit = defineEmits<{

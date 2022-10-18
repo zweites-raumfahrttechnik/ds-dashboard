@@ -121,12 +121,12 @@ const handlePageChange = (page: number) => {
 };
 
 //获取数据库信息
-const handledb = () => {
-  dbvisible.value = true;
+const handleDB = () => {
+  DBVisible.value = true;
 };
 
-const dbvisible = ref(false);
-const dbform = reactive({
+const DBVisible = ref(false);
+const DBForm = reactive({
   name: '',
   size: '',
   null: '',
@@ -134,52 +134,52 @@ const dbform = reactive({
 });
 
 //数据库数据
-const handlestatsone = () => {
-  statsonevisible.value = true;
+const handleStatsOne = () => {
+  StatsOneVisible.value = true;
 };
 
-const handlecollection = () => {
-  collectionvisible.value = true;
+const handleCollection = () => {
+  CollectionVisible.value = true;
 };
 
-const handledoc = () => {
-  docvisible.value = true;
+const handleDoc = () => {
+  DocVisible.value = true;
 };
 
-const handleattr = () => {
-  attrvisible.value = true;
+const handleAttr = () => {
+  AttrVisible.value = true;
 };
 
-const handleindex = () => {
-  indexvisible.value = true;
+const handleIndex = () => {
+  IndexVisible.value = true;
 };
 
-const collectionvisible = ref(false);
-const collectionform = reactive({
+const CollectionVisible = ref(false);
+const CollectionForm = reactive({
   name: '',
   op: '',
 });
 
-const docvisible = ref(false);
-const docform = reactive({
+const DocVisible = ref(false);
+const DocForm = reactive({
   name: '',
   op: '',
 });
 
-const attrvisible = ref(false);
-const attrform = reactive({
+const AttrVisible = ref(false);
+const AttrForm = reactive({
   name: '',
   op: '',
 });
 
-const indexvisible = ref(false);
-const indexform = reactive({
+const IndexVisible = ref(false);
+const IndexForm = reactive({
   name: '',
   op: '',
 });
 
-const statsonevisible = ref(false);
-const statsoneform = reactive({
+const StatsOneVisible = ref(false);
+const StatsOneForm = reactive({
   db: 'test',
   indexes: '3',
   totalSize: '184.00KB',
@@ -193,7 +193,7 @@ const statsoneform = reactive({
   indexSize: '92.00KB',
 });
 
-const dbcolumns = [
+const DBColumns = [
   {
     title: 'uuid',
     dataIndex: 'uuid',
@@ -215,7 +215,7 @@ const dbcolumns = [
     slotName: 'optional',
   },
 ];
-const dbdata = reactive([
+const DBData = reactive([
   {
     key: '1',
     uuid: 'admin',
@@ -265,25 +265,25 @@ const dbdata = reactive([
       <template>
         <Table
           row-key="name"
-          :columns="dbcolumns"
-          :data="dbdata"
+          :columns="DBColumns"
+          :data="DBData"
           :pagination="pagination"
           :bordered="false"
           v-model:selectedKeys="selectedKeys"
         >
           <template #optional>
             <Space :size="18">
-              <Button @click="handlestatsone()" type="text" status="success">stats</Button>
-              <Button @click="handlecollection()" type="text">集合</Button>
-              <Button @click="handledoc()" type="text">文档</Button>
-              <Button @click="handleattr()" type="text">属性</Button>
-              <Button @click="handleindex()" type="text">索引</Button>
+              <Button @click="handleStatsOne()" type="text" status="success">stats</Button>
+              <Button @click="handleCollection()" type="text">集合</Button>
+              <Button @click="handleDoc()" type="text">文档</Button>
+              <Button @click="handleAttr()" type="text">属性</Button>
+              <Button @click="handleIndex()" type="text">索引</Button>
             </Space>
           </template>
         </Table>
       </template>
 
-      <template #title>数据库操作</template>
+      <template #title>MongoDB数据库操作</template>
 
       <Row>
         <Col :flex="1">
@@ -368,13 +368,13 @@ const dbdata = reactive([
 
           <TableColumn title="操作" title-align="left">
             <template #cell>
-              <Button @click="handledb()" type="text">数据库</Button>
+              <Button @click="handleDB()" type="text">数据库</Button>
             </template>
           </TableColumn>
         </template>
       </Table>
     </Card>
-    <Modal width="900px" v-model:visible="dbvisible" :footer="False">
+    <Modal width="900px" v-model:visible="DBVisible" :footer="False">
       <template #title>数据库列表</template>
       <comlist></comlist>
     </Modal>

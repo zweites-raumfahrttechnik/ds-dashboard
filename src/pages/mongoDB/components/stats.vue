@@ -16,12 +16,12 @@ const rowSelection = reactive({
 });
 
 //数据库数据
-const handlestatsone = () => {
-  statsonevisible.value = true;
+const handleStatsOne = () => {
+  StatsOneVisible.value = true;
 };
 
-const statsonevisible = ref(false);
-const statsoneform = reactive({
+const StatsOneVisible = ref(false);
+const StatsOneForm = reactive({
   db: 'test',
   indexes: '3',
   totalSize: '184.00KB',
@@ -37,39 +37,39 @@ const statsoneform = reactive({
 </script>
 
 <template>
-  <Form :model="statsoneform">
+  <Form :model="StatsOneForm">
     <Form-item field="db" label="db">
-      <Input v-model="statsoneform.db" />
+      <Input v-model="StatsOneForm.db" />
     </Form-item>
     <Form-item field="indexes" label="Indexes">
-      <Input v-model="statsoneform.indexes" />
+      <Input v-model="StatsOneForm.indexes" />
     </Form-item>
     <Form-item field="totalSize" label="totalSize">
-      <Input v-model="statsoneform.totalSize" />
+      <Input v-model="StatsOneForm.totalSize" />
     </Form-item>
     <Form-item field="fsUsedSize" label="fsUsedSize">
-      <Input v-model="statsoneform.fsUsedSize" />
+      <Input v-model="StatsOneForm.fsUsedSize" />
     </Form-item>
     <Form-item field="collections" label="collections">
-      <Input v-model="statsoneform.collections" />
+      <Input v-model="StatsOneForm.collections" />
     </Form-item>
     <Form-item field="avgObjSize" label="avgObjSize">
-      <Input v-model="statsoneform.avgObjSize" />
+      <Input v-model="StatsOneForm.avgObjSize" />
     </Form-item>
     <Form-item field="storageSize" label="storageSize">
-      <Input v-model="statsoneform.storageSize" />
+      <Input v-model="StatsOneForm.storageSize" />
     </Form-item>
     <Form-item field="objects" label="objects">
-      <Input v-model="statsoneform.objects" />
+      <Input v-model="StatsOneForm.objects" />
     </Form-item>
     <Form-item field="dataSize" label="dataSize">
-      <Input v-model="statsoneform.dataSize" />
+      <Input v-model="StatsOneForm.dataSize" />
     </Form-item>
     <Form-item field="fsTotalSize" label="fsTotalSize">
-      <Input v-model="statsoneform.fsTotalSize" />
+      <Input v-model="StatsOneForm.fsTotalSize" />
     </Form-item>
     <Form-item field="indexSize" label="indexSize">
-      <Input v-model="statsoneform.indexSize" />
+      <Input v-model="StatsOneForm.indexSize" />
     </Form-item>
   </Form>
 </template>

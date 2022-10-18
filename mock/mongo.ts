@@ -8,16 +8,10 @@ const requests: MockMethod[] = [
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
-
       return successResp({
-        count: 500,
-        data: Array(size)
-          .fill(1)
-          .map(() => {
-            return {
-              document: Random.document(),
-            };
-          }),
+        data: {
+          document: Random.string('lower', 1, 6),
+        },
       });
     },
   },
