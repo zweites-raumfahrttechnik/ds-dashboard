@@ -1,7 +1,7 @@
 import { MockMethod } from 'vite-plugin-mock';
 import { Random } from 'mockjs';
 import { successResp } from './_utils';
-
+//关系型数据库用户管理-post请求，响应值为code,msg,data(null
 const requests: MockMethod[] = [
   //添加
   {
@@ -33,7 +33,6 @@ const requests: MockMethod[] = [
   },
   //修改
   {
-    //返回
     url: '/api/v1/sql/user/update',
     method: 'post',
     response: () => {

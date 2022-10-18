@@ -10,22 +10,25 @@ const router = useRouter();
 const handlePre = () => {
   emit('change-step', 0);
 };
-
-const handleDetail = () => {
-  router.push({ name: 'ConnectList' });
-};
 </script>
 
 <template>
-  <div>
-    <Result status="success" title="数据库查询成功">
-      <template #subtitle> 请在连接列表页面查看添加的数据库连接 </template>
+  <Card class="background">
+    <Result status="success" title="数据库查询成功" class="Result">
       <template #extra>
         <Space :size="16">
-          <Button @click="handleDetail">查看详情</Button>
           <Button type="primary" @click="handlePre">再次创建</Button>
         </Space>
       </template>
     </Result>
-  </div>
+  </Card>
 </template>
+<style lang="less">
+.background{
+  width:100%;
+  height:400px;
+  background-color: aliceblue;
+
+}
+</style>
+
