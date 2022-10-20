@@ -25,26 +25,28 @@ import { GetConnectListParams, GetListData } from '@/api/types';
 
 import PageContainer from '@/components/PageContainer.vue';
 
+//将接口赋值给SearchParams
 type SearchParams = GetConnectListParams;
-
+//form重置功能
 const searchFormRef = ref<FormInstance>();
 
 const searchFormdata = reactive<Pick<SearchParams, 'ip' | 'username' | 'type'>>({
   ip: '',
   username: '',
 });
-
+//初值
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
   current: 1,
   pageSize: 15,
 });
-
+//data的内容同GetListData
 const { data, isLoading, execute } = useAxios<ResponseWrap<GetListData>>(
   CONNECT_URL,
+
   { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize } },
   instance,
 );
-
+//
 const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
   CONNECT_URL,
   { method: 'DELETE' },
@@ -60,7 +62,7 @@ watch(
     pagination.total = newVal;
   },
 );
-
+//监视窗口
 watch(
   () => pagination.current,
   () => {
@@ -82,7 +84,7 @@ watch(
 const tableData = computed(() => {
   return data.value?.data?.data;
 });
-
+//搜索
 const handleSearch = () => {
   const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
   if (searchFormdata.ip && searchFormdata.ip !== '') {
@@ -97,15 +99,15 @@ const handleSearch = () => {
 
   execute({ params });
 };
-
+//重置功能
 const handleFromReset = () => {
   searchFormRef.value?.resetFields();
 };
-
+//换页功能
 const handlePageChange = (page: number) => {
   pagination.current = page;
 };
-
+//删除功能
 const handleDeleteConnect = (uuid: string) => {
   deleteExecute({ data: { uuid } }).then(() => {
     execute({ params: { pg: pagination.current, size: pagination.pageSize } });

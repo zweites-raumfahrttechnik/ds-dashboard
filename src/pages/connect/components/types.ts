@@ -1,3 +1,4 @@
+//post请求
 export interface FormModel {
   ip?: string;
   port?: number;
@@ -5,11 +6,11 @@ export interface FormModel {
   password?: string;
   name?: string;
   others?: string;
-  type: 1 | 2 | 3 | 4 | 5;
+  type: 1 | 2 | 3 | 4 | 5|6;
 
   [key: string]: unknown;
 }
-
+//默认值
 export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
   1: {
     ip: '',
