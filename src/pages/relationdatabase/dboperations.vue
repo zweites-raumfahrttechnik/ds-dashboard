@@ -1,4 +1,4 @@
-<script lang="ts" setup>
+<script>
 import {
   Card,
   Row,
@@ -17,15 +17,39 @@ import {
   Modal,
   Tag,
 } from '@arco-design/web-vue';
-import PageContainer from '@/components/PageContainer.vue';
+//import PageContainer from '@/components/PageContainer.vue';
+import sqlFormatter from 'sql-formatter';
+import SqlEditor from './component/SqlEditor.vue';
 //文本输入框输入时执行
 const handleinput = () => {};
+
+export default {
+  components: {
+    SqlEditor,
+  },
+  data() {
+    return {
+      basicInfoForm: {
+        sqlMain: '',
+      },
+    };
+  },
+  methods: {
+    changeTextarea(val) {
+      this.$set(this.basicInfoForm, 'sqlMain', val);
+    },
+    formaterSql(val) {
+      let dom = this.$refs.sqleditor;
+      dom.editor.setValue(sqlFormatter.format(dom.editor.getValue()));
+    },
+  },
+};
 </script>
 
 <template>
-  <PageContainer>
+
     <Card>
-      <Form :model="from">
+      <Form>
         <Row :gutter="20">
           <Col :span="7">
             <FormItem label="数据库">
@@ -73,13 +97,24 @@ const handleinput = () => {};
             </Tag>
           </Col>
 
-          <Col class="TextInput">
-            <textarea placeholder="请输入查询语句" auto-size @input="handleinput"></textarea>
+          <Col :span="20">
+            <SqlEditor
+              ref="sqleditor"
+              :value="basicInfoForm.sqlMain"
+              @changeTextarea="changeTextarea($event)"
+            />
+            <el-button
+              type="primary"
+              size="small"
+              class="sql-btn"
+              @click="formaterSql(basicInfoForm.sqlMain)"
+              >格式化sql</el-button
+            >
           </Col>
         </Row>
       </Space>
     </Card>
-  </PageContainer>
+ 
 </template>
 <style scoped lang="less">
 .TextInput {

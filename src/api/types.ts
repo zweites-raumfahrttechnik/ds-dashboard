@@ -31,6 +31,7 @@ export interface ConcurrentChartValue {
   concurrent: number[];
   through: number[];
 }
+
 //用户列表的参数的接口
 export interface UserlistParams{
   uuid:string,

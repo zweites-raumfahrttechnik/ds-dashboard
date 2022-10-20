@@ -1,4 +1,4 @@
-
+//用户信息--uuid应该是随机生成
 export interface UserFormlist {
   uuid?: string;
   type: 1 | 2 | 3;

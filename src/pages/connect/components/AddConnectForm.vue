@@ -18,19 +18,18 @@ import { instance } from '@/api';
 import { CONNECT_URL } from '@/api/url';
 
 import { FormModel, defaultFromValue } from './types';
-//在<script setup>中必须使用defineProps和defineEmits来声明props和 emits
+
 const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
 }>();
 
 const formRef = ref<FormInstance>();
-//默认情况
+
 const formdata = reactive<FormModel>({
-  //默认情况
   ...defaultFromValue[1],
   type: 1,
 });
-//计算属性
+
 const isSQL = computed(() => {
   if (formdata.type === 1 || formdata.type === 2 || formdata.type === 3) {
     return true;

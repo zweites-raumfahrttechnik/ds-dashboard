@@ -18,46 +18,79 @@ import {
 } from '@arco-design/web-vue';
 import { reactive, ref } from 'vue';
 import PageContainer from '@/components/PageContainer.vue';
+
 import Formlist from './components/Adduserdata.vue';
+import Successadd from './components/Successaddpages.vue';
+import ReviseForm from './components/Reviseuserdata.vue';
 import Treepermission from './components/Permissionslist.vue';
+
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
-import { Add_Userlist } from '@/api/url';
+import { Add_Userlist, Delete_User_URl } from '@/api/url';
 //引入传回参数
 import { UserlistData } from '@/api/types';
 
 const visibleAdd = ref(false);
 const visibleChange = ref(false);
 const visibleAssignment = ref(false);
-const { data, isLoading, execute } = useAxios<ResponseWrap<UserlistData>>(
-  Add_Userlist,
-  { method: 'GET'},
-  instance,
-);
-const tableData = computed(() => {
-  return data.value?.data?.data;
+
+const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
+  current: 1,
+  pageSize: 15,
 });
+//data为请求返回的数据,重命名为res--自定义操作
+const {
+  data: res,
+  isLoading,
+  execute,
+} = useAxios<ResponseWrap<UserlistData>>(Add_Userlist, { method: 'GET' }, instance);
+
+//删除操作
+const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
+  Delete_User_URl,
+  { method: 'DELETE' },
+  instance,
+  {
+    immediate: false,
+  },
+);
+//进行数据的检测
+const tableData = computed(() => {
+  return res.value?.data?.data;
+});
+
+const step = ref(0);
+
+const changeStep = (idx: number) => {
+  step.value = idx;
+};
 
 //显示不同的行数，待做
 const handleChange = () => {};
 
-//事件-添加用户
+//事件-添加用户--显示对话框
 const adduseraccount = () => {
   visibleAdd.value = true;
 };
 //事件-搜索用户列表
 const searchuserlist = () => {};
-searchuserlist();
-//修改用户数据
-const changeuserdata = () => {
-  visibleChange.value = true;
-};
-//删除用户数据
-const handleDeleteAccount = () => {};
-//修改用户数据
-const assignmentpermission=()=>{
-  visibleAssignment.value = true;
+
+//编辑对话框
+const reviseuserdata=()=>{
+  visibleChange.value=true
 }
+
+//删除用户数据
+const handleDeleteAccount = (uuid:string,type:1|2|3,username:string,host:string) => {
+  deleteExecute({ data: { uuid,type,username,host } }).then(() => {
+    execute({ params: { pg: pagination.current, size: pagination.pageSize } });
+  });
+};
+
+//分配权限
+const assignmentpermission = () => {
+  visibleAssignment.value = true;
+};
 </script>
 
 <template>
@@ -89,7 +122,7 @@ const assignmentpermission=()=>{
         <Col flex="auto"></Col>
 
         <Divider direction="horizontal" type="dashed" />
-
+        <!--请求数据列表-->
         <Col>
           <Table id="userTable" row-key="uuid" :data="tableData">
             <template #columns>
@@ -106,21 +139,22 @@ const assignmentpermission=()=>{
               <TableColumn title="密码" data-index="password" />
               <TableColumn title="修改">
                 <template #cell>
-                  <Button status="success" @click="changeuserdata">编辑</Button>
+                  <Button status="success" @click="reviseuserdata">编辑</Button>
                 </template>
               </TableColumn>
+              <!--定义删除用户数据操作//ok--点击确认按钮时触发-->
               <TableColumn title="操作">
                 <template #cell="{ record }">
-                  <!--点击确认时，执行deleteuserdata方法-->
                   <Popconfirm
                     content="请确认是否删除此用户数据"
-                    @ok="() => handleDeleteAccount()"
+                    @ok="() => handleDeleteAccount(record.uuid,record.type,record.username,record.host)"
                     type="warning"
                   >
-                    <Button status="warning">删除</Button>
+                    <Button status="danger">删除</Button>
                   </Popconfirm>
                 </template>
               </TableColumn>
+
               <TableColumn title="权限">
                 <template #cell>
                   <Button type="primary" @click="assignmentpermission">分配</Button>
@@ -132,27 +166,22 @@ const assignmentpermission=()=>{
       </Row>
     </Card>
     <!--对话框-添加用户-->
-    <Modal v-model:visible="visibleAdd">
+    <Modal v-model:visible="visibleAdd" :hide-cancel="true">
       <template #title> 添加用户 </template>
-      <Formlist></Formlist>
+      <KeepAlive>
+        <Formlist v-if="step === 0" @change-step="changeStep" />
+        <Successadd v-else-if="step === 1" @change-step="changeStep" />
+      </KeepAlive>
     </Modal>
 
     <!--修改用户信息-->
-    <Modal v-model:visible="visibleChange">
+    <Modal v-model:visible="visibleChange" :hide-cancel="true">
       <template #title> 修改用户信息 </template>
-      <Form>
-        <FormItem label="用户名">
-          <Input placeholder="请输入用户名" />
-        </FormItem>
-        <FormItem label="主机地址">
-          <Input placeholder="请输入用户主机地址" />
-        </FormItem>
-        <FormItem label="密码">
-          <Input placeholder="请输入用户密码" />
-        </FormItem>
-      </Form>
+      <ReviseForm />
     </Modal>
-    <Modal v-model:visible="visibleAssignment">
+
+    <!--分配权限-->
+    <Modal v-model:visible="visibleAssignment" :hide-cancel="true">
       <template #title>分配权限</template>
       <Treepermission />
     </Modal>
