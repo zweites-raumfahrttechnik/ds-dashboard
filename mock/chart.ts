@@ -2,7 +2,6 @@ import { MockMethod } from 'vite-plugin-mock';
 import { Random } from 'mockjs';
 import { successResp } from './_utils';
 
-//生成图表的数据
 const requests: MockMethod[] = [
   {
     url: '/api/v1/chart/cpu',
