@@ -4,7 +4,8 @@ import PageContainer from '@/components/PageContainer.vue';
 
 import Form from './components/AddConnectForm.vue';
 import Success from './components/AddConnectSuccess.vue';
-//step数值为0
+
+// 标记当前应展示的表单页面
 const step = ref(0);
 
 const changeStep = (idx: number) => {

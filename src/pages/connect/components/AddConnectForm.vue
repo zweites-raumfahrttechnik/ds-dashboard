@@ -10,7 +10,6 @@ import {
   InputPassword,
   Button,
 } from '@arco-design/web-vue';
-//Forminstance表单实例
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
 
@@ -18,19 +17,20 @@ import { instance } from '@/api';
 import { CONNECT_URL } from '@/api/url';
 
 import { FormModel, defaultFromValue } from './types';
-//在<script setup>中必须使用defineProps和defineEmits来声明props和 emits
+
 const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
 }>();
 
 const formRef = ref<FormInstance>();
-//默认情况
+
+// 初始化表单初值
 const formdata = reactive<FormModel>({
-  //默认情况
   ...defaultFromValue[1],
   type: 1,
 });
-//计算属性
+
+// 计算当前是否选择了关系型数据库
 const isSQL = computed(() => {
   if (formdata.type === 1 || formdata.type === 2 || formdata.type === 3) {
     return true;
@@ -38,12 +38,11 @@ const isSQL = computed(() => {
   return false;
 });
 
-//引入POST请求
 const { execute, isLoading } = useAxios(CONNECT_URL, { method: 'POST' }, instance, {
   immediate: false,
 });
 
-// 更新默认值
+// 更新表单数据
 watch(
   () => formdata.type,
   newVal => {
@@ -54,7 +53,8 @@ watch(
     });
   },
 );
-//提交时间
+
+// 提交表单数据
 const handleSubmit = async () => {
   const res = await formRef.value?.validate();
   if (res) {

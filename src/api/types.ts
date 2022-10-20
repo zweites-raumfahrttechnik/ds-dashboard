@@ -31,15 +31,17 @@ export interface ConcurrentChartValue {
   concurrent: number[];
   through: number[];
 }
-//用户列表的参数的接口
-export interface UserlistParams{
-  uuid:string,
-  type:1|2|3,
-  username:string,
-  host:string,
-  password:string
+
+// 用户列表的参数的接口
+export interface UserlistParams {
+  uuid: string;
+  type: 1 | 2 | 3;
+  username: string;
+  host: string;
+  password: string;
 }
-//响应的数组
-export interface UserlistData{
-  data:UserlistParams[]
+
+// 响应的数组
+export interface UserlistData {
+  data: UserlistParams[];
 }
