@@ -28,6 +28,16 @@ const mongoDB: RouteRecordRaw = {
         icon: 'IconApps',
       },
     },
+    {
+      path: 'jsonEditor',
+      name: 'JsonEditor',
+      component: () => import('@/pages/mongoDB/components/JsonEditor.vue'),
+      meta: {
+        requireAuth: true,
+        locale: 'JsonEditor',
+        icon: 'IconApps',
+      },
+    },
   ],
 };
 export default mongoDB;

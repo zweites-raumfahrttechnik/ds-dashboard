@@ -18,8 +18,10 @@ import {
   Popconfirm,
   CardGrid,
 } from '@arco-design/web-vue';
-import { reactive, ref, defineComponent } from 'vue';
-import JsonEdit from './components/JsonEditor.vue';
+import { reactive, ref } from 'vue';
+import JsonEdit from '@/components/JsonEditor.vue';
+import JSONEditor from 'jsoneditor';
+import 'jsoneditor/dist/jsoneditor.min.css';
 
 let count = 5;
 //标签页
@@ -83,14 +85,6 @@ const OnJsonEditor = () => {
   OnJsonEditorVisible.value = true;
 };
 
-//json数据样例1
-var jsonexampleOne =
-  '{ "flocbxnutio": "a3XVvfPJNFKA-aei1L7t", "uilwtvirlx": true, "ccsvba": -423469322, "nllzyzj": -500901304.9595631, "rqttybsmtx": true}';
-
-//json数据样例2
-var jsonexampleTwo =
-  '{"aaofyxx": "7d7cTji_ecds90GpU","jrshuu": "ldhuNNkCKCM2kPX","upobazkdgjwn": true}';
-
 //保存按钮
 const SaveVisible = ref(false);
 const Save = () => {
@@ -146,6 +140,14 @@ const handleCancel = () => {
 
 const OpenModal = () => {
   FindVisible.value = true;
+};
+
+//Json编辑器
+const jsonStr = ref({ key: 'key', value: 'value' });
+
+const couldView = ref(['tree', 'code', 'form', 'view']);
+const updateModelValue = (val: unknown) => {
+  console.log(val, '修改了值');
 };
 </script>
 
@@ -207,16 +209,19 @@ const OpenModal = () => {
           </Form-item>
         </Col>
       </Row>
-
-      <Modal
-        width="700px"
-        title="json编辑器"
-        v-model:visible="OnJsonEditorVisible"
-        :close-on-click-modal="false"
-        :hide-cancel="false"
-      >
-        <JsonEdit v-model="jsonexampleOne" />
-      </Modal>
+      <template>
+        <Modal
+          width="700px"
+          title="json编辑器"
+          v-model:visible="OnJsonEditorVisible"
+          :close-on-click-modal="false"
+          :hide-cancel="false"
+        >
+      
+          <JSONEditor />
+      
+        </Modal>
+      </template>
 
       <Tabs :editable="true" @add="handleAdd" @delete="handleDelete" show-add-button auto-switch>
         <Tab-pane
@@ -240,15 +245,11 @@ const OpenModal = () => {
           </template>
         </Link>
         <Modal
-          width="700px"
           v-model:visible="NewCollectionVisible"
           title="新增'test_coll'集合文档'"
-          :close-on-click-modal="false"
-          :hide-cancel="false"
           @cancel="handleNewCollectionCancel()"
           @ok="handleNewCollectionOk()"
         >
-          <JsonEdit currentMode="code" v-model="jsonexampleTwo" />
         </Modal>
       </Row>
 
@@ -272,8 +273,9 @@ const OpenModal = () => {
       ></div>
       <Row :gutter="20">
         <Col :span="30">
-          <Card :bordered="true" :style="{ width: '100%' }">
-            <CardGrid v-for="(_, index) in new Array(12)" :key="index" :style="{ width: '25%' }">
+          <Card :bordered="true" :style="{ width: '100%'}">
+            
+            <CardGrid v-for="(_, index) in new Array(1)" :key="index" :style="{ width: '100%' }">
               <Card class="card-demo" :bordered="true">
                 <template #extra>
                   <Link @click="OnJsonEditor()" type="success" :underline="false">
