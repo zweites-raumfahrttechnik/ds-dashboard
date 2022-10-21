@@ -17,7 +17,7 @@ const handlePre = () => {
 
 <template>
   <div>
-    <Result status="success" title="redis数据库基本操作成功">
+    <Result status="success" title="redis数据库自定义操作成功">
       <!-- <template #subtitle> 请在连接列表页面查看添加的数据库连接 </template> -->
       <template #extra>
         <Space :size="16">

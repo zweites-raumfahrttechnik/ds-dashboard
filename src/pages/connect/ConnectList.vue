@@ -60,6 +60,7 @@ watch(
     pagination.total = newVal;
   },
 );
+console.log(pagination.total)
 
 watch(
   () => pagination.current,

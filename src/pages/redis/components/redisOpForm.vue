@@ -1,119 +1,156 @@
 <script lang="ts" setup>
 import {
-  Spin,
-  Form,
-  FormItem,
-  Select,
-  Option,
-  Input,
-  InputNumber,
-  InputPassword,
-  Button,
+        Form,
+        FormItem,
+        Row,
+        Col,
+        Input,
+        InputNumber,
+        Select,
+        Option,
+        Button,
+        Space
 } from '@arco-design/web-vue';
+import { reactive } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
-
-import { instance } from '@/api';
-import { CONNECT_URL } from '@/api/url';
-
+import { instance,ResponseWrap } from '@/api';
+import { REDIS_OP_URL } from '@/api/url';
 import { FormModel, defaultFromValue } from './types';
 
 const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
+  (e: 'getChildren', num: object): void;
 }>();
 
-const formRef = ref<FormInstance>();
-
-const formdata = reactive<FormModel>({
-  ...defaultFromValue[1],
+const form = reactive<FormModel>({
+  ...defaultFromValue[0],
+  type: 0,
+});
+//acition为set/get时,string/set/list/zset/hash;  acition为delete/exist时,item/set/list/zset/hash
+const isSetGet = computed(() => {
+  if (form.action === 'set' || form.action === 'get' ) {
+    return false;
+  }
+  return true;
 });
 
-const { execute, isLoading } = useAxios(CONNECT_URL, { method: 'POST' }, instance, {
-  immediate: false,
+const isDelExist = computed(() => {
+  if (form.action === 'delete' || form.action === 'exist' ) {
+    return false;
+  }
+  return true;
 });
 
-// 更新默认值
-// watch(
-//   () => formdata.type,
-//   newVal => {
-//     const defaultVal = defaultFromValue[newVal];
+const { data,execute, isLoading } = useAxios<ResponseWrap<FormModel>>
+    (REDIS_OP_URL,
+     { method: 'get' }, 
+     instance, {
+     immediate: false,
+});
 
-//     Object.keys(defaultVal).forEach(k => {
-//       formdata[k] = defaultVal[k];
-//     });
-//   },
-// );
+// 更新默认值(用于声明在数据更改时调用的侦听回调。)
+watch(
+  () => form.type,
+  newVal => {
+    const defaultVal = defaultFromValue[newVal];
+    Object.keys(defaultVal).forEach(k => {
+      form[k] = defaultVal[k];
+    });
+  },
+);
+
+// const json1={
+//         库:'1,2,3,4,5,6,7,8,9',
+//         number:10,
+//         1:{hello:'redisOp操作',halou:'redisManagement'},
+//         2:{zhuxian:'gujian',qingyun:'dazhufeng'}
+// }
 
 const handleSubmit = async () => {
   const res = await formRef.value?.validate();
   if (res) {
     return;
   }
-
   execute({
     data: {
-      ...formdata,
+      ...form,
     },
   }).then(() => {
     formRef.value?.resetFields();
     emit('change-step', 1);
+    emit('getChildren',data);
   });
 };
-const options = {
-      Beijing: ['Haidian', 'Chaoyang', 'Changping'],
-      Sichuan: ['Chengdu', 'Mianyang', 'Aba'],
-      Guangdong: ['Guangzhou', 'Shenzhen', 'Shantou']
-    }
+const formRef = ref<FormInstance>();
 </script>
 
 <template>
-  <Spin :loading="isLoading">
-    <Form ref="formRef" :model="formdata" class="form" @submit="handleSubmit">
-      
-      <FormItem label="数据库名称" :rules="[{ required: true }]">
-        <InputNumber v-model="formdata.dbname" /> 
-      </FormItem>
-      <FormItem field="type" label="操作类型" >
-        <!-- :rules="[{ required: true }]" -->
-        <Select v-model="formdata.action">
-          <Option :value="1">set</Option>
-          <Option :value="2">get</Option>
-          <Option :value="3">delete</Option>
-          <Option :value="4">exist</Option>
-          <Option :value="5">type</Option>
-          <Option :value="6">count</Option>
-        </Select>
-      </FormItem>
-      <FormItem field="type" label="操作值类型">
-        <!-- :rules="[{ required: true }]" -->
-        <Select v-model="formdata.keyType">
-          <Option :value="1">string</Option>
-          <Option :value="2">set</Option>
-          <Option :value="3">list</Option>
-          <Option :value="4">sort</Option>
-          <Option :value="5">sortset</Option>
-        </Select>
-      </FormItem>
-      <FormItem v-model="formdata.key" field="key" label="键名">
-        <Input placeholder="请输入key值" />
-      </FormItem>
-      <FormItem v-model="formdata.parameter1" field="others" label="参数1">
-        <Input placeholder="请输入参数1" />
-      </FormItem>
-      <FormItem v-model="formdata.parameter2" field="others" label="参数2">
-        <Input placeholder="请输入参数2" />
-      </FormItem>
-      <FormItem>
-        <Button html-type="submit" type="primary">执行</Button>
-      </FormItem>
-
+    <div>
+    <Form  ref="formRef" :model="form"  @submit="handleSubmit" >
+        <Row :gutter="16">
+            <Col :span="8">
+                <FormItem field="dbname" label="数据库编号" label-col-flex="100px" 
+                :rules="[{required:true,message:'name is required'},{type:'number',message:'must be a number'}]"
+                :validate-trigger="['change','input']">
+                    <InputNumber v-model="form.dbname" :min="0" placeholder="please enter..." /> 
+                </FormItem>
+            </Col>
+            <Col :span="8">
+                <FormItem field="action" label="操作类型" label-col-flex="80px"
+                :rules="[{required:true,message:'action is required to select'}]">
+                    <Select v-model="form.action" placeholder="please select ..." allow-search>
+                        <Option :value="set">set</Option>
+                        <Option :value="get">get</Option>
+                        <Option :value="delete">delete</Option>
+                        <Option :value="exist">exist</Option>
+                        <Option :value="type">type</Option>
+                        <Option :value="count">count</Option>
+                    </Select>
+                </FormItem>
+            </Col>
+            <Col :span="8">
+                <FormItem field="keyType" label="操作值类型" label-col-flex="80px"
+                :rules="[{required:true,message:'keyType is required to select'}]">
+                    <Select v-model="form.keyType" placeholder="please select ..." allow-search>
+                        <Option :value="item" v-if="isSetGet">item</Option>
+                        <Option :value="string" v-if="isDelExist">string</Option>
+                        <Option :value="set">set</Option>
+                        <Option :value="list">list</Option>
+                        <Option :value="zset">zset</Option>
+                        <Option :value="hash">hash</Option>
+                    </Select>
+                </FormItem>
+            </Col>
+        </Row>
+        <Row :gutter="16">
+            <Col :span="8">
+                <FormItem field="key" label="键名" label-col-flex="100px"
+                :rules="[{required:true,message:'key is required'}]" :validate-trigger="['change','input']">
+                    <Input v-model="form.key" placeholder="please enter..." />
+                </FormItem>
+            </Col>
+            <Col :span="8">
+                <FormItem field="parameter1" label="参数1" label-col-flex="80px" 
+                :rules="[{required:true,message:'parameter is required'}]"
+                :validate-trigger="['change','input']">
+                    <Input v-model="form.parameter1" placeholder="please enter..." /> 
+                </FormItem>
+            </Col>
+            <Col :span="8">
+                <FormItem field="parameter2" label="参数2" label-col-flex="80px">
+                    <Input v-model="form.parameter2" placeholder="please enter..." />
+                </FormItem>
+            </Col>
+        </Row>
+        <Row>
+            <FormItem label-col-flex="100px">
+                <Space>
+                    <Button html-type="submit" type="primary">执行</Button>
+                    <Button type="primary" @click="$refs.formRef.resetFields()">重置</Button>
+                </Space>
+            </FormItem>
+        </Row>
     </Form>
-  </Spin>
+    </div>
 </template>
-
-<style lang="less" scoped>
-.form {
-  width: 700px;
-}
-</style>
-
