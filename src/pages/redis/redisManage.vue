@@ -75,7 +75,6 @@ const handlePageChange = (page: number) => {
 };
 const dbcount = computed(() =>{return dataKeys.value?.data!?.count});
 const dbkeys = computed(() =>{return dataKeys.value?.data!?.dbkeys});
-
 //浮窗中的keys详情展示的数据组织
 const keysData=reactive([{}]);
 keysData.pop();
@@ -89,7 +88,6 @@ function keysDetail(){
     keysData.push(keysItem);
   }
 }
-
 
 //数据库编号接口与数据库大小接口的数据组织//redisMetaKeys接口，表格索引程序
 const tablesize:number[] = new Array(dbtotalNum.value);
@@ -135,9 +133,16 @@ const viewDetails = (dbnumber:number) => {
 };
 const handleOk = () => {
   visibleKeys.value = false;
+  keysData.splice(1,dbcount.value);
+  keysData.pop();
+  // for(var i=dbcount.value;i>=0;i--){
+  //   keysData.pop();
+  // }
 };
 const handleCancel = () => {
   visibleKeys.value = false;
+  keysData.splice(1,dbcount.value);
+  keysData.pop();
 }
 </script>
 

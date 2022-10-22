@@ -79,7 +79,7 @@ const handleSubmit = async () => {
   }).then(() => {
     formRef.value?.resetFields();
     emit('change-step', 1);
-    emit('getChildren',data);
+    emit('getChildren',data.value.data);
   });
 };
 const formRef = ref<FormInstance>();
