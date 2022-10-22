@@ -28,10 +28,10 @@ const requests: MockMethod[] = [
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
-      
+      const num=Random.integer(0,100);
       return successResp({
-        count:Random.integer(0,100),
-        dbkeys:Array(10).fill(1).map(()=>{return Random.string()})
+        count:num,
+        dbkeys:Array(num).fill(1).map(()=>{return Random.string()})
       });
     },
   },

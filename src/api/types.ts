@@ -1,3 +1,4 @@
+import redis from '../router/modules/Redis';
 export interface GetConnectListParams {
   pg: number;
   size: number;
@@ -57,4 +58,12 @@ export interface redisDbsize{
 export interface redisKeys{
   count:number,
   dbkeys:string[]
+}
+
+//redis元数据-keys获取参数
+export interface redisgetkeysParams{
+  uuid:string,
+  dbnumber:number,
+  pg:number,
+  size:number
 }

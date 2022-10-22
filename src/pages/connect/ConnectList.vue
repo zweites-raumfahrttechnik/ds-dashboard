@@ -58,9 +58,9 @@ watch(
   () => data.value?.data?.count,
   newVal => {
     pagination.total = newVal;
+    console.log(pagination.total)
   },
 );
-console.log(pagination.total)
 
 watch(
   () => pagination.current,
@@ -75,7 +75,6 @@ watch(
     if (searchFormdata.type) {
       params.type = searchFormdata.type;
     }
-
     execute({ params });
   },
 );
