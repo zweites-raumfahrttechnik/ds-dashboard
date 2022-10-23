@@ -24,7 +24,7 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 
 import { instance } from '@/api';
 
-import { RelationInqurey } from '@/api/url';
+import { InQUERY_DATABASE_URL } from '@/api/url';
 import { ApifoxModal, defaultInqueryValue } from '../types';
 
 //change-step定义界面跳转
@@ -50,7 +50,7 @@ const pagination = reactive<{ current: number; pageSize: number; total?: number 
 //请求参数-固定值
 //响应数据data
 const { data, execute, isLoading } = useAxios(
-  RelationInqurey,
+  InQUERY_DATABASE_URL,
   { method: 'POST', params: { pg: pagination.current, size: pagination.pageSize } },
   instance,
   {

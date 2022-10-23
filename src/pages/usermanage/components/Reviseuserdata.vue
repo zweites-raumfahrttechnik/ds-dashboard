@@ -21,7 +21,7 @@ import { reactive, ref } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance } from '@/api';
-import { Revise_User_Data } from '@/api/url';
+import { UPDATE_USER_URL } from '@/api/url';
 
 import { UserFormlist } from '../userData';
 
@@ -32,7 +32,7 @@ const ReFormData = reactive<UserFormlist>({
   type: 1,
 });
 
-const { execute } = useAxios(Revise_User_Data, { method: 'POST' }, instance, {
+const { execute } = useAxios(UPDATE_USER_URL, { method: 'POST' }, instance, {
   immediate: false,
 });
 

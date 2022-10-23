@@ -21,10 +21,9 @@ import { reactive, ref } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance } from '@/api';
-import { Add_Userlist } from '@/api/url';
 
+import { Add_USERLIST_URL } from '@/api/url';
 import { UserFormlist, defaultUserFormlist } from '../userData';
-
 const formRef = ref<FormInstance>();
 
 //设置结果框
@@ -38,7 +37,7 @@ const userFormData = reactive<UserFormlist>({
   type: 1,
 });
 
-const { execute } = useAxios(Add_Userlist, { method: 'POST' }, instance, {
+const { execute } = useAxios(Add_USERLIST_URL, { method: 'POST' }, instance, {
   immediate: false,
 });
 
@@ -57,6 +56,7 @@ const handleSubmitUser = async () => {
     emit('change-step', 1);
   });
 };
+
 </script>
 <template>
   <!--uuid应该是自动生成，不应该有用户指定，这里留出输入框-->

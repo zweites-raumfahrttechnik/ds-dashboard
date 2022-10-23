@@ -27,7 +27,7 @@ import PageContainer from '@/components/PageContainer.vue';
 
 //将接口赋值给SearchParams
 type SearchParams = GetConnectListParams;
-//form重置功能
+
 const searchFormRef = ref<FormInstance>();
 
 const searchFormdata = reactive<Pick<SearchParams, 'ip' | 'username' | 'type'>>({
