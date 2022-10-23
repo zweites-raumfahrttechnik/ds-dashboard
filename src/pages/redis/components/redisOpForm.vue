@@ -17,14 +17,14 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance,ResponseWrap } from '@/api';
 import { REDIS_OP_URL } from '@/api/url';
 import { FormModel } from './types';
-
+const props = defineProps<{ uuid: "6df74580-023a-4aa0-ae5f-c134639e618d" }>();
 const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
   (e: 'getChildren', num: object): void;
 }>();
 
 const form = reactive<FormModel>({
-    uuid: '',
+    uuid: props.uuid,
     dbname:0,
     action: '',
     keyType: '',

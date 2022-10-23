@@ -16,7 +16,7 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance,ResponseWrap } from '@/api';
 import { REDIS_OP_CUSTOM_URL } from '@/api/url';
 import { CustomFormModel } from './types';
-
+const props = defineProps<{ uuid: string }>();
 const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
   (e: 'getChildren', num: object): void;
@@ -27,7 +27,7 @@ const form = reactive<CustomFormModel>({
   args:[],
   command:'',
   dbnumber:0,
-  uuid:''
+  uuid:props.uuid
 });
 
 const { data,execute, isLoading } = useAxios<ResponseWrap<CustomFormModel>>

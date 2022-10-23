@@ -1,3 +1,4 @@
+<!--json字符串美化组件-->
 <script lang="ts" setup>
 import { 
     CollapseItem,
@@ -14,8 +15,4 @@ import {
         <span><pre>{{ JSON.stringify(data, null, 4)  }}</pre></span>
     </div>
 </template>
-
-<style lang="less">
-
-</style>
 

@@ -29,12 +29,13 @@ setTimeout(function(){
 //  console.log(dbkeys.value);
  redisMeta();
 },10)
+const props = defineProps<{ uuid: "6df74580-023a-4aa0-ae5f-c134639e618d" }>();
 type SearchParams = redisgetkeysParams;
 const searchFormRef = ref<FormInstance>();
 const searchFormdata = reactive({num:NaN});
 const { data, isLoading, execute } = useAxios<ResponseWrap<redisDBtotal>>(
   redisMetaTotal_URL,
-  { method: 'GET', params: { uuid:"6df74580-023a-4aa0-ae5f-c134639e618d" } },
+  { method: 'GET', params: { uuid:props.uuid } },
   instance,{immediate:true}
 );
 
@@ -45,7 +46,7 @@ function getdbsize(dbtotal:number[]){
   for(var i=0;i<dbtotal.length;i++){
     const { data:dataSize,execute:executeSize } = useAxios<ResponseWrap<redisDbsize>>(
       REDIS_META_SIZE_URL,
-      { method: 'GET', params: { uuid:"6df74580-023a-4aa0-ae5f-c134639e618d",dbnumber:dbtotal[i]} },
+      { method: 'GET', params: { uuid:props.uuid,dbnumber:dbtotal[i]} },
       instance,
     );
     watch(dataSize,(value,oldValue)=>{
@@ -130,7 +131,7 @@ const getdetailloading = computed(() => {
 const visibleKeys = ref(false);
 const viewDetails = (dbnumber:number) => {
   const params: SearchParams =
-     { uuid:"6df74580-023a-4aa0-ae5f-c134639e618d",dbnumber:dbnumber,pg: pagination.current, size: pagination.pageSize };
+     { uuid:props.uuid,dbnumber:dbnumber,pg: pagination.current, size: pagination.pageSize };
   executeKeys({ params });
   setTimeout(function(){keysDetail();},10);
   visibleKeys.value = true;
@@ -154,7 +155,7 @@ const handleSearch = () => {
   if(searchFormdata.num>=0){
     const { data:dataSize,execute:executeSize } = useAxios<ResponseWrap<redisDbsize>>(
       REDIS_META_SIZE_URL,
-      { method: 'GET', params: { uuid:"6df74580-023a-4aa0-ae5f-c134639e618d",dbnumber:searchFormdata.num} },
+      { method: 'GET', params: { uuid:props.uuid,dbnumber:searchFormdata.num} },
       instance,
     );
     const dbsize = computed(() =>{return dataSize.value?.data!?.dbsize});
