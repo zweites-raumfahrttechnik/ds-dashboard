@@ -7,13 +7,6 @@ const requests: MockMethod[] = [
     url: '/api/v1/redisOpCustomForm',
     method: 'post',
     response: () => {
-      return successResp();
-    },
-  },
-  {
-    url: '/api/v1/redisOpCustomForm',
-    method: 'get',
-    response: () => {
       return successResp({
         data: Array(1)
           .fill(1)
@@ -25,14 +18,6 @@ const requests: MockMethod[] = [
             };
           }),
       });
-    },
-  },
-  {
-    //删除
-    url: '/api/v1/redisOpCustomForm',
-    method: 'delete',
-    response: () => {
-      return successResp();
     },
   },
 ];

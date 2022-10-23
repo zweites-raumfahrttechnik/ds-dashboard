@@ -38,19 +38,6 @@ const disabledBasic = ref(false);
     <div>
       <Card class="general-card" :bordered="false">
         <Space style="margin-top: 8px;">
-          <p>redis自定义操作</p>
-          <Switch v-model="disabledCustom" />
-        </Space>
-        <Divider direction="horizontal" type="solid" margin="6px"/>
-        <div class="wrap" v-if="disabledCustom">
-          <KeepAlive>
-            <CustomForm v-if="customStep === 0" @change-step="changeCustomStep" @getChildren="getCustomJson"/>
-            <CustomSuccess v-else-if="customStep === 1" @change-step="changeCustomStep" @get-children="getCustomJson"/>
-          </KeepAlive>
-        </div>
-      </Card>
-      <Card class="general-card" :bordered="false">
-        <Space style="margin-top: 8px;">
           <p>redis基本操作</p>
           <Switch v-model="disabledBasic" />
         </Space>
@@ -59,6 +46,19 @@ const disabledBasic = ref(false);
           <KeepAlive>
             <Form v-if="step === 0" @change-step="changeStep" @getChildren="getJson"/>
             <Success v-else-if="step === 1" @change-step="changeStep" @get-children="getJson"/>
+          </KeepAlive>
+        </div>
+      </Card>
+      <Card class="general-card" :bordered="false">
+        <Space style="margin-top: 8px;">
+          <p>redis自定义操作</p>
+          <Switch v-model="disabledCustom" />
+        </Space>
+        <Divider direction="horizontal" type="solid" margin="6px"/>
+        <div class="wrap" v-if="disabledCustom">
+          <KeepAlive>
+            <CustomForm v-if="customStep === 0" @change-step="changeCustomStep" @getChildren="getCustomJson"/>
+            <CustomSuccess v-else-if="customStep === 1" @change-step="changeCustomStep" @get-children="getCustomJson"/>
           </KeepAlive>
         </div>
       </Card>

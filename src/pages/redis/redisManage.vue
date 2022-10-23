@@ -1,11 +1,20 @@
 <script lang="ts" setup>
 import {
   Card,
+  Form,
+  FormItem,
+  Row,
+  InputNumber,
+  Divider,
+  Col,
+  Space,
   Table,
   TableColumn,
   Button,
   Modal,
 } from '@arco-design/web-vue';
+import { FormInstance } from '@arco-design/web-vue/es/form';
+import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
 import { reactive, ref } from 'vue';
 import PageContainer from '@/components/PageContainer.vue';
 import { useAxios } from '@vueuse/integrations/useAxios';
@@ -19,13 +28,16 @@ setTimeout(function(){
 //  console.log(dbcount.value);
 //  console.log(dbkeys.value);
  redisMeta();
-},500)
+},10)
 type SearchParams = redisgetkeysParams;
+const searchFormRef = ref<FormInstance>();
+const searchFormdata = reactive({num:NaN});
 const { data, isLoading, execute } = useAxios<ResponseWrap<redisDBtotal>>(
   redisMetaTotal_URL,
   { method: 'GET', params: { uuid:"6df74580-023a-4aa0-ae5f-c134639e618d" } },
   instance,{immediate:true}
 );
+
 const dbtotalNum = computed(() =>{return data.value?.data!?.data});
 
 //dbsize
@@ -61,14 +73,6 @@ watch(
     //console.log("keys键个数即浮窗页面所有信息条目数:",pagination.total)
   },
 );
-// const dbkey=reactive<{key?:string[]}>({});
-// watch(
-//   () => dataKeys.value?.data?.dbkeys,
-//   newVal => {
-//     dbkey.key = newVal;
-//     //console.log("keys详情:",dbkey.key)
-//   },
-// );
 
 const handlePageChange = (page: number) => {
   pagination.current = page;
@@ -104,7 +108,7 @@ function redisMeta(){
       var dataItem={ dbnumber:dbtotal[i],dbsize:tablesize[i]};
       tableData.push(dataItem);
     }
-  },500);
+  },300);
 }
 
 const tableData=reactive([{}]);
@@ -128,13 +132,14 @@ const viewDetails = (dbnumber:number) => {
   const params: SearchParams =
      { uuid:"6df74580-023a-4aa0-ae5f-c134639e618d",dbnumber:dbnumber,pg: pagination.current, size: pagination.pageSize };
   executeKeys({ params });
-  setTimeout(function(){keysDetail();},500);
+  setTimeout(function(){keysDetail();},10);
   visibleKeys.value = true;
 };
 const handleOk = () => {
   visibleKeys.value = false;
   keysData.splice(1,dbcount.value);
   keysData.pop();
+  pagination.current=1;
   // for(var i=dbcount.value;i>=0;i--){
   //   keysData.pop();
   // }
@@ -143,13 +148,70 @@ const handleCancel = () => {
   visibleKeys.value = false;
   keysData.splice(1,dbcount.value);
   keysData.pop();
+  pagination.current=1;
 }
+const handleSearch = () => {
+  if(searchFormdata.num>=0){
+    const { data:dataSize,execute:executeSize } = useAxios<ResponseWrap<redisDbsize>>(
+      REDIS_META_SIZE_URL,
+      { method: 'GET', params: { uuid:"6df74580-023a-4aa0-ae5f-c134639e618d",dbnumber:searchFormdata.num} },
+      instance,
+    );
+    const dbsize = computed(() =>{return dataSize.value?.data!?.dbsize});
+    tableData.splice(1,tableData.length);
+    tableData.pop();
+    setTimeout(function(){
+      tableData.push({ dbnumber:searchFormdata.num,dbsize:dbsize});
+    },10)
+  }
+};
+const handleFromReset = () => {
+  searchFormdata.num=NaN;
+  tableData.splice(1,tableData.length);
+  tableData.pop();
+  setTimeout(function(){redisMeta();},10);
+};
 </script>
 
 <template>
   <PageContainer>
-    <Card>
+    <Card class="general-card" :bordered="false">
       <template #title>redis元数据管理</template>
+      <Row>
+        <Col :flex="1">
+          <Form
+            ref="searchFormRef"
+            :model="searchFormdata"
+            :wrapper-col-props="{ span: 18 }"
+            label-align="right"
+          >
+            <Row :gutter="16">
+              <Col :span="11">
+                <FormItem field="number" label="数据库编号">
+                  <InputNumber v-model="searchFormdata.num" :min="0" placeholder="请输入数据库编号" />
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>
+        </Col>
+        <Col :flex="'86px'" style="text-align: left">
+          <Space :size="18">
+            <Button type="primary" @click="handleSearch">
+              <template #icon>
+                <IconSearch />
+              </template>
+              搜索
+            </Button>
+            <Button @click="handleFromReset">
+              <template #icon>
+                <IconRefresh />
+              </template>
+              重置
+            </Button>
+          </Space>
+        </Col>
+      </Row>
+      <Divider style="margin-top: 0" />
       <!-- <div>{{data}}</div>
       <div>{{dataSize}}</div>
       <div>{{dataKeys}}</div>
@@ -164,7 +226,7 @@ const handleCancel = () => {
           <TableColumn title="键值对数量" data-index="dbsize" />
           <TableColumn title="详情">
             <template #cell="{ record }">
-              <Button  status="success" @click="viewDetails(record.dbnumber)">查看</Button>
+              <Button  type="text" @click="viewDetails(record.dbnumber)">查看</Button>
             </template>
           </TableColumn>
         </template>

@@ -58,7 +58,7 @@ watch(
   () => data.value?.data?.count,
   newVal => {
     pagination.total = newVal;
-    console.log(pagination.total)
+    //console.log(pagination.total)
   },
 );
 
@@ -94,7 +94,6 @@ const handleSearch = () => {
   if (searchFormdata.type) {
     params.type = searchFormdata.type;
   }
-
   execute({ params });
 };
 

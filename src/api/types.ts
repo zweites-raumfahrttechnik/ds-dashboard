@@ -1,4 +1,3 @@
-import redis from '../router/modules/Redis';
 export interface GetConnectListParams {
   pg: number;
   size: number;

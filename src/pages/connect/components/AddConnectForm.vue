@@ -33,7 +33,6 @@ const isSQL = computed(() => {
   if (formdata.type === 1 || formdata.type === 2 || formdata.type === 3) {
     return true;
   }
-
   return false;
 });
 

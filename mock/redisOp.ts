@@ -7,13 +7,6 @@ const requests: MockMethod[] = [
     url: '/api/v1/redisOp',
     method: 'post',
     response: () => {
-      return successResp();
-    },
-  },
-  {
-    url: '/api/v1/redisOp',
-    method: 'get',
-    response: ({ query }: { query: any }) => {
       return successResp({
         count: 500,
         data: Array(3)
@@ -30,13 +23,6 @@ const requests: MockMethod[] = [
             };
           }),
       });
-    },
-  },
-  {
-    url: '/api/v1/redisOp',
-    method: 'delete',
-    response: () => {
-      return successResp();
     },
   },
 ];
