@@ -13,17 +13,18 @@ import {
   Table,
   TableColumn,
   Button,
-  Popconfirm,
+  Modal,
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
 import { useAxios } from '@vueuse/integrations/useAxios';
-
 import { instance, ResponseWrap } from '@/api';
 import { CONNECT_URL } from '@/api/url';
 import { GetConnectListParams, GetListData } from '@/api/types';
-
+import { reactive, ref } from 'vue';
+import { DB_URL, COLLECTION_URL, DOC_URL, INDEX_URL, ATTR_URL } from '@/api/url';
 import PageContainer from '@/components/PageContainer.vue';
+import comlist from './components/metadata.vue';
 
 type SearchParams = GetConnectListParams;
 
@@ -45,7 +46,7 @@ const { data, isLoading, execute } = useAxios<ResponseWrap<GetListData>>(
   instance,
 );
 
-const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
+const { execute: DeleteExecute, isLoading: deleteIsLoading } = useAxios(
   CONNECT_URL,
   { method: 'DELETE' },
   instance,
@@ -98,6 +99,19 @@ const handleSearch = () => {
   execute({ params });
 };
 
+const True = ref(true);
+const False = ref(false);
+
+const selectedKeys = ref(['1', '2']);
+const size = ref('medium');
+const show = ref(true);
+
+const rowSelection = reactive({
+  type: 'checkbox',
+  showCheckedAll: true,
+  onlyCurrent: false,
+});
+
 const handleFromReset = () => {
   searchFormRef.value?.resetFields();
 };
@@ -106,17 +120,170 @@ const handlePageChange = (page: number) => {
   pagination.current = page;
 };
 
-const handleDeleteConnect = (uuid: string) => {
-  deleteExecute({ data: { uuid } }).then(() => {
-    execute({ params: { pg: pagination.current, size: pagination.pageSize } });
-  });
+//获取数据库信息
+const handleDB = () => {
+  DBVisible.value = true;
 };
+
+const DBVisible = ref(false);
+const DBForm = reactive({
+  name: '',
+  size: '',
+  null: '',
+  op: '',
+});
+
+//数据库数据
+const handleStatsOne = () => {
+  StatsOneVisible.value = true;
+};
+
+const handleCollection = () => {
+  CollectionVisible.value = true;
+};
+
+const handleDoc = () => {
+  DocVisible.value = true;
+};
+
+const handleAttr = () => {
+  AttrVisible.value = true;
+};
+
+const handleIndex = () => {
+  IndexVisible.value = true;
+};
+
+const CollectionVisible = ref(false);
+const CollectionForm = reactive({
+  name: '',
+  op: '',
+});
+
+const DocVisible = ref(false);
+const DocForm = reactive({
+  name: '',
+  op: '',
+});
+
+const AttrVisible = ref(false);
+const AttrForm = reactive({
+  name: '',
+  op: '',
+});
+
+const IndexVisible = ref(false);
+const IndexForm = reactive({
+  name: '',
+  op: '',
+});
+
+const StatsOneVisible = ref(false);
+const StatsOneForm = reactive({
+  db: 'test',
+  indexes: '3',
+  totalSize: '184.00KB',
+  fsUsedSize: '13.18GB',
+  collections: '3',
+  avgObjSize: '74.94B',
+  storageSize: '92.00KB',
+  objects: '18',
+  dataSize: '1.32KB',
+  fsTotalSize: '39.98GB',
+  indexSize: '92.00KB',
+});
+
+const DBColumns = [
+  {
+    title: 'uuid',
+    dataIndex: 'uuid',
+  },
+  {
+    title: 'dbName',
+    dataIndex: 'dbName',
+  },
+  {
+    title: 'collectionName',
+    dataIndex: 'collectionName',
+  },
+  {
+    title: 'docName',
+    dataIndex: 'docName',
+  },
+  {
+    title: '操作',
+    slotName: 'optional',
+  },
+];
+const DBData = reactive([
+  {
+    key: '1',
+    uuid: 'admin',
+    dbName: 'asd',
+    collectionName: 'qwe',
+    docName: 'pouy',
+    optional: '集合',
+  },
+  {
+    key: '2',
+    uuid: 'config',
+    dbName: 'zxc',
+    collectionName: 'vbn',
+    docName: 'pouy',
+    optional: '集合',
+  },
+  {
+    key: '3',
+    uuid: 'lacal',
+    dbName: 'fgh',
+    collectionName: 'defr',
+    docName: 'pouy',
+    optional: '集合',
+  },
+  {
+    key: '4',
+    uuid: 'test1',
+    dbName: 'tyui',
+    collectionName: 'fsdfg',
+    docName: 'pouy',
+    optional: '集合',
+  },
+  {
+    key: '5',
+    uuid: 'test2',
+    dbName: 'ght',
+    collectionName: 'frvc',
+    docName: 'pouy',
+    optional: '集合',
+  },
+]);
 </script>
 
 <template>
   <PageContainer>
     <Card class="general-card" :bordered="false">
-      <template #title>查看数据库连接</template>
+      <template>
+        <Table
+          row-key="name"
+          :columns="DBColumns"
+          :data="DBData"
+          :pagination="pagination"
+          :bordered="false"
+          v-model:selectedKeys="selectedKeys"
+        >
+          <template #optional>
+            <Space :size="18">
+              <Button @click="handleStatsOne()" type="text" status="success">stats</Button>
+              <Button @click="handleCollection()" type="text">集合</Button>
+              <Button @click="handleDoc()" type="text">文档</Button>
+              <Button @click="handleAttr()" type="text">属性</Button>
+              <Button @click="handleIndex()" type="text">索引</Button>
+            </Space>
+          </template>
+        </Table>
+      </template>
+
+      <template #title>MongoDB数据库操作</template>
 
       <Row>
         <Col :flex="1">
@@ -198,18 +365,18 @@ const handleDeleteConnect = (uuid: string) => {
               <span v-else>Elasticsearch</span>
             </template>
           </TableColumn>
-          <TableColumn title="操作" >
-            <template #cell="{ record }">
-              <Popconfirm
-                content="请确认是否删除此数据库连接"
-                @ok="() => handleDeleteConnect(record.uuid)"
-              >
-                <Button type="text" status="danger">删除</Button>
-              </Popconfirm>
+
+          <TableColumn title="操作" title-align="left">
+            <template #cell>
+              <Button @click="handleDB()" type="text">数据库</Button>
             </template>
           </TableColumn>
         </template>
       </Table>
     </Card>
+    <Modal width="900px" v-model:visible="DBVisible" :footer="False">
+      <template #title>数据库列表</template>
+      <comlist></comlist>
+    </Modal>
   </PageContainer>
 </template>
