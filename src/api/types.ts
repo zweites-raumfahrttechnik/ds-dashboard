@@ -66,3 +66,4 @@ export interface redisgetkeysParams{
   pg:number,
   size:number
 }
+

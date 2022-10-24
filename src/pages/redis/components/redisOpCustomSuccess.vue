@@ -10,7 +10,7 @@ const router = useRouter();
 
 const handlePre = () => {
   emit('change-step', 0);
-  emit('getChildren',Object);
+  emit('getChildren', Object);
 };
 
 </script>

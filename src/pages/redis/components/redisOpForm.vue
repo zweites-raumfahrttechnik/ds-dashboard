@@ -1,31 +1,39 @@
 <script lang="ts" setup>
 import {
-        Form,
-        FormItem,
-        Row,
-        Col,
-        Input,
-        InputNumber,
-        Select,
-        Option,
-        Button,
-        Space
+    Form,
+    FormItem,
+    Row,
+    Col,
+    Input,
+    InputNumber,
+    Select,
+    Option,
+    Button,
+    Space
 } from '@arco-design/web-vue';
 import { reactive } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { instance,ResponseWrap } from '@/api';
+import { instance, ResponseWrap } from '@/api';
 import { REDIS_OP_URL } from '@/api/url';
 import { FormModel } from './types';
-const props = defineProps<{ uuid: "6df74580-023a-4aa0-ae5f-c134639e618d" }>();
+//const props = defineProps<{ uuid: string }>();
+
+interface Props {
+    uuid?: string
+}
+const props = withDefaults(defineProps<Props>(), {
+    uuid: '6df74580-023a-4aa0-ae5f-c134639e618d',
+});
+
 const emit = defineEmits<{
-  (e: 'change-step', idx: number): void;
-  (e: 'getChildren', num: object): void;
+    (e: 'change-step', idx: number): void;
+    (e: 'getChildren', num: object): void;
 }>();
 
 const form = reactive<FormModel>({
     uuid: props.uuid,
-    dbname:0,
+    dbname: 0,
     action: '',
     keyType: '',
     key: '',
@@ -34,25 +42,25 @@ const form = reactive<FormModel>({
 });
 //acition为set/get时,string/set/list/zset/hash;  acition为delete/exist时,item/set/list/zset/hash
 const isSetGet = computed(() => {
-  if (form.action === 'set' || form.action === 'get' ) {
-    return false;
-  }
-  return true;
+    if (form.action === 'set' || form.action === 'get') {
+        return false;
+    }
+    return true;
 });
 
 const isDelExist = computed(() => {
-  if (form.action === 'delete' || form.action === 'exist' ) {
-    return false;
-  }
-  return true;
+    if (form.action === 'delete' || form.action === 'exist') {
+        return false;
+    }
+    return true;
 });
 
-const { data,execute, isLoading } = useAxios<ResponseWrap<FormModel>>
+const { data, execute, isLoading } = useAxios<ResponseWrap<FormModel>>
     (REDIS_OP_URL,
-     { method: 'POST' }, 
-     instance, {
-     immediate: false,
-});
+        { method: 'POST' },
+        instance, {
+        immediate: false,
+    });
 
 
 // const json1={
@@ -63,39 +71,39 @@ const { data,execute, isLoading } = useAxios<ResponseWrap<FormModel>>
 // }
 
 const handleSubmit = async () => {
-  const res = await formRef.value?.validate();
-  if (res) {
-    return;
-  }
-  execute({
-    data: {
-      ...form,
-    },
-  }).then(() => {
-    formRef.value?.resetFields();
-    emit('change-step', 1);
-    emit('getChildren',data);
-  });
+    const res = await formRef.value?.validate();
+    if (res) {
+        return;
+    }
+    execute({
+        data: {
+            ...form,
+        },
+    }).then(() => {
+        formRef.value?.resetFields();
+        emit('change-step', 1);
+        emit('getChildren', data);
+    });
 };
 const handleFromReset = () => {
-  formRef.value?.resetFields();
+    formRef.value?.resetFields();
 };
 const formRef = ref<FormInstance>();
 </script>
 
 <template>
     <div>
-    <Form  ref="formRef" :model="form"  @submit="handleSubmit" >
-        <Row :gutter="20">
-            <Col :span="8">
-                <FormItem field="dbname" label="数据库编号" label-col-flex="100px" 
-                :rules="[{required:true,message:'name is required'},{type:'number',message:'must be a number'}]">
-                    <InputNumber v-model="form.dbname" :min="0" placeholder="please enter..." /> 
+        <Form ref="formRef" :model="form" @submit="handleSubmit">
+            <Row :gutter="20">
+                <Col :span="8">
+                <FormItem field="dbname" label="数据库编号" label-col-flex="100px"
+                    :rules="[{ required: true, message: 'name is required' }, { type: 'number', message: 'must be a number' }]">
+                    <InputNumber v-model="form.dbname" :min="0" placeholder="please enter..." />
                 </FormItem>
-            </Col>
-            <Col :span="8">
+                </Col>
+                <Col :span="8">
                 <FormItem field="action" label="操作类型" label-col-flex="80px"
-                :rules="[{required:true,message:'action is required to select'}]">
+                    :rules="[{ required: true, message: 'action is required to select' }]">
                     <Select v-model="form.action" placeholder="please select ..." allow-search>
                         <Option value="set">set</Option>
                         <Option value="get">get</Option>
@@ -105,10 +113,10 @@ const formRef = ref<FormInstance>();
                         <Option value="count">count</Option>
                     </Select>
                 </FormItem>
-            </Col>
-            <Col :span="8">
+                </Col>
+                <Col :span="8">
                 <FormItem field="keyType" label="操作值类型" label-col-flex="80px"
-                :rules="[{required:true,message:'keyType is required to select'}]">
+                    :rules="[{ required: true, message: 'keyType is required to select' }]">
                     <Select v-model="form.keyType" placeholder="please select ..." allow-search>
                         <Option value="item" v-if="isSetGet">item</Option>
                         <Option value="string" v-if="isDelExist">string</Option>
@@ -118,36 +126,36 @@ const formRef = ref<FormInstance>();
                         <Option value="hash">hash</Option>
                     </Select>
                 </FormItem>
-            </Col>
-        </Row>
-        <Row :gutter="16">
-            <Col :span="8">
+                </Col>
+            </Row>
+            <Row :gutter="16">
+                <Col :span="8">
                 <FormItem field="key" label="键名" label-col-flex="100px"
-                :rules="[{required:true,message:'key is required'}]" :validate-trigger="['change','input']">
+                    :rules="[{ required: true, message: 'key is required' }]" :validate-trigger="['change', 'input']">
                     <Input v-model="form.key" placeholder="please enter..." />
                 </FormItem>
-            </Col>
-            <Col :span="8">
-                <FormItem field="parameter1" label="参数1" label-col-flex="80px" 
-                :rules="[{required:true,message:'parameter is required'}]"
-                :validate-trigger="['change','input']">
-                    <Input v-model="form.parameter1" placeholder="please enter..." /> 
+                </Col>
+                <Col :span="8">
+                <FormItem field="parameter1" label="参数1" label-col-flex="80px"
+                    :rules="[{ required: true, message: 'parameter is required' }]"
+                    :validate-trigger="['change', 'input']">
+                    <Input v-model="form.parameter1" placeholder="please enter..." />
                 </FormItem>
-            </Col>
-            <Col :span="8">
+                </Col>
+                <Col :span="8">
                 <FormItem field="parameter2" label="参数2" label-col-flex="80px">
                     <Input v-model="form.parameter2" placeholder="please enter..." />
                 </FormItem>
-            </Col>
-        </Row>
-        <Row>
-            <FormItem label-col-flex="100px">
-                <Space>
-                    <Button html-type="submit" type="primary">执行</Button>
-                    <Button type="primary" @click="handleFromReset">重置</Button>
-                </Space>
-            </FormItem>
-        </Row>
-    </Form>
+                </Col>
+            </Row>
+            <Row>
+                <FormItem label-col-flex="100px">
+                    <Space>
+                        <Button html-type="submit" type="primary">执行</Button>
+                        <Button type="primary" @click="handleFromReset">重置</Button>
+                    </Space>
+                </FormItem>
+            </Row>
+        </Form>
     </div>
 </template>

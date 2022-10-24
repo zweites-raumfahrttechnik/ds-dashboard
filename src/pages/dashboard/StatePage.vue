@@ -49,7 +49,6 @@ watch(
     form.pg = 1;
     form.uuid = '';
     dbs.value = [];
-
     listExec({ params: { pg: form.pg, size: 50, type: form.type } });
   },
 );
@@ -84,30 +83,26 @@ const selectLoadMore = () => {
         <Form :model="form">
           <Row :gutter="16" justify="space-around">
             <Col :span="10">
-              <FormItem label="选择数据库类型">
-                <Select v-model="form.type">
-                  <Option :value="1">MySQL</Option>
-                  <Option :value="2">达梦数据库</Option>
-                  <Option :value="3">金仓数据库</Option>
-                  <Option :value="4">Redis</Option>
-                  <Option :value="5">MongoDB</Option>
-                  <Option :value="6">Elasticsearch</Option>
-                </Select>
-              </FormItem>
+            <FormItem label="选择数据库类型">
+              <Select v-model="form.type">
+                <Option :value="1">MySQL</Option>
+                <Option :value="2">达梦数据库</Option>
+                <Option :value="3">金仓数据库</Option>
+                <Option :value="4">Redis</Option>
+                <Option :value="5">MongoDB</Option>
+                <Option :value="6">Elasticsearch</Option>
+              </Select>
+            </FormItem>
             </Col>
 
             <Col :span="10">
-              <FormItem label="选择数据库" :virtual-list-props="{ height: 300 }">
-                <Select
-                  v-model="form.uuid"
-                  :loading="listLoading"
-                  @dropdown-reach-bottom="selectLoadMore"
-                >
-                  <Option v-for="item in dbs" :key="item.uuid" :value="item.uuid">
-                    {{ item.ip }}:{{ item.port }}
-                  </Option>
-                </Select>
-              </FormItem>
+            <FormItem label="选择数据库" :virtual-list-props="{ height: 300 }">
+              <Select v-model="form.uuid" :loading="listLoading" @dropdown-reach-bottom="selectLoadMore">
+                <Option v-for="item in dbs" :key="item.uuid" :value="item.uuid">
+                  {{ item.ip }}:{{ item.port }}
+                </Option>
+              </Select>
+            </FormItem>
             </Col>
           </Row>
         </Form>
