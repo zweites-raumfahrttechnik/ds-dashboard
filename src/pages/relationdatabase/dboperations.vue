@@ -1,9 +1,9 @@
 <script lang="ts" setup>
-import PageContainer from '@/components/PageContainer.vue';
+import {} from '@arco-design/web-vue';
+//引入组件
+import CodemirrorEditor from './component/SqlEditor.vue';
 </script>
 
 <template>
-  <PageContainer>
-    1111111
-  </PageContainer>
+  <CodemirrorEditor ref="CodeCodemirrorEditor" />
 </template>

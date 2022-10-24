@@ -69,6 +69,7 @@ const handleSubmit = async () => {
     emit('change-step', 1);
   });
 };
+
 </script>
 
 <template>
