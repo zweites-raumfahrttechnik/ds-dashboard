@@ -18,6 +18,7 @@ import {
   Tabs,
   TabPane,
   Tree,
+  InputSearch
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
@@ -44,6 +45,9 @@ const { data } = useAxios<ResponseWrap<DBListData>>(
   { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize } },
   instance,
 );
+
+//树的搜索框
+const searchKey = ref()
 
 //搜索按钮
 const handleSearch = () => {};
@@ -130,6 +134,7 @@ const treeData = [
         <Col :span="5">
           <div class="wrap">
             <Form :model="form">
+              <InputSearch style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
               <Tree blockNode :data="treeData" />
             </Form>
           </div>
