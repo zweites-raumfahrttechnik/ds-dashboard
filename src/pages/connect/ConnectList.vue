@@ -15,7 +15,7 @@ import {
   Button,
   Popconfirm,
 } from '@arco-design/web-vue';
-import { FormInstance } from '@arco-design/web-vue/es/form';
+import { FormInstance } from '@arco-design/web-vue/es/form';//表单检验
 import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
 import { useAxios } from '@vueuse/integrations/useAxios';
 
@@ -56,7 +56,7 @@ const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
 
 watch(
   () => data.value?.data?.count,
-  newVal => {
+  (newVal) => {
     pagination.total = newVal;
   },
 );

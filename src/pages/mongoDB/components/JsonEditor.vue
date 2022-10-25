@@ -2,6 +2,7 @@
   <div ref="jsoneditorVue" :style="{ height: height, width: width }"></div>
 </template>
 <script lang="ts">
+
 import {
   ref,
   toRefs,
@@ -110,7 +111,9 @@ export default defineComponent({
         nextTick(() => {
           internalChange = false;
         });
-      } catch (error) {}
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const init = () => {

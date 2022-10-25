@@ -29,13 +29,13 @@ const mongoDB: RouteRecordRaw = {
       },
     },
     {
-      path: 'jsonEditor',
-      name: 'JsonEditor',
-      component: () => import('@/pages/mongoDB/components/JsonEditor.vue'),
+      path: 'mongoCustomize',
+      name: 'MongoCustomize',
+      component: () => import('@/pages/mongoDB/MongoCustomize.vue'),
       meta: {
         requireAuth: true,
-        locale: 'JsonEditor',
-        icon: 'IconApps',
+        locale: 'Mongo自定义操作',
+        icon: 'IconInteraction',
       },
     },
   ],

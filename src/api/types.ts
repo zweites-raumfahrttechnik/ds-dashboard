@@ -30,3 +30,58 @@ export interface ConcurrentChartValue {
   concurrent: number[];
   through: number[];
 }
+
+export interface DBinformationParams{
+  uuid?: string;
+  dbName?:string;
+  collectionName?:string;
+  docName?:string;
+}
+export interface DBListData{
+  count:number;
+  data:DBinformationParams[];
+}
+
+export interface CollectioninformationParams{
+  uuid?: string;
+  dbName?:string;
+}
+
+export interface CollectionListData{
+  count:number;
+  data:CollectioninformationParams[];
+}
+
+export interface DocinformationParams{
+  uuid?: string;
+  dbName?:string;
+  collectionName?:string;
+}
+
+export interface DocListData{
+  count:number;
+  data:DocinformationParams[];
+}
+
+export interface IndexinformationParams{
+  uuid?: string;
+  dbName?:string;
+  collectionName?:string;
+}
+
+export interface IndexListData{
+  count:number;
+  data:IndexinformationParams[];
+}
+
+export interface AttrinformationParams{
+  uuid?: string;
+  dbName?:string;
+  collectionName?:string;
+  docName?:string;
+}
+
+export interface AttrListData{
+  count:number;
+  data:AttrinformationParams[];
+}

@@ -4,8 +4,57 @@ import { successResp } from './_utils';
 
 const requests: MockMethod[] = [
   {
+    url: '/api/v1/mgdb/query',
+    method: 'post',
+    response: () => {
+      return successResp({
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
+      });
+    },
+  },
+  {
+    url: '/api/v1/mgdb/read',
+    method: 'post',
+    response: () => {
+      return successResp({
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
+      });
+    },
+  },
+  {
+    url: '/api/v1/mgdb/query',
+    method: 'put',
+    response: ({ query }: { query: any }) => {
+      const size = +query.size;
+      return successResp({
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
+      });
+    },
+  },
+  {
+    url: '/api/v1/mgdb/query',
+    method: 'delete',
+    response: () => {
+      return successResp({
+        count: Random.integer(100, 500),
+        data: {
+          'array|0-10': [Random.string('lower', 1, 6)],
+        },
+      });
+    },
+  },
+  {
     url: '/api/v1/bson',
-    method: 'get',
+    method: 'post',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
       return successResp({
@@ -13,50 +62,6 @@ const requests: MockMethod[] = [
           document: Random.string('lower', 1, 6),
         },
       });
-    },
-  },
-  {
-    url: '/api/v1/mgdb/meta/db',
-    method: 'get',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
-      return successResp({});
-    },
-  },
-  {
-    url: '/api/v1/mgdb/meta/collection',
-    method: 'get',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
-
-      return successResp({});
-    },
-  },
-  {
-    url: '/api/v1/mgdb/meta/doc',
-    method: 'get',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
-
-      return successResp({});
-    },
-  },
-  {
-    url: '/api/v1/mgdb/meta/index',
-    method: 'get',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
-
-      return successResp({});
-    },
-  },
-  {
-    url: '/api/v1/mgdb/meta/attr',
-    method: 'get',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
-
-      return successResp({});
     },
   },
 ];

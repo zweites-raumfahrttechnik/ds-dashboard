@@ -17,11 +17,20 @@ import {
   Option,
   Popconfirm,
   CardGrid,
+  Button,
+  Textarea,
 } from '@arco-design/web-vue';
 import { reactive, ref, defineComponent } from 'vue';
 import JsonEdit from './components/JsonEditor.vue';
 
+//标签页数量
 let count = 5;
+
+//搜索按钮
+const handleSubmit = () => {};
+
+const itemvalue = ref(false);
+const item = () => {};
 //标签页
 const data = ref([
   {
@@ -38,20 +47,21 @@ const data = ref([
   },
 ]);
 
-//新增集合文档
-const handleAdd = () => {
+//新增标签页
+const handleAddTab = () => {
   const number = count++;
+  data.value = data.value.concat({
+    key: `${number}`,
+    title: `New Tab ${number}`,
+  });
 };
 
-const selectedKeys = ref(['1', '2']);
-const size = ref('medium');
-const show = ref(true);
+//删除标签页
+const handleDeleteTab = key => {
+  data.value = data.value.filter(item => item.key !== key);
+};
 
-const rowSelection = reactive({
-  type: 'checkbox',
-  showCheckedAll: true,
-  onlyCurrent: false,
-});
+const form = ref();
 
 const DataBaseVisible = ref(false);
 
@@ -103,31 +113,13 @@ const handleDelete = () => {
   handleDeleteVisible.value = true;
 };
 
-const searchFormRef_visible = ref(false);
-const searchFormRef = () => {
-  searchFormRef_visible.value = true;
-};
-
-const handleDeleteDocOk = () => {};
-const handleDeleteDocCancel = () => {};
-
 //文档
 const DocVisible = ref(false);
 const Doc = () => {
   DocVisible.value = true;
 };
-
-//属性
-const AttrVisible = ref(false);
-const Attr = () => {
-  AttrVisible.value = true;
-};
-
-//索引
-const IndexVisible = ref(false);
-const Index = () => {
-  IndexVisible.value = true;
-};
+const handleDeleteDocOk = () => {};
+const handleDeleteDocCancel = () => {};
 
 //查询参数
 const SearchVisible = ref(false);
@@ -147,66 +139,79 @@ const handleCancel = () => {
 const OpenModal = () => {
   FindVisible.value = true;
 };
+
+
 </script>
 
 <template>
   <PageContainer>
-    <Card>
-      <template>
-        <Modal v-model:visible="FindVisible" @ok="handleOk" @cancel="handleCancel">
-          <template #title> find参数 </template>
-        </Modal>
-      </template>
-      <Row :gutter="20" :flex="1">
-        <Col :span="4">
-          <Form-item label="库" label-width="40px">
-            <Select v-model:visible="DataBaseVisible" placeholder="请选择库" allow-clear>
-              <Option :value="1">MySQL</Option>
-              <Option :value="2">达梦数据库</Option>
-              <Option :value="3">金仓数据库</Option>
-              <Option :value="4">Redis</Option>
-              <Option :value="5">MongoDB</Option>
-              <Option :value="6">Elasticsearch</Option>
-            </Select>
-          </Form-item>
-        </Col>
-        <Col :span="4">
-          <Form-item label="集合" label-width="40px">
-            <Select v-model:visible="CollectionVisible" placeholder="请选择集合">
-              <Option :value="1">test3</Option>
-              <Option :value="2">test_coll</Option>
-              <Option :value="3">test_info</Option>
-            </Select>
-          </Form-item>
-        </Col>
-        <Col :span="4">
-          <Form-item label="文档" label-width="40px">
-            <Select v-model:visible="DocVisible" placeholder="请选择文档">
-              <Option :value="1">qwe</Option>
-              <Option :value="2">sfdc</Option>
-              <Option :value="3">fcsoa</Option>
-            </Select>
-          </Form-item>
-        </Col>
-        <Col :span="4">
-          <Form-item label="属性" label-width="40px">
-            <Select v-model:visible="AttrVisible" placeholder="请选择属性">
+    <Card class="general-card" :bordered="false">
+      <template #title>MongoDB数据操作</template>
+      <Form :model="form">
+        <Row :gutter="16" justify="space-around">
+          <Col :span="6">
+            <Form-item label="实例">
+              <Select v-model:visible="DataBaseVisible" placeholder="请选择实例" allow-clear>
+                <Option :value="1">aaaaaaabbbbbbb</Option>
+                <Option :value="2">cccccccddddddd</Option>
+                <Option :value="3">eeeeeeefffffff</Option>
+                <Option :value="4">ggggggghhhhhhh</Option>
+                <Option :value="5">iiiiiiijjjjjjj</Option>
+                <Option :value="6">kkkkkkkmmmmmmm</Option>
+              </Select>
+            </Form-item>
+          </Col>
+          <Col :span="6">
+            <Form-item label="数据库名">
+              <Select v-model:visible="CollectionVisible" placeholder="请选择数据库名">
+                <Option :value="1">test3</Option>
+                <Option :value="2">test_coll</Option>
+                <Option :value="3">test_info</Option>
+              </Select>
+            </Form-item>
+          </Col>
+          <Col :span="6">
+            <Form-item label="集合">
+              <Select v-model:visible="DocVisible" placeholder="请选择集合">
+                <Option :value="1">qwe</Option>
+                <Option :value="2">sfdc</Option>
+                <Option :value="3">fcsoa</Option>
+              </Select>
+            </Form-item>
+          </Col>
+
+          <Divider style="height: 50px" direction="vertical" />
+
+          <Col :flex="'86px'" style="text-align: right">
+            <Space :size="18">
+              <Button type="primary" @click="handleSubmit()">
+                <template #icon>
+                  <icon-subscribed />
+                </template>
+                提交
+              </Button>
+            </Space>
+          </Col>
+          <!-- <Col :sm="{ span: 4 }">
+          <Form-item label="文档">
+            <Select v-model:visible="AttrVisible" placeholder="请选择文档">
               <Option :value="1">hdye</Option>
               <Option :value="2">msaygc</Option>
               <Option :value="3">nvcnhd</Option>
             </Select>
           </Form-item>
         </Col>
-        <Col :span="4">
-          <Form-item label="索引" label-width="40px">
+        <Col :sm="{ span: 4 }">
+          <Form-item label="索引">
             <Select v-model:visible="IndexVisible" placeholder="请选择索引">
               <Option :value="1">mcdkjnv</Option>
               <Option :value="2">dswf</Option>
               <Option :value="3">cbhbya</Option>
             </Select>
           </Form-item>
-        </Col>
-      </Row>
+        </Col>-->
+        </Row>
+      </Form>
 
       <Modal
         width="700px"
@@ -214,11 +219,23 @@ const OpenModal = () => {
         v-model:visible="OnJsonEditorVisible"
         :close-on-click-modal="false"
         :hide-cancel="false"
+        :footer="false"
+        :draggable="true"
       >
         <JsonEdit v-model="jsonexampleOne" />
       </Modal>
 
-      <Tabs :editable="true" @add="handleAdd" @delete="handleDelete" show-add-button auto-switch>
+      <Modal v-model:visible="FindVisible" @ok="handleOk" @cancel="handleCancel" :draggable="true">
+        <template #title> find参数 </template>
+      </Modal>
+
+      <Tabs
+        :editable="true"
+        @add="handleAddTab"
+        @delete="handleDeleteTab"
+        show-add-button
+        auto-switch
+      >
         <Tab-pane
           v-for="(item, index) of data"
           :key="item.key"
@@ -245,6 +262,7 @@ const OpenModal = () => {
           title="新增'test_coll'集合文档'"
           :close-on-click-modal="false"
           :hide-cancel="false"
+          :draggable="true"
           @cancel="handleNewCollectionCancel()"
           @ok="handleNewCollectionOk()"
         >
@@ -272,45 +290,44 @@ const OpenModal = () => {
       ></div>
       <Row :gutter="20">
         <Col :span="30">
-          <Card :bordered="true" :style="{ width: '100%' }">
-            <CardGrid v-for="(_, index) in new Array(12)" :key="index" :style="{ width: '25%' }">
-              <Card class="card-demo" :bordered="true">
-                <template #extra>
-                  <Link @click="OnJsonEditor()" type="success" :underline="false">
-                    <template #icon>
-                      <icon-tool size="15" />
-                    </template>
-                  </Link>
-                  <Divider direction="vertical" />
-                  <Link @click="Save()" type="primary" :underline="false">
-                    <template #icon>
-                      <icon-file size="15" />
-                    </template>
-                  </Link>
-                  <Divider direction="vertical" />
-                  <Popconfirm
-                    type="warning"
-                    content="确认删除该文档？"
-                    @cancel="handleDeleteDocCancel()"
-                    @ok="handleDeleteDocOk()"
-                  >
-                    <Link @click="handleDelete()" status="danger" :underline="false">
-                      <template #icon>
-                        <icon-delete size="15" />
-                      </template>
-                    </Link>
-                  </Popconfirm>
+          <Card
+            v-for="(_, index) in new Array(12)"
+            :key="index"
+            :style="{ width: '150%' }"
+            :bordered="true"
+          >
+            <Textarea :key="index" placeholder="Please enter something" allow-clear> </Textarea>
+
+            <template #extra>
+              <Link @click="OnJsonEditor()" type="success" :underline="false">
+                <template #icon>
+                  <icon-tool size="15" />
                 </template>
-                { "_id":"123456789",<br />
-                "df":{},<br />
-                "x":"\"1212"\",<br />
-                "y":{<br />
-                "age":23154564545<br />
-                "name":3157487484<br />
-                }<br />
-                } <br />
-              </Card>
-            </CardGrid>
+              </Link>
+
+              <Divider direction="vertical" />
+
+              <Link @click="Save()" type="primary" :underline="false">
+                <template #icon>
+                  <icon-file size="15" />
+                </template>
+              </Link>
+
+              <Divider direction="vertical" />
+
+              <Popconfirm
+                type="warning"
+                content="确认删除该文档？"
+                @cancel="handleDeleteDocCancel()"
+                @ok="handleDeleteDocOk()"
+              >
+                <Link @click="handleDelete()" status="danger" :underline="false">
+                  <template #icon>
+                    <icon-delete size="15" />
+                  </template>
+                </Link>
+              </Popconfirm>
+            </template>
           </Card>
         </Col>
       </Row>
@@ -324,11 +341,5 @@ const OpenModal = () => {
 }
 .card-demo :deep(.arco-card-header) {
   border: none;
-}
-.divider-demo {
-  box-sizing: border-box;
-  width: 560px;
-  padding: 24px;
-  border: 30px solid rgb(var(--gray-2));
 }
 </style>
