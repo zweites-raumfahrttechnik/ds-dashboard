@@ -56,7 +56,7 @@ export interface redisDbsize{
 //redis元数据-keys获取接口
 export interface redisKeys{
   count:number,
-  dbkeys:string[]
+  data:string[]
 }
 
 //redis元数据-keys获取参数

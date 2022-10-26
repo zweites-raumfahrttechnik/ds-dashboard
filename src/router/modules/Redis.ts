@@ -7,21 +7,52 @@ const redis: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     {
+      path: '/redisConnect',
+      name: 'redisConnect',
+      component: () => import('@/pages/redis/redisConnect.vue'),
+      meta: {
+        requireAuth: true,
+        locale: 'redis列表',
+      },
+    },
+    {
       path: '/redisManagement',
       name: 'redisManagement',
       component: () => import('@/pages/redis/redisManage.vue'),
       meta: {
         requireAuth: true,
+        hideInMenu: true,
         locale: 'redis元数据管理',
       },
     },
     {
-      path: '/redisOp',
-      name: 'redisOp',
-      component: () => import('@/pages/redis/redisOp.vue'),
+      path: '/redisbasicOp',
+      name: 'redisbasicOp',
+      component: () => import('@/pages/redis/redisbasicOp.vue'),
       meta: {
         requireAuth: true,
-        locale: 'redis操作',
+        hideInMenu:true,
+        locale: 'redis基本操作',
+      },
+    },
+    {
+      path: '/rediscustomOp',
+      name: 'rediscustomOp',
+      component: () => import('@/pages/redis/rediscustomOp.vue'),
+      meta: {
+        requireAuth: true,
+        hideInMenu:true,
+        locale: 'redis自定义操作',
+      },
+    },
+    {
+      path: '/redismetaKeys',
+      name: 'redismetaKeys',
+      component: () => import('@/pages/redis/components/redismetaKeys.vue'),
+      meta: {
+        requireAuth: true,
+        hideInMenu:true,
+        locale: 'redis键名',
       },
     },
   ],

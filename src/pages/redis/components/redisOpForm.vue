@@ -25,6 +25,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
     uuid: '6df74580-023a-4aa0-ae5f-c134639e618d',
 });
+//console.log(props.uuid);
+
 
 const emit = defineEmits<{
     (e: 'change-step', idx: number): void;
@@ -62,7 +64,6 @@ const { data, execute, isLoading } = useAxios<ResponseWrap<FormModel>>
         immediate: false,
     });
 
-
 // const json1={
 //         库:'1,2,3,4,5,6,7,8,9',
 //         number:10,
@@ -97,14 +98,14 @@ const formRef = ref<FormInstance>();
             <Row :gutter="20">
                 <Col :span="8">
                 <FormItem field="dbname" label="数据库编号" label-col-flex="100px"
-                    :rules="[{ required: true, message: 'name is required' }, { type: 'number', message: 'must be a number' }]">
-                    <InputNumber v-model="form.dbname" :min="0" placeholder="please enter..." />
+                    :rules="[{ required: true, message: '必填' }, { type: 'number', message: '数据库编号为整型' }]">
+                    <InputNumber v-model="form.dbname" :min="0" placeholder="请输入数据库编号" />
                 </FormItem>
                 </Col>
                 <Col :span="8">
                 <FormItem field="action" label="操作类型" label-col-flex="80px"
-                    :rules="[{ required: true, message: 'action is required to select' }]">
-                    <Select v-model="form.action" placeholder="please select ..." allow-search>
+                    :rules="[{ required: true, message: '请选择操作类型' }]">
+                    <Select v-model="form.action" placeholder="请选择操作类型" allow-search>
                         <Option value="set">set</Option>
                         <Option value="get">get</Option>
                         <Option value="delete">delete</Option>
@@ -116,8 +117,8 @@ const formRef = ref<FormInstance>();
                 </Col>
                 <Col :span="8">
                 <FormItem field="keyType" label="操作值类型" label-col-flex="80px"
-                    :rules="[{ required: true, message: 'keyType is required to select' }]">
-                    <Select v-model="form.keyType" placeholder="please select ..." allow-search>
+                    :rules="[{ required: true, message: '请选择操作值类型' }]">
+                    <Select v-model="form.keyType" placeholder="请选择操作值类型" allow-search>
                         <Option value="item" v-if="isSetGet">item</Option>
                         <Option value="string" v-if="isDelExist">string</Option>
                         <Option value="set">set</Option>
@@ -130,21 +131,20 @@ const formRef = ref<FormInstance>();
             </Row>
             <Row :gutter="16">
                 <Col :span="8">
-                <FormItem field="key" label="键名" label-col-flex="100px"
-                    :rules="[{ required: true, message: 'key is required' }]" :validate-trigger="['change', 'input']">
-                    <Input v-model="form.key" placeholder="please enter..." />
+                <FormItem field="key" label="键名" label-col-flex="100px" :rules="[{ required: true, message: '请输入键名' }]"
+                    :validate-trigger="['change', 'input']">
+                    <Input v-model="form.key" placeholder="请输入键名" />
                 </FormItem>
                 </Col>
                 <Col :span="8">
                 <FormItem field="parameter1" label="参数1" label-col-flex="80px"
-                    :rules="[{ required: true, message: 'parameter is required' }]"
-                    :validate-trigger="['change', 'input']">
-                    <Input v-model="form.parameter1" placeholder="please enter..." />
+                    :rules="[{ required: true, message: '请输入要设置的参数' }]" :validate-trigger="['change', 'input']">
+                    <Input v-model="form.parameter1" placeholder="请输入要设置的参数" />
                 </FormItem>
                 </Col>
                 <Col :span="8">
                 <FormItem field="parameter2" label="参数2" label-col-flex="80px">
-                    <Input v-model="form.parameter2" placeholder="please enter..." />
+                    <Input v-model="form.parameter2" placeholder="请输入要设置的参数" />
                 </FormItem>
                 </Col>
             </Row>

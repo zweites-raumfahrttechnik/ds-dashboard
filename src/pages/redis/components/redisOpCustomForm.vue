@@ -23,6 +23,8 @@ interface Props {
 const props = withDefaults(defineProps<Props>(), {
   uuid: '6df74580-023a-4aa0-ae5f-c134639e618d',
 });
+//console.log(props.uuid);
+
 const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
   (e: 'getChildren', num: object): void;
@@ -70,25 +72,22 @@ const formRef = ref<FormInstance>();
     <Form ref="formRef" :model="form" @submit="handleSubmit">
       <Row :gutter="16">
         <Col :span="8">
-        <FormItem field="dbnumber" label="数据库编号" label-col-flex="100px" help="The database number is required"
-          :rules="[{ required: true }]">
-          <InputNumber v-model="form.dbnumber" :min="0" placeholder="please enter database number" />
+        <FormItem field="dbnumber" label="数据库编号" label-col-flex="100px" :rules="[{ required: true }]">
+          <InputNumber v-model="form.dbnumber" :min="0" placeholder="请输入数据库编号" />
         </FormItem>
         </Col>
         <Col :span="8">
-        <FormItem field="command" label="操作类型" label-col-flex="100px" help="This is required custom operation"
-          :rules="[{ required: true }]">
-          <Input v-model="form.command" placeholder="please enter command" />
+        <FormItem field="command" label="操作类型" label-col-flex="100px" :rules="[{ required: true, message: '请输入操作命令' }]">
+          <Input v-model="form.command" placeholder="请输入操作命令" />
         </FormItem>
         </Col>
-
       </Row>
       <br />
       <Row :gutter="16">
         <Col :span="16">
-        <FormItem field="args" label="参数列表" label-col-flex="100px" help="This is custom parameter,support null"
-          :rules="[{ required: true }]" :validate-trigger="['change', 'input']">
-          <InputTag v-model="form.args" placeholder="please press enter after entering" allow-clear />
+        <FormItem field="args" label="参数列表" label-col-flex="100px"
+          :rules="[{ required: true, message: '请输入自定义参数后，按Enter键' }]" :validate-trigger="['change', 'input']">
+          <InputTag v-model="form.args" placeholder="请输入自定义参数后，按Enter键输入下一个参数" allow-clear />
         </FormItem>
         </Col>
       </Row>

@@ -12,6 +12,9 @@ import Success from './components/redisOpSuccess.vue';
 import RedisOpJson from './components/redisOpJson.vue';
 import CustomForm from './components/redisOpCustomForm.vue';
 import CustomSuccess from './components/redisOpCustomSuccess.vue';
+let route = useRoute();
+const uuid = route.query.uuid as string;
+//console.log(uuid);
 
 const json1 = ref();
 const customJson1 = ref();
@@ -46,7 +49,7 @@ const disabledBasic = ref(false);
         <Divider direction="horizontal" type="solid" margin="6px" />
         <div class="wrap" v-if="disabledBasic">
           <KeepAlive>
-            <Form v-if="step === 0" @change-step="changeStep" @getChildren="getJson" />
+            <Form v-if="step === 0" :uuid="uuid" @change-step="changeStep" @getChildren="getJson" />
             <Success v-else-if="step === 1" @change-step="changeStep" @get-children="getJson" />
           </KeepAlive>
         </div>
@@ -59,7 +62,8 @@ const disabledBasic = ref(false);
         <Divider direction="horizontal" type="solid" margin="6px" />
         <div class="wrap" v-if="disabledCustom">
           <KeepAlive>
-            <CustomForm v-if="customStep === 0" @change-step="changeCustomStep" @getChildren="getCustomJson" />
+            <CustomForm v-if="customStep === 0" :uuid="uuid" @change-step="changeCustomStep"
+              @getChildren="getCustomJson" />
             <CustomSuccess v-else-if="customStep === 1" @change-step="changeCustomStep" @get-children="getCustomJson" />
           </KeepAlive>
         </div>

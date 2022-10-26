@@ -28,10 +28,9 @@ const requests: MockMethod[] = [
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
-      const num=Random.integer(0,100);
       return successResp({
-        count:num,
-        dbkeys:Array(num).fill(1).map(()=>{return Random.string()})
+        count:50,
+        data:Array(size).fill(1).map(()=>{return Random.string()})
       });
     },
   },

@@ -11,11 +11,11 @@ import {
   Table,
   TableColumn,
   Button,
-  Modal,
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
 import { reactive, ref } from 'vue';
+import { useRoute, useRouter } from 'vue-router';
 import PageContainer from '@/components/PageContainer.vue';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
@@ -28,20 +28,16 @@ setTimeout(function () {
   //  console.log(dbcount.value);
   //  console.log(dbkeys.value);
   redisMeta();
-}, 10)
-//const props = defineProps<{ uuid: string }>();
-interface Props {
-  uuid?: string
-}
-const props = withDefaults(defineProps<Props>(), {
-  uuid: '6df74580-023a-4aa0-ae5f-c134639e618d',
-});
-type SearchParams = redisgetkeysParams;
+}, 50)
+
+let route = useRoute();
+const uuid = route.query.uuid as string;
+
 const searchFormRef = ref<FormInstance>();
 const searchFormdata = reactive({ num: NaN });
 const { data, isLoading, execute } = useAxios<ResponseWrap<redisDBtotal>>(
   redisMetaTotal_URL,
-  { method: 'GET', params: { uuid: props.uuid } },
+  { method: 'GET', params: { uuid: uuid } },
   instance, { immediate: true }
 );
 
@@ -52,7 +48,7 @@ function getdbsize(dbtotal: number[]) {
   for (var i = 0; i < dbtotal.length; i++) {
     const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<redisDbsize>>(
       REDIS_META_SIZE_URL,
-      { method: 'GET', params: { uuid: props.uuid, dbnumber: dbtotal[i] } },
+      { method: 'GET', params: { uuid: uuid, dbnumber: dbtotal[i] } },
       instance,
     );
     watch(dataSize, (value, oldValue) => {
@@ -63,42 +59,6 @@ function getdbsize(dbtotal: number[]) {
   }
 }
 
-//get keysdetail interface
-const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
-  current: 1,
-  pageSize: 5,
-});
-const { data: dataKeys, execute: executeKeys } = useAxios<ResponseWrap<redisKeys>>(
-  REDIS_KEYS_URL,
-  { method: 'GET' },
-  instance,
-);
-watch(
-  () => dataKeys.value?.data?.count,
-  newVal => {
-    pagination.total = newVal;
-    //console.log("keys键个数即浮窗页面所有信息条目数:",pagination.total)
-  },
-);
-
-const handlePageChange = (page: number) => {
-  pagination.current = page;
-};
-const dbcount = computed(() => { return dataKeys.value?.data!?.count });
-const dbkeys = computed(() => { return dataKeys.value?.data!?.dbkeys });
-//浮窗中的keys详情展示的数据组织
-const keysData = reactive([{}]);
-keysData.pop();
-function keysDetail() {
-  const keyCount: number[] = new Array(dbcount.value);
-  for (var i = 0; i < keyCount.length; i++) {
-    keyCount[i] = i;
-  }
-  for (var i = 0; i < dbcount.value; i++) {
-    var keysItem = { index: keyCount[i], keyName: dbkeys.value[i] };
-    keysData.push(keysItem);
-  }
-}
 
 //数据库编号接口与数据库大小接口的数据组织//redisMetaKeys接口，表格索引程序
 const tablesize: number[] = new Array(dbtotalNum.value);
@@ -115,7 +75,7 @@ function redisMeta() {
       var dataItem = { dbnumber: dbtotal[i], dbsize: tablesize[i] };
       tableData.push(dataItem);
     }
-  }, 700);
+  }, 600);
 }
 
 const tableData = reactive([{}]);
@@ -126,42 +86,16 @@ const getloading = computed(() => {
   }
   return false;
 });
-const getdetailloading = computed(() => {
-  if (Array.prototype.isPrototypeOf(keysData) && keysData.length === 0) {
-    return true;
-  }
-  return false;
-});
-
-//浮窗控制及显示
-const visibleKeys = ref(false);
-const viewDetails = (dbnumber: number) => {
-  const params: SearchParams =
-    { uuid: props.uuid, dbnumber: dbnumber, pg: pagination.current, size: pagination.pageSize };
-  executeKeys({ params });
-  setTimeout(function () { keysDetail(); }, 20);
-  visibleKeys.value = true;
+//详情跳转
+const router = useRouter();
+const viewDetails = (dbnum: number) => {
+  router.push({ name: "redismetaKeys", query: { uuid: uuid, dbnumber: dbnum } })
 };
-const handleOk = () => {
-  visibleKeys.value = false;
-  keysData.splice(1, dbcount.value);
-  keysData.pop();
-  pagination.current = 1;
-  // for(var i=dbcount.value;i>=0;i--){
-  //   keysData.pop();
-  // }
-};
-const handleCancel = () => {
-  visibleKeys.value = false;
-  keysData.splice(1, dbcount.value);
-  keysData.pop();
-  pagination.current = 1;
-}
 const handleSearch = () => {
   if (searchFormdata.num >= 0) {
     const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<redisDbsize>>(
       REDIS_META_SIZE_URL,
-      { method: 'GET', params: { uuid: props.uuid, dbnumber: searchFormdata.num } },
+      { method: 'GET', params: { uuid: uuid, dbnumber: searchFormdata.num } },
       instance,
     );
     const dbsize = computed(() => { return dataSize.value?.data!?.dbsize });
@@ -233,18 +167,6 @@ const handleFromReset = () => {
         </template>
       </Table>
     </Card>
-    <!--对话框-添加用户-->
-    <!--显示所有keys键-->
-    <Modal v-model:visible="visibleKeys" @ok="handleOk" @cancel="handleCancel">
-      <template #title> {{ dbcount }} keys in total </template>
-      <Table id="redismetaKeys" row-key="index" :data="keysData" :bordered="{ cell: true }" :pagination="pagination"
-        :loading="getdetailloading" @page-change="handlePageChange">
-        <template #columns>
-          <TableColumn title="序号" data-index="index" />
-          <TableColumn title="键名" data-index="keyName" />
-        </template>
-      </Table>
-    </Modal>
   </PageContainer>
 </template>
 
