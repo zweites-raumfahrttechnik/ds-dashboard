@@ -4,7 +4,7 @@ import { successResp } from './_utils';
 
 const requests: MockMethod[] = [
   {
-    url: '/api/v1/redisOpCustomForm',
+    url: '/api/v1/execute/redis/complex',
     method: 'post',
     response: () => {
       return successResp({

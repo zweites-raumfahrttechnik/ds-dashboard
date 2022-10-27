@@ -4,7 +4,7 @@ import { successResp } from './_utils';
 
 const requests: MockMethod[] = [
   {
-    url: '/api/v1/dbtotalNum',
+    url: '/api/v1/execute/redis/meta/dbnumber',
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
@@ -14,7 +14,7 @@ const requests: MockMethod[] = [
     },
   },
   {
-    url: '/api/v1/dbsize',
+    url: '/api/v1/execute/redis/meta/dbsize',
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
@@ -24,7 +24,7 @@ const requests: MockMethod[] = [
     },
   },
   {
-    url: '/api/v1/redisKeys',
+    url: '/api/v1/execute/redis/meta/keys',
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;

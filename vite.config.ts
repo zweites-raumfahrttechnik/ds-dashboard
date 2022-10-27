@@ -17,6 +17,10 @@ export default defineConfig({
     ...createVuePlugin(),
     ...createAutoImportPlugin(),
     ...createArcoPlugin(),
-    ...createMockPlugin(),
+    //...createMockPlugin(),
   ],
+  server:{
+    host:"localhost",
+    port:8080,
+  }
 });
