@@ -1,172 +1,238 @@
 <script lang="ts" setup>
 import {
   Card,
-  Row,
-  Col,
   Form,
   FormItem,
-  Input,
+  Button,
+  Row,
+  Col,
   Select,
-  Space,
   Option,
+  Input,
   Divider,
   Table,
-  TableColumn,
-  Button,
-  Popconfirm,
-  Modal,
-  Tag,
 } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
+import { reactive } from 'vue';
+//上传数据
+const form = reactive({
+  type: '',
+  table: '',
+  name: '',
+  columnList: [{ column: '' }],
+  whereList: { columnList: [{ column: '' }], columnType: '', value: '', queryType: '' },
 
-import { FormInstance } from '@arco-design/web-vue/es/form';
-import { useAxios } from '@vueuse/integrations/useAxios';
-
-import { instance } from '@/api';
-
-import { InQUERY_DATABASE_URL } from '@/api/url';
-import { ApifoxModal, defaultInqueryValue } from '../types';
-
-//change-step定义界面跳转
-const emit = defineEmits<{
-  (e: 'change-step', idx: number): void;
-}>();
-
-//设定默认值
-const Inquerydata = reactive<ApifoxModal>({
-  ...defaultInqueryValue[1],
-  type: 1,
+  groupByList: [{ column: '' }],
+  orderByList: { type: '', columnList: [{ column: '' }] },
 });
-//表单检验
-const formRef = ref<FormInstance>();
-
-//定义请求参数pg//size
-const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
-  current: 1,
-  pageSize: 15,
-});
-
-//引入POST请求--instance为axios实例
-//请求参数-固定值
-//响应数据data
-const { data, execute, isLoading } = useAxios(
-  InQUERY_DATABASE_URL,
-  { method: 'POST', params: { pg: pagination.current, size: pagination.pageSize } },
-  instance,
-  {
-    immediate: false,
-  },
-);
-
-const tableData = computed(() => {
-  return data.value?.data?.data;
-});
-
-//表单提交函数//同时进行表单检验
-const InquerySubmit = async () => {
-  const res = await formRef.value?.validate();
-  if (res) {
-    return;
-  }
-  execute({
-    data: {
-      ...Inquerydata,
-    },
-  }).then(() => {
-    formRef.value?.resetFields();
-    emit('change-step', 1);
+const handleAddInquery = () => {
+  form.columnList.push({
+    column: '',
   });
+};
+
+const handleAddGroup = () => {
+  form.groupByList.push({
+    column: '',
+  });
+};
+const handleAddWhere = () => {
+  form.whereList.columnList.push({
+    column: '',
+  });
+};
+const handleAddOrder = () => {
+  form.orderByList.columnList.push({
+    column: '',
+  });
+};
+const handleDelteWhere = (index: number) => {
+  form.whereList.columnList.splice(index, 1);
+};
+const handleDeleteInquery = (index: number) => {
+  form.columnList.splice(index, 1);
+};
+const handleDeleteGroup = (index: number) => {
+  form.groupByList.splice(index, 1);
+};
+const handleDeleteOrder = (index: number) => {
+  form.orderByList.columnList.splice(index, 1);
+};
+//提交
+const handlesubmit = () => {
+
 };
 </script>
 <template>
-  <Space :size="15" direction="vertical" fill>
+  <PageContainer>
     <Card>
-      <template #title>关系型数据库单表查询</template>
-      <Row>
-        <Col :flex="1">
-          <!--label-col-props标签元素布局//wrapper-col-props表单元素布局-->
-          <!--submit方法，表单提交时触发-->
-          <Form
-            ref="formRef"
-            :model="Inquerydata"
-            :label-col-props="{ span: 6 }"
-            :wrapper-col-props="{ span: 18 }"
-            @submit="InquerySubmit"
-          >
-            <Row :gutter="16">
-              <Col :span="7">
-                <FormItem field="type" label="数据库" required>
-                  <Select v-model="Inquerydata.type" placeholder="请选择数据库">
-                    <Option :value="1">MySQL</Option>
-                    <Option :value="2">达梦数据库</Option>
-                    <Option :value="3">金仓数据库</Option>
-                  </Select>
-                </FormItem>
-              </Col>
-              <Col :span="7">
-                <FormItem filed="table" label="表名" required>
-                  <Input v-model="Inquerydata.table" placeholder="请输入查询的表名" />
-                </FormItem>
-              </Col>
-              <Col :span="10">
-                <FormItem label="查询条件-列名">
-                  <Input :model="Inquerydata.whereList[0]" placeholder="请输入查询条件" />
-                </FormItem>
-              </Col>
-              <Col :span="10">
-                <FormItem label="指定列类型">
-                  <Input :model="Inquerydata.whereList[1]" placeholder="请输入列类型" />
-                </FormItem>
-              </Col>
-              <Col :span="10">
-                <FormItem label="查询条件-运算符">
-                  <Input :model="Inquerydata.whereList[2]" placeholder="请输入查询条件" />
-                </FormItem>
-              </Col>
-              <Col :span="10">
-                <FormItem label="查询条件-值">
-                  <Input :model="Inquerydata.whereList[3]" placeholder="请输入查询条件" />
-                </FormItem>
-              </Col>
-              <Col :span="10">
-                <FormItem label="分组指定列1">
-                  <Input :model="Inquerydata.groupByList[0]" placeholder="请输入列名1" />
-                </FormItem>
-              </Col>
-              <Col :span="10">
-                <FormItem label="分组指定列2">
-                  <Input :model="Inquerydata.groupByList[1]" placeholder="请输入列名2" />
-                </FormItem>
-              </Col>
-              <!--OrderByList--排序-->
-              <Col :span="10">
-                <FormItem label="指定排序列">
-                  <Input :model="Inquerydata.orderByList[0]" placeholder="请输入列名" />
-                </FormItem>
-              </Col>
-              <Col :span="10">
-                <FormItem label="排序类型">
-                  <Input :model="Inquerydata.orderByList[1]" placeholder="请输入排序类型" />
-                </FormItem>
-              </Col>
-              <FormItem>
-                <Button html-type="submit" type="primary">提交</Button>
+      <Form :model="form" @submit="handlesubmit" :style="{ width: '100%' }">
+        <Row :gutter="16">
+          <Col :span="9">
+            <FormItem field="type" label="数据库类型" label-col-flex="90px" required>
+              <Select v-model="form.type" default-value="1">
+                <Option :value="1">MySQL</Option>
+                <Option :value="2">达梦数据库</Option>
+                <Option :value="3">金仓数据库</Option>
+              </Select>
+            </FormItem>
+          </Col>
+          <Col :span="9">
+            <FormItem field="table" label="表名" label-col-flex="50px" required>
+              <Input v-model="form.table" placeholder="请输入查询表名" />
+            </FormItem>
+          </Col>
+          <Col :span="10">
+            <FormItem
+              v-for="(post, index) of form.columnList"
+              :field="`columnList.${index + 1}.column`"
+              :label="`查询列名${index + 1}`"
+              :key="index"
+            >
+              <Input v-model="post.column" placeholder="请输入查询列名" />
+              <Button
+                @click="handleDeleteInquery(index)"
+                :style="{ marginLeft: '10px' }"
+                status="danger"
+                >
+                <template #icon>
+                  <icon-close size="25"/>
+                </template>
+                
+                </Button
+              >
+            </FormItem>
+          </Col>
+          <FormItem>
+            <Button @click="handleAddInquery" type="primary" status="success">
+              <template #icon>
+                  <icon-plus size="25"/>
+                </template>
+            </Button>
+          </FormItem>
+          <Col :span="10">
+            <FormItem label="过滤条件" :content-flex="false" :merge-props="false">
+              <FormItem
+                v-for="(post, index) of form.whereList.columnList"
+                :field="`whereList.columnList.${index + 1}.column`"
+                :label="`条件${index + 1}`"
+                :key="index"
+              >
+                <Input v-model="post.column" placeholder="请输入查询列名" />
+                <Button
+                  @click="handleDelteWhere(index)"
+                  :style="{ marginLeft: '10px' }"
+                  status="danger"
+                  > <template #icon>
+                  <icon-close size="25"/>
+                </template></Button
+                >
               </FormItem>
-            </Row>
-          </Form>
-        </Col>
-      </Row>
+              <FormItem>
+                <Button @click="handleAddWhere" type="primary" status="success"><template #icon>
+                  <icon-plus size="25"/>
+                </template></Button>
+              </FormItem>
+              <FormItem field="whereList.columnType" label="列类型">
+                <!--<Input v-model="form.whereList.columnType" placeholder="请输入过滤条件列类型" />-->
+                <Select v-model="form.whereList.columnType" defalut-value="int">
+                  <Option>int</Option>
+                  <Option>string</Option>
+                </Select>
+              </FormItem>
+              <FormItem field="whereList.value" label="值">
+                <Input v-model="form.whereList.value" placeholder="请输入过滤条件值" />
+              </FormItem>
+              <FormItem field="whereList.queryType" label="条件类型">
+                <Select v-model="form.whereList.queryType">
+                  <Option>&gt;</Option>
+                  <Option>&lt;</Option>
+                  <Option>like</Option>
+                  <Option>=</Option>
+                  <Option>&le;</Option>
+                  <Option>&ge;</Option>
+                </Select>
+              </FormItem>
+            </FormItem>
+          </Col>
+          <Col :span="10">
+            <FormItem
+              v-for="(post, index) of form.groupByList"
+              :field="`groupByList.${index + 1}.column`"
+              :label="`分组列名${index + 1}`"
+              :key="index"
+            >
+              <Input v-model="post.column" placeholder="请输入分组条件列" />
+              <Button
+                @click="handleDeleteGroup(index)"
+                :style="{ marginLeft: '10px' }"
+                status="danger"
+                > <template #icon>
+                  <icon-close size="25"/>
+                </template></Button
+              >
+            </FormItem>
+
+            <FormItem>
+              <Button @click="handleAddGroup" type="primary" status="success"><template #icon>
+                  <icon-plus size="25"/>
+                </template></Button>
+            </FormItem>
+          </Col>
+          <Col :span="10">
+            <FormItem label="排序条件" :content-flex="false" :merge-props="false">
+              <FormItem field="orderByList.type" label="排序类型">
+                <!--<Input v-model="form.orderByList.type" placeholder="请输入排序条件列" />-->
+                <Select v-model="form.orderByList.type">
+                  <Option>ASC</Option>
+                  <Option>DESC</Option>
+                </Select>
+              </FormItem>
+              <FormItem
+                v-for="(post, index) of form.orderByList.columnList"
+                :field="`orderByList.columnList.${index + 1}.column`"
+                :label="`排序列${index + 1}`"
+                :key="index"
+              >
+                <Input v-model="post.column" placeholder="请输入查询列名" />
+                <Button
+                  @click="handleDeleteOrder(index)"
+                  :style="{ marginLeft: '10px' }"
+                  status="danger"
+                  > <template #icon>
+                  <icon-close size="25"/>
+                </template></Button
+                >
+              </FormItem>
+              <FormItem>
+                <Button @click="handleAddOrder" type="primary" status="success"><template #icon>
+                  <icon-plus size="25"/>
+                </template></Button>
+              </FormItem>
+            </FormItem>
+          </Col>
+          <FormItem>
+            <Button html-type="submit" type="primary">提交</Button>
+          </FormItem>
+        </Row>
+      </Form>
       <Divider />
-      <!--返回值，错误较多-->
-      <Table :data="tableData">
+      <Table>
         <template #columns>
-          <TableColumn title="columnName" data-index="columnList[0]" />
-          <TableColumn title="columnTypeName" data-index="columnList[1]" />
-          <TableColumn title="data-1" data-index="data[0]" />
-          <TableColumn title="data-2" data-index="data[1]" />
+          <TableColumn title="ip" data-index="ip" />
+          <TableColumn title="name" data-index="name" />
+          <TableColumn title="password" data-index="password" />
+          <TableColumn title="port" data-index="port" />
+          <TableColumn title="type" data-index="type" />
+          <TableColumn title="port" data-index="port" />
+          <TableColumn title="port" data-index="port" />
+          <TableColumn title="port" data-index="port" />
         </template>
       </Table>
     </Card>
-  </Space>
+  </PageContainer>
 </template>
-<style scoped lang="less"></style>
+
+<style scoped lang="less">
+
+</style>

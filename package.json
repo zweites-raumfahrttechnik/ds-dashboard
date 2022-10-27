@@ -31,7 +31,6 @@
     "@arco-design/web-vue": "^2.37.4",
     "@codemirror/commands": "^6.1.2",
     "@codemirror/lang-sql": "^6.3.0",
-    "@codemirror/language": "^6.2.1",
     "@codemirror/state": "^6.1.2",
     "@codemirror/view": "^6.4.0",
     "@types/nprogress": "^0.2.0",
