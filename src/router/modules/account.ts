@@ -9,7 +9,7 @@ const connect: RouteRecordRaw = {
     {
       path: 'list',
       name: 'Userlist',
-      component: () => import('@/pages/usermanage/UserList.vue'),
+      component: () => import('@/pages/userManage/UserList.vue'),
       meta: {
         requireAuth: true,
         locale: '用户列表',
@@ -18,13 +18,12 @@ const connect: RouteRecordRaw = {
     {
       path: 'permissions',
       name: 'permissions',
-      component: () => import('@/pages/usermanage/PermissionPage.vue'),
+      component: () => import('@/pages/userManage/PermissionPage.vue'),
       meta: {
         requireAuth: true,
         locale: '权限列表',
       },
     },
-
   ],
   meta: {
     requireAuth: true,
