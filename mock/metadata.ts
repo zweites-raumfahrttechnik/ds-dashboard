@@ -9,6 +9,7 @@ const requests: MockMethod[] = [
     response: () => {
       return successResp({
         count: 500,
+        //自定义-可修改
         data: Array(500)
           .fill(1)
           .map(() => {
@@ -29,17 +30,10 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp({
-        count: 500,
-        data: Array(12)
-          .fill(1)
-          .map(() => {
-            return {
-              uuid: '@uuid',
-              dbName: Random.name(),
-              collectionName: Random.name(),
-              docName: Random.name(),
-            };
-          }),
+        count: Random.integer(100, 500),
+        data: {
+          'array|count': [Random.string],
+        },
       });
     },
   },
@@ -48,16 +42,10 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp({
-        count: 500,
-        data: Array(12)
-          .fill(1)
-          .map(() => {
-            return {
-              uuid: '@uuid',
-              dbName: Random.name(),
-              collectionName: Random.name(),
-            };
-          }),
+        count: Random.integer(100, 500),
+        data: {
+          'array|count': [Random.string],
+        },
       });
     },
   },
@@ -66,16 +54,10 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp({
-        count: 500,
-        data: Array(12)
-          .fill(1)
-          .map(() => {
-            return {
-              uuid: '@uuid',
-              dbName: Random.name(),
-              collectionName: Random.name(),
-            };
-          }),
+        count: Random.integer(100, 500),
+        data: {
+          'array|count': [Random.string],
+        },
       });
     },
   },
@@ -84,17 +66,10 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp({
-        count: 500,
-        data: Array(12)
-          .fill(1)
-          .map(() => {
-            return {
-              uuid: '@uuid',
-              dbName: Random.name(),
-              collectionName: Random.name(),
-              docName: Random.name(),
-            };
-          }),
+        count: Random.integer(100, 500),
+        data: {
+          'array|count': [Random.string],
+        },
       });
     },
   },

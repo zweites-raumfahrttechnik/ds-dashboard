@@ -19,3 +19,6 @@ export const READ_URL = `${v1}/mgdb/read`;
 
 export const BSON_URL = `${v1}/exexute/bson`;
 
+//自行引入为了生成树下数据，可删
+export const TREE_URL = `${v1}/mgdb/meta/Tree`;
+

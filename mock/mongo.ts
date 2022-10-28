@@ -10,7 +10,7 @@ const requests: MockMethod[] = [
       return successResp({
         count: Random.integer(100, 500),
         data: {
-          'array|0-10': [Random.string('lower', 1, 6)],
+          'array|count': [Random.string],
         },
       });
     },
@@ -22,7 +22,7 @@ const requests: MockMethod[] = [
       return successResp({
         count: Random.integer(100, 500),
         data: {
-          'array|0-10': [Random.string('lower', 1, 6)],
+          'array|count': [Random.string],
         },
       });
     },
@@ -35,7 +35,7 @@ const requests: MockMethod[] = [
       return successResp({
         count: Random.integer(100, 500),
         data: {
-          'array|0-10': [Random.string('lower', 1, 6)],
+          'array|count': [Random.string],
         },
       });
     },
@@ -47,7 +47,7 @@ const requests: MockMethod[] = [
       return successResp({
         count: Random.integer(100, 500),
         data: {
-          'array|0-10': [Random.string('lower', 1, 6)],
+          'array|count': [Random.string],
         },
       });
     },
@@ -59,7 +59,7 @@ const requests: MockMethod[] = [
       const size = +query.size;
       return successResp({
         data: {
-          document: Random.string('lower', 1, 6),
+          document: Random.string
         },
       });
     },

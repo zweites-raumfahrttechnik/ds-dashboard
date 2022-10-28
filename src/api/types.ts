@@ -37,9 +37,18 @@ export interface DBinformationParams{
   collectionName?:string;
   docName?:string;
 }
+
 export interface DBListData{
   count:number;
   data:DBinformationParams[];
+}
+
+export interface TreeinformationParams{
+  uuid: string;
+}
+
+export interface TreeData{
+  data:TreeinformationParams[];
 }
 
 export interface CollectioninformationParams{

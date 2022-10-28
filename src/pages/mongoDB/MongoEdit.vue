@@ -139,8 +139,6 @@ const handleCancel = () => {
 const OpenModal = () => {
   FindVisible.value = true;
 };
-
-
 </script>
 
 <template>
@@ -289,15 +287,16 @@ const OpenModal = () => {
         }"
       ></div>
       <Row :gutter="20">
-        <Col :span="30">
+        <Col :span="8">
           <Card
             v-for="(_, index) in new Array(12)"
             :key="index"
-            :style="{ width: '150%' }"
+            :style="{ width: '50%', marginLeft: '0px', marginRight: '0px' }"
             :bordered="true"
           >
-            <Textarea :key="index" placeholder="Please enter something" allow-clear> </Textarea>
-
+            <Textarea :key="index" placeholder="Please enter something" allow-clear>
+              <Card class="card-demo" :bordered="true" />
+            </Textarea>
             <template #extra>
               <Link @click="OnJsonEditor()" type="success" :underline="false">
                 <template #icon>
@@ -334,8 +333,7 @@ const OpenModal = () => {
     </Card>
   </PageContainer>
 </template>
-
-<style scoped>
+<style scoped="less">
 .card-demo {
   width: 100%;
 }
