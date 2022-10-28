@@ -7,7 +7,7 @@ const connect: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     {
-      path: 'userlist',
+      path: 'list',
       name: 'Userlist',
       component: () => import('@/pages/usermanage/Userlist.vue'),
       meta: {

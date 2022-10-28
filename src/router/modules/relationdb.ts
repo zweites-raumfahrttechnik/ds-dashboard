@@ -21,9 +21,10 @@ const connect: RouteRecordRaw = {
       component: () => import('@/pages/relationdatabase/dboperations.vue'),
       meta: {
         requireAuth: true,
-        locale:'数据库操作',
+        locale: '数据库操作',
       },
-    }
+    },
+    
   ],
   meta: {
     requireAuth: true,
