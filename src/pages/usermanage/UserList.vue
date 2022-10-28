@@ -3,12 +3,8 @@ import {
   Card,
   Row,
   Col,
-  Form,
-  FormItem,
   Input,
-  Select,
   Space,
-  Option,
   Divider,
   Table,
   TableColumn,
@@ -48,14 +44,9 @@ const { data: res, execute } = useAxios<ResponseWrap<UserlistData>>(
 );
 
 //删除操作
-const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
-  DELETE_USER_URL,
-  { method: 'DELETE' },
-  instance,
-  {
-    immediate: false,
-  },
-);
+const { execute: deleteExecute } = useAxios(DELETE_USER_URL, { method: 'DELETE' }, instance, {
+  immediate: false,
+});
 
 //进行数据的检测,说明返回值中的data数据是否存在
 const tableData = computed(() => {
@@ -67,15 +58,10 @@ const changeStep = (idx: number) => {
   step.value = idx;
 };
 
-//显示不同的行数，待做
-const handleChange = () => {};
-
 //事件-添加用户--显示对话框
 const adduseraccount = () => {
   visibleAdd.value = true;
 };
-//事件-搜索用户列表
-const searchuserlist = () => {};
 
 //编辑对话框
 const reviseuserdata = () => {
@@ -113,7 +99,7 @@ const assignmentpermission = () => {
         </Col>
         <Col :span="4" style="text-align: right">
           <Space>
-            <Button type="primary" @click="searchuserlist">
+            <Button type="primary">
               <template #icon>
                 <IconSearch />
               </template>
@@ -151,11 +137,11 @@ const assignmentpermission = () => {
                 <template #cell="{ record }">
                   <Popconfirm
                     content="请确认是否删除此用户数据"
+                    type="warning"
                     @ok="
                       () =>
                         handleDeleteAccount(record.uuid, record.type, record.username, record.host)
                     "
-                    type="warning"
                   >
                     <Button status="danger">删除</Button>
                   </Popconfirm>
