@@ -41,6 +41,7 @@ const handleSubmitUser = async () => {
   });
 };
 </script>
+
 <template>
   <!--uuid应该是自动生成，不应该有用户指定，这里留出输入框-->
   <Form ref="formRef" :model="userFormData" class="form" @submit="handleSubmitUser">

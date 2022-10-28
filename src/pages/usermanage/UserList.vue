@@ -17,9 +17,9 @@ import PageContainer from '@/components/PageContainer.vue';
 
 //子组件
 import Formlist from './components/AddDBUser.vue';
-import Successadd from './components/Successaddpages.vue';
-import ReviseForm from './components/Reviseuserdata.vue';
-import Treepermission from './components/Permissionslist.vue';
+import Successadd from './components/AddSuccess.vue';
+import ReviseForm from './components/ReviseUserData.vue';
+import Treepermission from './components/PermissionList.vue';
 
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import {Modal,Checkbox,Tree} from '@arco-design/web-vue';
+import { Modal, Checkbox, Tree } from '@arco-design/web-vue';
 import { ref } from 'vue';
 const checkedKeys = ref([]);
 const checkStrictly = ref(false);
@@ -98,14 +98,12 @@ const treeData = [
       },
     ],
   },
-
-
 ];
 </script>
 <!--checked-keys (v-model)选中复选框的树节点-->
 <!--check-strictly是否取消父子节点关联-->
 <template>
-  <div >分配权限</div>
+  <div>分配权限</div>
   <!--data数据源，生成对应的树结构-->
   <Tree
     :checkable="true"
