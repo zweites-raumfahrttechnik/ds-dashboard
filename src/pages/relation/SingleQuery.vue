@@ -61,14 +61,12 @@ const handleDeleteGroup = (index: number) => {
 const handleDeleteOrder = (index: number) => {
   form.orderByList.splice(index, 1);
 };
-//提交
-const handlesubmit = () => {};
 </script>
 <template>
   <PageContainer>
     <Card>
       <template #title> 单表数据库查询 </template>
-      <Form :model="form" @submit="handlesubmit" :style="{ width: '75%' }">
+      <Form :model="form" :style="{ width: '75%' }">
         <FormItem
           field="type"
           label="数据库类型"
@@ -101,9 +99,9 @@ const handlesubmit = () => {};
 
         <FormItem
           v-for="(post, index) of form.columnList"
+          :key="index"
           :field="`columnList.${index + 1}.column`"
           :label="`查询列名${index + 1}`"
-          :key="index"
           :content-flex="false"
           :merge-props="false"
         >
@@ -115,16 +113,16 @@ const handlesubmit = () => {};
             </Col>
             <Col :span="4">
               <FormItem no-style>
-                <Button @click="handleAddInquery" type="primary" status="success" shape="circle">
+                <Button type="primary" status="success" shape="circle" @click="handleAddInquery">
                   <template #icon>
                     <icon-plus size="25" />
                   </template>
                 </Button>
                 <Button
-                  @click="handleDeleteInquery(index)"
                   :style="{ marginLeft: '10px' }"
                   status="danger"
                   shape="circle"
+                  @click="handleDeleteInquery(index)"
                 >
                   <template #icon>
                     <icon-close size="25" />
@@ -137,8 +135,8 @@ const handlesubmit = () => {};
 
         <FormItem
           v-for="(post, index) in form.whereList"
-          :field="`whereList.${index}`"
           :key="index"
+          :field="`whereList.${index}`"
           :label="`过滤条件${index + 1}`"
           :content-flex="false"
           :merge-props="false"
@@ -176,17 +174,17 @@ const handlesubmit = () => {};
             </Col>
             <Col :span="4">
               <FormItem no-style>
-                <Button @click="handleAddWhere" type="primary" status="success" shape="circle">
+                <Button type="primary" status="success" shape="circle" @click="handleAddWhere">
                   <template #icon>
                     <icon-plus size="25" />
                   </template>
                 </Button>
 
                 <Button
-                  @click="handleDelteWhere(index)"
                   :style="{ marginLeft: '10px' }"
                   status="danger"
                   shape="circle"
+                  @click="handleDelteWhere(index)"
                 >
                   <template #icon>
                     <icon-close size="25" />
@@ -199,9 +197,9 @@ const handlesubmit = () => {};
 
         <FormItem
           v-for="(post, index) of form.groupByList"
+          :key="index"
           :field="`groupByList.${index + 1}.column`"
           :label="`分组列名${index + 1}`"
-          :key="index"
           :content-flex="false"
           :merge-props="false"
         >
@@ -213,14 +211,14 @@ const handlesubmit = () => {};
             </Col>
             <Col :span="4">
               <FormItem no-style>
-                <Button @click="handleAddGroup" type="primary" status="success" shape="circle"
-                  ><template #icon> <icon-plus size="25" /> </template
-                ></Button>
+                <Button type="primary" status="success" shape="circle" @click="handleAddGroup">
+                  <template #icon> <icon-plus size="25" /> </template>
+                </Button>
                 <Button
-                  @click="handleDeleteGroup(index)"
                   :style="{ marginLeft: '10px' }"
                   status="danger"
                   shape="circle"
+                  @click="handleDeleteGroup(index)"
                 >
                   <template #icon> <icon-close size="25" /> </template
                 ></Button>
@@ -231,8 +229,8 @@ const handlesubmit = () => {};
 
         <FormItem
           v-for="(post, index) in form.orderByList"
-          :field="`orderByList.${index}`"
           :key="index"
+          :field="`orderByList.${index}`"
           :label="`排序条件${index + 1}`"
           :content-flex="false"
           :merge-props="false"
@@ -253,14 +251,14 @@ const handlesubmit = () => {};
             </Col>
             <Col :span="4">
               <FormItem no-style>
-                <Button @click="handleAddOrder" type="primary" status="success" shape="circle"
-                  ><template #icon> <icon-plus size="25" /> </template
-                ></Button>
+                <Button type="primary" status="success" shape="circle" @click="handleAddOrder">
+                  <template #icon> <icon-plus size="25" /> </template>
+                </Button>
                 <Button
-                  @click="handleDeleteOrder(index)"
                   :style="{ marginLeft: '10px' }"
                   status="danger"
                   shape="circle"
+                  @click="handleDeleteOrder(index)"
                 >
                   <template #icon> <icon-close size="25" /> </template
                 ></Button>
@@ -275,7 +273,7 @@ const handlesubmit = () => {};
       </Form>
 
       <Divider />
-      <Table >
+      <Table>
         <template #columns>
           <TableColumn title="ip" data-index="ip" />
           <TableColumn title="name" data-index="name" />
@@ -287,5 +285,3 @@ const handlesubmit = () => {};
     </Card>
   </PageContainer>
 </template>
-
-<style scoped lang="less"></style>

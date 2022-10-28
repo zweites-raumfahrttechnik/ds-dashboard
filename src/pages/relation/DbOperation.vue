@@ -6,7 +6,7 @@ import CodemirrorEditor from './component/SqlEditor.vue';
 </script>
 
 <template>
-<PageContainer>
-  <CodemirrorEditor/>
-</PageContainer>
+  <PageContainer>
+    <CodemirrorEditor />
+  </PageContainer>
 </template>
