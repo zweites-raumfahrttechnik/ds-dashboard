@@ -1,36 +1,45 @@
 import { RouteRecordRaw } from 'vue-router';
 import { MAIN_LAYOUT } from '@/router/constant';
 
-const connect: RouteRecordRaw = {
-  path: '/relationdatabase',
-  name: 'relationdatabase',
+const sql: RouteRecordRaw = {
+  path: '/sql',
+  name: 'SQL',
   component: MAIN_LAYOUT,
   children: [
     {
-      path: 'tableInqueryPage',
-      name: 'tableInqueryPage',
-      component: () => import('@/pages/relation/SingleQuery.vue'),
+      path: 'user',
+      name: 'UserManage',
+      component: () => import('@/pages/sql/UserManage.vue'),
+      meta: {
+        requireAuth: true,
+        locale: '用户管理',
+      },
+    },
+    {
+      path: 'single',
+      name: 'SingleQuery',
+      component: () => import('@/pages/sql/SingleQuery.vue'),
       meta: {
         requireAuth: true,
         locale: '单表查询',
       },
     },
     {
-      path: 'dboperations',
-      name: 'dboperations',
-      component: () => import('@/pages/relation/DbOperation.vue'),
+      path: 'customize',
+      name: 'CustomizeQuery',
+      component: () => import('@/pages/sql/CustomizeQuery.vue'),
       meta: {
         requireAuth: true,
-        locale: '数据库操作',
+        locale: '自定义操作',
       },
     },
   ],
   meta: {
     requireAuth: true,
-    locale: '数据库管理',
-    icon: 'icon-apps',
+    locale: '关系型数据库操作',
+    icon: 'icon-plus-circle',
     order: 4,
   },
 };
 
-export default connect;
+export default sql;

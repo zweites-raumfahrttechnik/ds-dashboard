@@ -37,10 +37,11 @@
     "codemirror": "^6.0.1",
     "echarts": "^5.4.0",
     "nprogress": "^0.2.0",
+    "sql-formatter": "^11.0.2",
     "vue": "^3.2.41",
+    "vue-codemirror": "^6.1.1",
     "vue-echarts": "^6.2.3",
-    "vue-router": "^4.1.6",
-    "vue-codemirror": "^6.1.1"
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^15.0.0",
