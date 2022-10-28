@@ -9,7 +9,7 @@ const connect: RouteRecordRaw = {
     {
       path: 'tableInqueryPage',
       name: 'tableInqueryPage',
-      component: () => import('@/pages/relation/TableInqueryPage.vue'),
+      component: () => import('@/pages/relation/SingleQuery.vue'),
       meta: {
         requireAuth: true,
         locale: '单表查询',

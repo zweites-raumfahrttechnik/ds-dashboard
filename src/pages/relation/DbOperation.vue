@@ -2,7 +2,7 @@
 import PageContainer from '@/components/PageContainer.vue';
 //import {} from '@arco-design/web-vue';
 //引入组件
-import CodemirrorEditor from './component/SqlEditor.vue';
+import CodemirrorEditor from './components/SqlEditor.vue';
 </script>
 
 <template>
