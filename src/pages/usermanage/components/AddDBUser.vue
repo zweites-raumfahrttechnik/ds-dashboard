@@ -1,21 +1,5 @@
 <script lang="ts" setup>
-import {
-  Card,
-  Row,
-  Col,
-  Form,
-  FormItem,
-  Input,
-  Select,
-  Space,
-  Option,
-  Divider,
-  Table,
-  TableColumn,
-  Button,
-  Popconfirm,
-  Modal,
-} from '@arco-design/web-vue';
+import { Form, FormItem, Input, Select, Option, Button } from '@arco-design/web-vue';
 import { reactive, ref } from 'vue';
 
 import { FormInstance } from '@arco-design/web-vue/es/form';
@@ -56,7 +40,6 @@ const handleSubmitUser = async () => {
     emit('change-step', 1);
   });
 };
-
 </script>
 <template>
   <!--uuid应该是自动生成，不应该有用户指定，这里留出输入框-->

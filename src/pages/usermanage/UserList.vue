@@ -16,7 +16,7 @@ import { reactive, ref } from 'vue';
 import PageContainer from '@/components/PageContainer.vue';
 
 //子组件
-import Formlist from './components/Adduserdata.vue';
+import Formlist from './components/AddDBUser.vue';
 import Successadd from './components/Successaddpages.vue';
 import ReviseForm from './components/Reviseuserdata.vue';
 import Treepermission from './components/Permissionslist.vue';
