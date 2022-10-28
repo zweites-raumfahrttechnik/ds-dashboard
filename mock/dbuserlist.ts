@@ -32,7 +32,7 @@ const requests: MockMethod[] = [
       });
     },
   },
-  
+
   //修改用户
   {
     url: '/api/v1/sql/user/update',

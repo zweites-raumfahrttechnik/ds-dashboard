@@ -1,51 +1,16 @@
 <script lang="ts" setup>
-import {
-  Spin,
-  Form,
-  Table,
-  FormItem,
-  Select,
-  Option,
-  Input,
-  InputNumber,
-  InputPassword,
-  Button,
-  Row,
-  Col,
-  Tag,
-  Divider,
-} from '@arco-design/web-vue';
-import { defineComponent } from 'vue';
+import { Table, Button, Row, Col, Divider } from '@arco-design/web-vue';
 import { Codemirror } from 'vue-codemirror';
 import { sql } from '@codemirror/lang-sql';
 
-const code = ref(`console.log('Hello, world!')`);
 const extensions = [sql()];
-
-// Codemirror EditorView instance ref
-const view = shallowRef();
-const handleReady = (payload: any) => {
-  view.value = payload.view;
-};
-
-// Status is available at all times via Codemirror EditorView
-const getCodemirrorStates = () => {
-  const state = view.value.state;
-  const ranges = state.selection.ranges;
-  const selected = ranges.reduce((r: any, range: any) => r + range.to - range.from, 0);
-  const cursor = ranges[0].anchor;
-  const length = state.doc.length;
-  const lines = state.doc.lines;
-  // more state info ...
-  // return ...
-};
 </script>
 
 <template>
   <Card class="cardbackground">
     <Row :gutter="2">
       <Col :span="2">
-        <Button status="success" type="primary" @click="">
+        <Button status="success" type="primary">
           <template #icon>
             <icon-play-circle />
           </template>
@@ -53,7 +18,7 @@ const getCodemirrorStates = () => {
         </Button>
       </Col>
       <Col :span="2">
-        <Button type="primary" status="danger" @click="">
+        <Button type="primary" status="danger">
           <template #icon>
             <icon-pause-circle />
           </template>
@@ -90,6 +55,7 @@ const getCodemirrorStates = () => {
 .cardbackground {
   background-color: #f2fff2;
 }
+
 .codemirror {
   font-family: Arial, monospace;
   font-size: 18px;

@@ -58,13 +58,11 @@ const handleDeleteGroup = (index: number) => {
 const handleDeleteOrder = (index: number) => {
   form.orderByList.columnList.splice(index, 1);
 };
-//提交
-const handlesubmit = () => {};
 </script>
 <template>
   <PageContainer>
     <Card>
-      <Form :model="form" @submit="handlesubmit" :style="{ width: '100%' }">
+      <Form :model="form" :style="{ width: '100%' }">
         <Row :gutter="16">
           <Col :span="9">
             <FormItem field="type" label="数据库类型" label-col-flex="90px" required>
@@ -83,15 +81,15 @@ const handlesubmit = () => {};
           <Col :span="10">
             <FormItem
               v-for="(post, index) of form.columnList"
+              :key="index"
               :field="`columnList.${index + 1}.column`"
               :label="`查询列名${index + 1}`"
-              :key="index"
             >
               <Input v-model="post.column" placeholder="请输入查询列名" />
               <Button
-                @click="handleDeleteInquery(index)"
                 :style="{ marginLeft: '10px' }"
                 status="danger"
+                @click="handleDeleteInquery(index)"
               >
                 <template #icon>
                   <icon-close size="25" />
@@ -100,7 +98,7 @@ const handlesubmit = () => {};
             </FormItem>
           </Col>
           <FormItem>
-            <Button @click="handleAddInquery" type="primary" status="success">
+            <Button type="primary" status="success" @click="handleAddInquery">
               <template #icon>
                 <icon-plus size="25" />
               </template>
@@ -110,25 +108,23 @@ const handlesubmit = () => {};
             <FormItem label="过滤条件" :content-flex="false" :merge-props="false">
               <FormItem
                 v-for="(post, index) of form.whereList.columnList"
+                :key="index"
                 :field="`whereList.columnList.${index + 1}.column`"
                 :label="`条件${index + 1}`"
-                :key="index"
               >
                 <Input v-model="post.column" placeholder="请输入查询列名" />
                 <Button
-                  @click="handleDelteWhere(index)"
                   :style="{ marginLeft: '10px' }"
                   status="danger"
+                  @click="handleDelteWhere(index)"
                 >
-                  <template #icon>
-                    <icon-close size="25" /> </template
-                ></Button>
+                  <template #icon> <icon-close size="25" /> </template>
+                </Button>
               </FormItem>
               <FormItem>
-                <Button @click="handleAddWhere" type="primary" status="success"
-                  ><template #icon>
-                    <icon-plus size="25" /> </template
-                ></Button>
+                <Button type="primary" status="success" @click="handleAddWhere">
+                  <template #icon> <icon-plus size="25" /> </template>
+                </Button>
               </FormItem>
               <FormItem field="whereList.columnType" label="列类型">
                 <!--<Input v-model="form.whereList.columnType" placeholder="请输入过滤条件列类型" />-->
@@ -155,26 +151,24 @@ const handlesubmit = () => {};
           <Col :span="10">
             <FormItem
               v-for="(post, index) of form.groupByList"
+              :key="index"
               :field="`groupByList.${index + 1}.column`"
               :label="`分组列名${index + 1}`"
-              :key="index"
             >
               <Input v-model="post.column" placeholder="请输入分组条件列" />
               <Button
-                @click="handleDeleteGroup(index)"
                 :style="{ marginLeft: '10px' }"
                 status="danger"
+                @click="handleDeleteGroup(index)"
               >
-                <template #icon>
-                  <icon-close size="25" /> </template
-              ></Button>
+                <template #icon> <icon-close size="25" /> </template>
+              </Button>
             </FormItem>
 
             <FormItem>
-              <Button @click="handleAddGroup" type="primary" status="success"
-                ><template #icon>
-                  <icon-plus size="25" /> </template
-              ></Button>
+              <Button type="primary" status="success" @click="handleAddGroup">
+                <template #icon> <icon-plus size="25" /> </template>
+              </Button>
             </FormItem>
           </Col>
           <Col :span="10">
@@ -188,25 +182,23 @@ const handlesubmit = () => {};
               </FormItem>
               <FormItem
                 v-for="(post, index) of form.orderByList.columnList"
+                :key="index"
                 :field="`orderByList.columnList.${index + 1}.column`"
                 :label="`排序列${index + 1}`"
-                :key="index"
               >
                 <Input v-model="post.column" placeholder="请输入查询列名" />
                 <Button
-                  @click="handleDeleteOrder(index)"
                   :style="{ marginLeft: '10px' }"
                   status="danger"
+                  @click="handleDeleteOrder(index)"
                 >
-                  <template #icon>
-                    <icon-close size="25" /> </template
+                  <template #icon> <icon-close size="25" /> </template
                 ></Button>
               </FormItem>
               <FormItem>
-                <Button @click="handleAddOrder" type="primary" status="success"
-                  ><template #icon>
-                    <icon-plus size="25" /> </template
-                ></Button>
+                <Button type="primary" status="success" @click="handleAddOrder">
+                  <template #icon> <icon-plus size="25" /> </template>
+                </Button>
               </FormItem>
             </FormItem>
           </Col>
@@ -231,5 +223,3 @@ const handlesubmit = () => {};
     </Card>
   </PageContainer>
 </template>
-
-<style scoped lang="less"></style>
