@@ -41,11 +41,11 @@ const pagination = reactive<{ current: number; pageSize: number; total?: number 
 });
 
 //data为请求返回的数据,重命名为res--自定义操作
-const {
-  data: res,
-  execute,
-} = useAxios<ResponseWrap<UserlistData>>(REQUEST_USERLIST_URL, { method: 'GET' }, instance);
-
+const { data: res, execute } = useAxios<ResponseWrap<UserlistData>>(
+  REQUEST_USERLIST_URL,
+  { method: 'GET' },
+  instance,
+);
 
 //删除操作
 const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
@@ -81,7 +81,6 @@ const searchuserlist = () => {};
 const reviseuserdata = () => {
   visibleChange.value = true;
 };
-
 
 //删除用户数据
 const handleDeleteAccount = (uuid: string, type: 1 | 2 | 3, username: string, host: string) => {
@@ -146,7 +145,7 @@ const assignmentpermission = () => {
                   <Button status="success" @click="reviseuserdata">编辑</Button>
                 </template>
               </TableColumn>
-              
+
               <!--定义删除用户数据操作//ok--点击确认按钮时触发-->
               <TableColumn title="操作">
                 <template #cell="{ record }">
