@@ -18,7 +18,7 @@ const connect: RouteRecordRaw = {
     {
       path: 'permissions',
       name: 'permissions',
-      component: () => import('@/pages/usermanage/Permissionspage.vue'),
+      component: () => import('@/pages/usermanage/PermissionPage.vue'),
       meta: {
         requireAuth: true,
         locale: '权限列表',

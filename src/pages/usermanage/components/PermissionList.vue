@@ -1,8 +1,9 @@
 <script lang="ts" setup>
-import { Modal, Checkbox, Tree } from '@arco-design/web-vue';
-import { ref } from 'vue';
+import { Tree } from '@arco-design/web-vue';
+
 const checkedKeys = ref([]);
 const checkStrictly = ref(false);
+
 const treeData = [
   {
     title: 'MySQL',
@@ -106,8 +107,8 @@ const treeData = [
   <div>分配权限</div>
   <!--data数据源，生成对应的树结构-->
   <Tree
-    :checkable="true"
     v-model:checked-keys="checkedKeys"
+    :checkable="true"
     :check-strictly="checkStrictly"
     :data="treeData"
   ></Tree>

@@ -5,8 +5,6 @@ const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
 }>();
 
-const router = useRouter();
-
 const handlePre = () => {
   emit('change-step', 0);
 };

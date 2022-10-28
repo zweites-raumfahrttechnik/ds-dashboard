@@ -1,21 +1,5 @@
 <script lang="ts" setup>
-import {
-  Card,
-  Row,
-  Col,
-  Form,
-  FormItem,
-  Input,
-  Select,
-  Space,
-  Option,
-  Divider,
-  Table,
-  TableColumn,
-  Button,
-  Popconfirm,
-  Modal,
-} from '@arco-design/web-vue';
+import { Form, FormItem, Input, Select, Option, Button } from '@arco-design/web-vue';
 import { reactive, ref } from 'vue';
 
 import { FormInstance } from '@arco-design/web-vue/es/form';
