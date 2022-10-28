@@ -41,7 +41,7 @@ const { data, isLoading, execute } = useAxios<ResponseWrap<redisDBtotal>>(
   instance, { immediate: true }
 );
 
-const dbtotalNum = computed(() => { return data.value?.data!?.data });
+const dbtotalNum = computed(() => { return Number(data.value?.data!?.data) });
 
 //dbsize
 function getdbsize(dbtotal: number[]) {

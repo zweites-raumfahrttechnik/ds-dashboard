@@ -9,7 +9,7 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
       return successResp({
-        data:Random.integer(0,100)
+        data:String(Random.integer())
       });
     },
   },

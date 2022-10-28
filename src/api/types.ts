@@ -45,7 +45,7 @@ export interface UserlistData{
 }
 
 export interface redisDBtotal{
-  data:number
+  data:string
 }
 
 //redis元数据-数据库大小获取接口
