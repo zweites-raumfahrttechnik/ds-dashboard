@@ -99,7 +99,7 @@ const formRef = ref<FormInstance>();
         <Form ref="formRef" :model="form" @submit="handleSubmit">
             <Row :gutter="20">
                 <Col :span="8">
-                <FormItem field="dbname" label="数据库编号" label-col-flex="90px"
+                <FormItem field="dbname" label="数据库编号" label-col-flex="100px"
                     :rules="[{ required: true, message: '必填' }, { type: 'number', message: '数据库编号为整型' }]">
                     <InputNumber v-model="form.dbname" :min="0" placeholder="请输入数据库编号" />
                 </FormItem>
@@ -118,7 +118,7 @@ const formRef = ref<FormInstance>();
                 </FormItem>
                 </Col>
                 <Col :span="8">
-                <FormItem field="keyType" label="操作值类型" label-col-flex="80px"
+                <FormItem field="keyType" label="操作值类型" label-col-flex="85px"
                     :rules="[{ required: true, message: '请选择操作值类型' }]">
                     <Select v-model="form.keyType" placeholder="请选择操作值类型" allow-search>
                         <Option value="item" v-if="isSetGet">item</Option>
@@ -130,10 +130,10 @@ const formRef = ref<FormInstance>();
                     </Select>
                 </FormItem>
                 </Col>
-            </Row>
-            <Row :gutter="16">
+            </Row><br/>
+            <Row :gutter="20">
                 <Col :span="8">
-                <FormItem field="key" label="键名" label-col-flex="90px" :rules="[{ required: true, message: '请输入键名' }]"
+                <FormItem field="key" label="键名" label-col-flex="100px" :rules="[{ required: true, message: '请输入键名' }]"
                     :validate-trigger="['change', 'input']">
                     <Input v-model="form.key" placeholder="请输入键名" />
                 </FormItem>
@@ -144,11 +144,11 @@ const formRef = ref<FormInstance>();
                 </FormItem>
                 </Col>
                 <Col :span="8">
-                <FormItem field="parameter2" label="参数2" label-col-flex="80px">
+                <FormItem field="parameter2" label="参数2" label-col-flex="85px">
                     <Input v-model="form.parameter2" placeholder="请输入要设置的参数" />
                 </FormItem>
                 </Col>
-            </Row>
+            </Row><br/>
             <Row>
                 <FormItem label-col-flex="100px">
                     <Space>

@@ -6,21 +6,19 @@ const requests: MockMethod[] = [
   {
     url: '/api/v1/execute/redis/meta/dbnumber',
     method: 'get',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
-      return successResp({
-        data:String(Random.integer())
-      });
+    response: () => {
+      return successResp(
+        "10"
+      );
     },
   },
   {
     url: '/api/v1/execute/redis/meta/dbsize',
     method: 'get',
     response: ({ query }: { query: any }) => {
-      const size = +query.size;
-      return successResp({
-        data:Random.integer(0,100)
-      });
+      return successResp(
+        Random.integer(0,100)
+      );
     },
   },
   {

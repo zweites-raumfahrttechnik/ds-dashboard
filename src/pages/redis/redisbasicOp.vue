@@ -31,11 +31,11 @@ const changeStep = (idx: number) => {
                 <template #title>redis基本操作</template>
                 <template #extra>
                     <Space :size="18">
-                        <Button type="text" size="small" @click="()=>{router.go(-1)}">
+                        <Button type="text" size="medium" @click="()=>{router.go(-1)}">
                             <template #icon>
                                 <icon-backward />
                             </template>
-                            <template #default>返回</template>
+                            <template #default>返回上一级</template>
                         </Button>
                     </Space>
                 </template>

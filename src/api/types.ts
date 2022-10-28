@@ -44,14 +44,6 @@ export interface UserlistData{
   data:UserlistParams[]
 }
 
-export interface redisDBtotal{
-  data:string
-}
-
-//redis元数据-数据库大小获取接口
-export interface redisDbsize{
-  data:number
-}
 
 //redis元数据-keys获取接口
 export interface redisKeys{

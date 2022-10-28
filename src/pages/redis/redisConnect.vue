@@ -108,12 +108,13 @@ const redisMANAGE = (uuid: string) => {
                 >
                     <Row :gutter="16">
                     <Col :span="9">
-                        <FormItem field="ip" label="数据库地址">
+                        <FormItem field="ip" label="数据库地址" auto-label-width="true">
                         <Input v-model="searchFormdata.ip" placeholder="请输入数据库地址" />
                         </FormItem>
                     </Col>
-                    <Col :span="10">
-                        <FormItem field="username" label="Root用户名">
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <Col :span="7">
+                        <FormItem field="username" label="用户名" auto-label-width="true">
                         <Input v-model="searchFormdata.username" placeholder="请输入Root用户名" />
                         </FormItem>
                     </Col>
@@ -147,20 +148,21 @@ const redisMANAGE = (uuid: string) => {
                     <TableColumn title="uuid" data-index="uuid" />
                     <TableColumn title="数据库地址" data-index="ip" />
                     <TableColumn title="数据库运行端口" data-index="port" />
-                    <TableColumn title="Redis元数据管理">
+                    <TableColumn title="用户名" data-index="username" />
+                    <TableColumn title="元数据查询">
                         <template #cell="{ record }">
-                            <Button type="text" v-if="record.type === 4"
-                                @click="() => redisMANAGE(record.uuid)">进入</Button>
+                            <Button  status="success" v-if="record.type === 4"
+                                @click="() => redisMANAGE(record.uuid)">查看</Button>
                         </template>
                     </TableColumn>
-                    <TableColumn title="Redis基本操作">
+                    <TableColumn title="基本操作">
                         <template #cell="{ record }">
-                            <Button type="text" @click="() => redisbasicOP(record.uuid)">进入</Button>
+                            <Button status="warning"  @click="() => redisbasicOP(record.uuid)">进入</Button>
                         </template>
                     </TableColumn>
-                    <TableColumn title="Redis自定义操作">
+                    <TableColumn title="自定义操作">
                         <template #cell="{ record }">
-                            <Button type="text" status="normal" @click="() => rediscustomOP(record.uuid)">进入</Button>
+                            <Button  @click="() => rediscustomOP(record.uuid)">进入</Button>
                         </template>
                     </TableColumn>
                 </template>

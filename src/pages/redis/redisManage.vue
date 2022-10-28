@@ -21,12 +21,8 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
 import { redisMetaTotal_URL, REDIS_META_SIZE_URL } from '@/api/url';
 //引入参数
-import { redisDBtotal, redisDbsize } from '@/api/types';
 //接口数据执行
 setTimeout(function () {
-  //  console.log(dbtotalNum.value);
-  //  console.log(dbcount.value);
-  //  console.log(dbkeys.value);
   redisMeta();
 }, 50)
 
@@ -35,43 +31,48 @@ const uuid = route.query.uuid as string;
 
 const searchFormRef = ref<FormInstance>();
 const searchFormdata = reactive({ num: NaN });
-const { data, isLoading, execute } = useAxios<ResponseWrap<redisDBtotal>>(
+const { data, isLoading, execute } = useAxios<ResponseWrap<string>>(
   redisMetaTotal_URL,
   { method: 'GET', params: { uuid: uuid } },
   instance, { immediate: true }
 );
-
-const dbtotalNum = computed(() => { return Number(data.value?.data!?.data) });
+let dbtotalNum:number =0;
+watch(()=>data.value?.data,newVal=>{
+  dbtotalNum=Number(newVal);
+  console.log("数据库总数",dbtotalNum);
+})
+//const dbtotalNum = computed(() => { return data.value?.data });
 
 //dbsize
+const tablesize: number[] = new Array(dbtotalNum);
 function getdbsize(dbtotal: number[]) {
   for (var i = 0; i < dbtotal.length; i++) {
-    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<redisDbsize>>(
+    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
       REDIS_META_SIZE_URL,
       { method: 'GET', params: { uuid: uuid, dbnumber: dbtotal[i] } },
       instance,
     );
     watch(dataSize, (value, oldValue) => {
-      const dbsize = computed(() => { return dataSize.value?.data!?.data });
-      //console.log(dbsize.value);
-      tablesize.push(dbsize.value);
+      const dbsize = computed(() => { return dataSize.value?.data });
+      console.log(dbsize.value);
+      tablesize.push(dbsize.value as number);
     })
   }
 }
 
 
 //数据库编号接口与数据库大小接口的数据组织//redisMetaKeys接口，表格索引程序
-const tablesize: number[] = new Array(dbtotalNum.value);
+
 tablesize.pop();
 function redisMeta() {
-  const dbtotal: number[] = new Array(dbtotalNum.value);
+  const dbtotal: number[] = new Array(dbtotalNum);
   for (var i = 0; i < dbtotal.length; i++) {
     dbtotal[i] = i;
   }
   getdbsize(dbtotal);
   setTimeout(function () {
     //console.log(tablesize);
-    for (var i = 0; i < dbtotalNum.value; i++) {
+    for (var i = 0; i <Number(dbtotalNum); i++) {
       var dataItem = { dbnumber: dbtotal[i], dbsize: tablesize[i] };
       tableData.push(dataItem);
     }
@@ -93,12 +94,12 @@ const viewDetails = (dbnum: number) => {
 };
 const handleSearch = () => {
   if (searchFormdata.num >= 0) {
-    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<redisDbsize>>(
+    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
       REDIS_META_SIZE_URL,
       { method: 'GET', params: { uuid: uuid, dbnumber: searchFormdata.num } },
       instance,
     );
-    const dbsize = computed(() => { return dataSize.value?.data!?.data });
+    const dbsize = computed(() => { return dataSize.value?.data });
     tableData.splice(1, tableData.length);
     tableData.pop();
     setTimeout(function () {
@@ -117,14 +118,14 @@ const handleFromReset = () => {
 <template>
   <PageContainer>
     <Card class="general-card" :bordered="false">
-      <template #title>redis元数据管理</template>
+      <template #title>redis元数据查询</template>
       <template #extra>
         <Space :size="18">
-          <Button type="text" size="small" @click="()=>{router.go(-1)}">
+          <Button type="text" size="medium" @click="()=>{router.go(-1)}">
             <template #icon>
               <icon-backward />
             </template>
-            <template #default>返回</template>
+            <template #default>返回上一级</template>
           </Button>
         </Space>
       </template>
@@ -159,13 +160,6 @@ const handleFromReset = () => {
         </Col>
       </Row>
       <Divider style="margin-top: 0" />
-      <!-- <div>{{data}}</div>
-      <div>{{dataSize}}</div>
-      <div>{{dataKeys}}</div>
-      <div>{{dbtotalNum}}</div>
-      <div>{{dbsize}}</div>
-      <div>{{dbcount}}</div>
-      <div>{{dbkeys}}</div> -->
       <Table id="redismetaTable" row-key="dbnumber" :data="tableData" :bordered="false" :loading="getloading">
         <template #columns>
           <TableColumn title="数据库编号" data-index="dbnumber" />
