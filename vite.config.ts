@@ -19,8 +19,9 @@ export default defineConfig({
     ...createArcoPlugin(),
     //...createMockPlugin(),
   ],
-  server:{
-    host:"localhost",
-    port:8080,
-  }
+  server: {
+     proxy: {
+    '/api': { target: 'http://127.0.0.1:8080', rewrite: path => path.replace(/^\/api/, '') },
+    },
+  },
 });

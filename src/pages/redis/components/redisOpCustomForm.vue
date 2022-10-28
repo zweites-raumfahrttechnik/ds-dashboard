@@ -58,7 +58,7 @@ const handleSubmit = async () => {
   }).then(() => {
     formRef.value?.resetFields();
     emit('change-step', 1);
-    emit('getChildren', data);
+    emit('getChildren', Object(data.value));
   });
 };
 const handleFromReset = () => {

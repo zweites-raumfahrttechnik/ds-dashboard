@@ -19,7 +19,7 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
       return successResp({
-        dbsize:Random.integer(0,100)
+        data:Random.integer(0,100)
       });
     },
   },

@@ -19,9 +19,9 @@ import { useRoute, useRouter } from 'vue-router';
 import PageContainer from '@/components/PageContainer.vue';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
-import { redisMetaTotal_URL, REDIS_META_SIZE_URL, REDIS_KEYS_URL } from '@/api/url';
+import { redisMetaTotal_URL, REDIS_META_SIZE_URL } from '@/api/url';
 //引入参数
-import { redisDBtotal, redisDbsize, redisKeys, redisgetkeysParams } from '@/api/types';
+import { redisDBtotal, redisDbsize } from '@/api/types';
 //接口数据执行
 setTimeout(function () {
   //  console.log(dbtotalNum.value);
@@ -52,7 +52,7 @@ function getdbsize(dbtotal: number[]) {
       instance,
     );
     watch(dataSize, (value, oldValue) => {
-      const dbsize = computed(() => { return dataSize.value?.data!?.dbsize });
+      const dbsize = computed(() => { return dataSize.value?.data!?.data });
       //console.log(dbsize.value);
       tablesize.push(dbsize.value);
     })
@@ -75,7 +75,7 @@ function redisMeta() {
       var dataItem = { dbnumber: dbtotal[i], dbsize: tablesize[i] };
       tableData.push(dataItem);
     }
-  }, 600);
+  }, 500);
 }
 
 const tableData = reactive([{}]);
@@ -98,7 +98,7 @@ const handleSearch = () => {
       { method: 'GET', params: { uuid: uuid, dbnumber: searchFormdata.num } },
       instance,
     );
-    const dbsize = computed(() => { return dataSize.value?.data!?.dbsize });
+    const dbsize = computed(() => { return dataSize.value?.data!?.data });
     tableData.splice(1, tableData.length);
     tableData.pop();
     setTimeout(function () {
@@ -118,6 +118,16 @@ const handleFromReset = () => {
   <PageContainer>
     <Card class="general-card" :bordered="false">
       <template #title>redis元数据管理</template>
+      <template #extra>
+        <Space :size="18">
+          <Button type="text" size="small" @click="()=>{router.go(-1)}">
+            <template #icon>
+              <icon-backward />
+            </template>
+            <template #default>返回</template>
+          </Button>
+        </Space>
+      </template>
       <Row>
         <Col :flex="1">
         <Form ref="searchFormRef" :model="searchFormdata" :wrapper-col-props="{ span: 18 }" label-align="right">
@@ -130,7 +140,8 @@ const handleFromReset = () => {
           </Row>
         </Form>
         </Col>
-        <Col :flex="'86px'" style="text-align: left">
+        <Col :flex="'86px'" style="text-align: right">
+        
         <Space :size="18">
           <Button type="primary" @click="handleSearch">
             <template #icon>

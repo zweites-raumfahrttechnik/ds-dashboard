@@ -2,6 +2,8 @@
 import {
     Card,
     Divider,
+    Space,
+    Button
 } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
 import { ref, watch } from 'vue';
@@ -9,6 +11,7 @@ import Form from './components/redisOpForm.vue';
 import Success from './components/redisOpSuccess.vue';
 import RedisOpJson from './components/redisOpJson.vue';
 let route = useRoute();
+const router = useRouter();
 const uuid = route.query.uuid as string;
 
 const json1 = ref();
@@ -26,6 +29,16 @@ const changeStep = (idx: number) => {
         <div>
             <Card class="general-card" :bordered="false">
                 <template #title>redis基本操作</template>
+                <template #extra>
+                    <Space :size="18">
+                        <Button type="text" size="small" @click="()=>{router.go(-1)}">
+                            <template #icon>
+                                <icon-backward />
+                            </template>
+                            <template #default>返回</template>
+                        </Button>
+                    </Space>
+                </template>
                 <div class="wrap">
                     <KeepAlive>
                         <Form v-if="step === 0" :uuid="uuid" @change-step="changeStep" @getChildren="getJson" />

@@ -13,7 +13,7 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (resp: AxiosResponse<ResponseWrap<unknown>>) => {
     if (resp.data.code !== 0) {
-      return Promise.reject(new Error(resp.data.msg));
+      return resp;
     }
     return resp;
   },

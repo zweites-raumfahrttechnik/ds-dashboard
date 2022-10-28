@@ -17,6 +17,7 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
 import { REDIS_OP_URL } from '@/api/url';
 import { FormModel } from './types';
+import { dataTool } from 'echarts/core';
 //const props = defineProps<{ uuid: string }>();
 
 interface Props {
@@ -83,7 +84,8 @@ const handleSubmit = async () => {
     }).then(() => {
         formRef.value?.resetFields();
         emit('change-step', 1);
-        emit('getChildren', data);
+        
+        emit('getChildren', Object(data.value));
     });
 };
 const handleFromReset = () => {
@@ -97,7 +99,7 @@ const formRef = ref<FormInstance>();
         <Form ref="formRef" :model="form" @submit="handleSubmit">
             <Row :gutter="20">
                 <Col :span="8">
-                <FormItem field="dbname" label="数据库编号" label-col-flex="100px"
+                <FormItem field="dbname" label="数据库编号" label-col-flex="90px"
                     :rules="[{ required: true, message: '必填' }, { type: 'number', message: '数据库编号为整型' }]">
                     <InputNumber v-model="form.dbname" :min="0" placeholder="请输入数据库编号" />
                 </FormItem>
@@ -131,14 +133,13 @@ const formRef = ref<FormInstance>();
             </Row>
             <Row :gutter="16">
                 <Col :span="8">
-                <FormItem field="key" label="键名" label-col-flex="100px" :rules="[{ required: true, message: '请输入键名' }]"
+                <FormItem field="key" label="键名" label-col-flex="90px" :rules="[{ required: true, message: '请输入键名' }]"
                     :validate-trigger="['change', 'input']">
                     <Input v-model="form.key" placeholder="请输入键名" />
                 </FormItem>
                 </Col>
                 <Col :span="8">
-                <FormItem field="parameter1" label="参数1" label-col-flex="80px"
-                    :rules="[{ required: true, message: '请输入要设置的参数' }]" :validate-trigger="['change', 'input']">
+                <FormItem field="parameter1" label="参数1" label-col-flex="80px">
                     <Input v-model="form.parameter1" placeholder="请输入要设置的参数" />
                 </FormItem>
                 </Col>

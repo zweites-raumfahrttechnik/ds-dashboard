@@ -50,7 +50,7 @@ export interface redisDBtotal{
 
 //redis元数据-数据库大小获取接口
 export interface redisDbsize{
-  dbsize:number
+  data:number
 }
 
 //redis元数据-keys获取接口
