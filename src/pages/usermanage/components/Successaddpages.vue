@@ -14,7 +14,7 @@ const handlePre = () => {
 
 <template>
   <Card class="background">
-    <Result status="success" title="数据库查询成功" class="Result">
+    <Result status="success" title="用户创建成功" class="Result">
       <template #extra>
         <Space :size="16">
           <Button type="primary" @click="handlePre">再次创建</Button>
@@ -23,10 +23,3 @@ const handlePre = () => {
     </Result>
   </Card>
 </template>
-<style lang="less">
-.background {
-  width: 100%;
-  height: 400px;
-  background-color: aliceblue;
-}
-</style>

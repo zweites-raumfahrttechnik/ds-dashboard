@@ -3,7 +3,7 @@ import { Random } from 'mockjs';
 import { successResp } from './_utils';
 //关系型数据库用户管理-post请求，响应值为code,msg,data(null
 const requests: MockMethod[] = [
-  //添加
+  //添加用户
   {
     url: '/api/v1/sql/user/add',
     method: 'post',
@@ -11,9 +11,10 @@ const requests: MockMethod[] = [
       return successResp();
     },
   },
-  //自定义添加
+
+  //自定义添加-项目中没有
   {
-    url: '/api/v1/sql/user/add',
+    url: '/api/v1/sql/user/request',
     method: 'get',
     response: () => {
       return successResp({
@@ -31,7 +32,8 @@ const requests: MockMethod[] = [
       });
     },
   },
-  //修改
+  
+  //修改用户
   {
     url: '/api/v1/sql/user/update',
     method: 'post',
@@ -39,7 +41,7 @@ const requests: MockMethod[] = [
       return successResp();
     },
   },
-  //删除
+  //删除用户
   {
     url: '/api/v1/sql/user/delete',
     method: 'delete',
@@ -47,7 +49,7 @@ const requests: MockMethod[] = [
       return successResp();
     },
   },
-  //授权
+  //授权用户
   {
     url: '/api/v1/sql/user/grant',
     method: 'post',
@@ -55,7 +57,7 @@ const requests: MockMethod[] = [
       return successResp();
     },
   },
-  //撤销
+  //撤销权限
   {
     url: '/api/v1/sql/user/revoke',
     method: 'post',

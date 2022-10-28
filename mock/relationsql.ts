@@ -4,7 +4,7 @@ import { successResp } from './_utils';
 
 const requests: MockMethod[] = [
   {
-    url: '/api/v1/table/query',
+    url: '/api/v1/execute/sql',
     method: 'get',
     response: () => {
       return successResp({
