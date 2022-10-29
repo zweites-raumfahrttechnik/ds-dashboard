@@ -15,7 +15,6 @@ const requests: MockMethod[] = [
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
-
       return successResp({
         count: 500,
         data: Array(size)

@@ -4,8 +4,30 @@ import { successResp } from './_utils';
 
 const requests: MockMethod[] = [
   {
-    url: '/api/v1/mgdb/query',
-    method: 'post',
+    url: '/api/v1/mgdb/meta/db',
+    method: 'get',
+    response: () => {
+      return successResp({
+        count: 500,
+        //自定义-可修改
+        data: Array(500)
+          .fill(1)
+          .map(() => {
+            return {
+              uuid: '@uuid',
+              username: Random.name(),
+              ip: Random.ip(),
+              port: Random.integer(1000, 50000),
+              export_port: Random.integer(1000, 50000),
+              export_ip: Random.ip(),
+            };
+          }),
+      });
+    },
+  },
+  {
+    url: '/api/v1/mgdb/meta/collection',
+    method: 'get',
     response: () => {
       return successResp({
         count: Random.integer(100, 500),
@@ -16,8 +38,8 @@ const requests: MockMethod[] = [
     },
   },
   {
-    url: '/api/v1/mgdb/read',
-    method: 'post',
+    url: '/api/v1/mgdb/meta/doc',
+    method: 'get',
     response: () => {
       return successResp({
         count: Random.integer(100, 500),
@@ -28,21 +50,8 @@ const requests: MockMethod[] = [
     },
   },
   {
-    url: '/api/v1/mgdb/query',
-    method: 'put',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
-      return successResp({
-        count: Random.integer(100, 500),
-        data: {
-          'array|count': [Random.string],
-        },
-      });
-    },
-  },
-  {
-    url: '/api/v1/mgdb/query',
-    method: 'delete',
+    url: '/api/v1/mgdb/meta/index',
+    method: 'get',
     response: () => {
       return successResp({
         count: Random.integer(100, 500),
@@ -53,13 +62,13 @@ const requests: MockMethod[] = [
     },
   },
   {
-    url: '/api/v1/bson',
-    method: 'post',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
+    url: '/api/v1/mgdb/meta/attr',
+    method: 'get',
+    response: () => {
       return successResp({
+        count: Random.integer(100, 500),
         data: {
-          document: Random.string
+          'array|count': [Random.string],
         },
       });
     },

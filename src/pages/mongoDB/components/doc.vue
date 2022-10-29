@@ -5,12 +5,17 @@ import {
   Input,
   Space,
   Table,
+  TableColumn,
   Button,
   Popconfirm,
   Modal,
 } from '@arco-design/web-vue';
 import { reactive, ref } from 'vue';
 import { DOC_URL } from '@/api/url';
+import { FormInstance } from '@arco-design/web-vue/es/form';
+import { useAxios } from '@vueuse/integrations/useAxios';
+import { instance, ResponseWrap } from '@/api';
+import { DocinformationParams, DocListData } from '@/api/types';
 
 const True = ref(true);
 const False = ref(false);
@@ -19,11 +24,26 @@ const selectedKeys = ref(['1', '2']);
 const size = ref('medium');
 const show = ref(true);
 
-const DocVisible = ref(false);
-const DocForm = reactive({
-  name: '',
-  op: '',
+const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
+  current: 1,
+  pageSize: 15,
 });
+
+const { data, isLoading, execute } = useAxios<ResponseWrap<DocListData>>(
+  DOC_URL,
+  { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize } },
+  instance,
+);
+
+const handlePageChange = (page: number) => {
+  pagination.current = page;
+};
+
+const DocData = computed(() => {
+  return data.value?.data?.data;
+});
+
+const DocVisible = ref(false);
 
 //新增文档
 const NewDoc = () => {
@@ -48,50 +68,6 @@ const handleDeleteDoc = () => {
   DeleteDocVisible.value = true;
 };
 const DeleteDocVisible = ref(false);
-
-//文档数据
-const handleStatsThree = () => {
-  StatsThreeVisible.value = true;
-};
-
-const DocColumns = [
-  {
-    title: '名称',
-    dataIndex: 'name',
-  },
-  {
-    title: '操作',
-    slotName: 'opTwo',
-  },
-];
-const DocData = reactive([
-  {
-    key: '1',
-    name: 'test3',
-    opTwo: '删除',
-  },
-  {
-    key: '2',
-    name: 'test_coll',
-    opTwo: '删除',
-  },
-  {
-    key: '3',
-    name: 'test_info',
-    opTwo: '删除',
-  },
-]);
-const StatsThreeVisible = ref(false);
-const StatsThreeForm = reactive({
-  ns: 'test_coll',
-  avgObjSize: '81.00KB',
-  totalSize: '72.00KB',
-  nindexes: '1',
-  storageSize: '36.00KB',
-  Count: '13',
-  size: '1.04KB',
-  freeStorageSize: '16.00KB',
-});
 </script>
 
 <template>
@@ -104,6 +80,7 @@ const StatsThreeForm = reactive({
   <Modal
     v-model:visible="NewDocVisible"
     title="新建文档"
+    :draggable="true"
     @cancel="handleNewDocCancel()"
     @ok="handleNewDocOk()"
   >
@@ -114,56 +91,20 @@ const StatsThreeForm = reactive({
     </Form>
   </Modal>
 
-  <Table
-    row-key="name"
-    :columns="DocColumns"
-    :data="DocData"
-    :pagination="false"
-    :bordered="false"
-    v-model:selectedKeys="selectedKeys"
-  >
-    <template #opTwo>
-      <Space :size="18">
-        <Button @click="handleStatsThree()" type="text" status="success">stats</Button>
-      </Space>
-
-      <Popconfirm type="warning" content="确认删除该文档？" @ok="() => handleDeleteDoc()">
-        <Button type="text" status="danger">删除</Button>
-      </Popconfirm>
-    </template>
+  <Table :pagination="false" :bordered="false">
+    <Table row-key="uuid" :data="DocData" :bordered="false">
+      <template #columns>
+        <TableColumn title="uuid" data-index="uuid" />
+        <TableColumn title="数据库名" data-index="dbName" />
+        <TableColumn title="集合名" data-index="collectionName" />
+        <TableColumn title="操作">
+          <template #cell>
+            <Popconfirm type="warning" content="确认删除该文档？" @ok="() => handleDeleteDoc()">
+              <Button type="text" status="danger">删除</Button>
+            </Popconfirm>
+          </template>
+        </TableColumn>
+      </template>
+    </Table>
   </Table>
-  <Modal
-    width="700px"
-    :hide-cancel="false"
-    v-model:visible="StatsThreeVisible"
-    title="文档状态信息"
-    :footer="False"
-  >
-    <Form :model="StatsThreeForm">
-      <Form-item field="ns" label="ns">
-        <Input v-model="StatsThreeForm.ns" />
-      </Form-item>
-      <Form-item field="avgObjSize" label="avgObjSize">
-        <Input v-model="StatsThreeForm.avgObjSize" />
-      </Form-item>
-      <Form-item field="totalSize" label="totalSize">
-        <Input v-model="StatsThreeForm.totalSize" />
-      </Form-item>
-      <Form-item field="nindexes" label="nindexes">
-        <Input v-model="StatsThreeForm.nindexes" />
-      </Form-item>
-      <Form-item field="storageSize" label="storageSize">
-        <Input v-model="StatsThreeForm.storageSize" />
-      </Form-item>
-      <Form-item field="Count" label="Count">
-        <Input v-model="StatsThreeForm.Count" />
-      </Form-item>
-      <Form-item field="size" label="size">
-        <Input v-model="StatsThreeForm.size" />
-      </Form-item>
-      <Form-item field="freeStorageSize" label="freeStorageSize">
-        <Input v-model="StatsThreeForm.freeStorageSize" />
-      </Form-item>
-    </Form>
-  </Modal>
 </template>

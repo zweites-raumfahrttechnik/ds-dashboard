@@ -34,18 +34,19 @@ import comlist from './components/metadata.vue';
 
 const form = ref();
 
+
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
   current: 1,
   pageSize: 15,
 });
 
-const { data: dbdata } = useAxios<ResponseWrap<DBListData>>(
+ /* const { data: dbdata } = useAxios<ResponseWrap<DBListData>>(
   DB_URL,
   { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize } },
   instance,
-);
+);*/
 
-const { data: treedata } = useAxios<ResponseWrap<DBListData>>(
+const { data, execute } = useAxios<ResponseWrap<TreeData>>(
   DB_URL,
   { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize } },
   instance,
@@ -54,22 +55,20 @@ const { data: treedata } = useAxios<ResponseWrap<DBListData>>(
 //树的搜索框
 const searchKey = ref();
 
-//搜索按钮
-const handleSearch = () => {};
 
 
-const tableData = computed(() => {
+
+/* const tableData = computed(() => {
   return dbdata.value?.data?.data;
-});
+});*/
 
 const treeData = computed(() => {
-  return treedata.value?.data?.data;
+  return data.value?.data?.data;
 });
 
 const handlePageChange = (page: number) => {
   pagination.current = page;
 };
-
 
 </script>
 
@@ -92,20 +91,16 @@ const handlePageChange = (page: number) => {
             <template #first>
               <TypographyParagraph>
                 <InputSearch style="margin-bottom: 8px; max-width: 240px" v-model="searchKey" />
-                <Tree
-                  ref="treeRef"
-                  blockNode
-                  checkable
-                  :data="treeData"
-                  :virtualListProps="{
-                    height: 800,
-                  }"
-                />
+              
+
+                <Tree  blockNode :data="treeData" 
+                :default-expanded-keys="['0-0','0-0-0','0-0-0-0']"
+                :default-selected-keys="['0-0', '0-1']"/>
               </TypographyParagraph>
             </template>
             <template #second>
               <TypographyParagraph>
-                <div class="pack">
+          <!--   <div class="pack">
                   <Table
                     row-key="uuid"
                     :bordered="false"
@@ -122,7 +117,7 @@ const handlePageChange = (page: number) => {
                       <TableColumn title="导出器ip" data-index="export_ip" />
                     </template>
                   </Table>
-                </div>
+                </div>-->
               </TypographyParagraph>
             </template>
           </Split>
