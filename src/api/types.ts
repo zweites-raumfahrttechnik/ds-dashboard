@@ -9,6 +9,7 @@ export interface GetConnectListParams {
 export interface GetListDataItem {
   uuid: string;
   username: string;
+  name:string;
   ip: string;
   port: number;
   type: number;

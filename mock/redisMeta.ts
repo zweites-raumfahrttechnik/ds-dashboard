@@ -8,7 +8,7 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp(
-        "10"
+        "50"
       );
     },
   },

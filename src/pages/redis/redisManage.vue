@@ -4,7 +4,6 @@ import {
   Form,
   FormItem,
   Row,
-  InputNumber,
   Divider,
   Col,
   Space,
@@ -14,7 +13,6 @@ import {
   Input
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
-import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
 import { reactive, ref } from 'vue';
 import { useRoute, useRouter } from 'vue-router';
 import PageContainer from '@/components/PageContainer.vue';
@@ -26,7 +24,6 @@ import { redisMetaTotal_URL, REDIS_META_SIZE_URL } from '@/api/url';
 setTimeout(function () {
   redisMeta();
 }, 50)
-
 let route = useRoute();
 const uuid = route.query.uuid as string;
 const ip = route.query.ip as string;
@@ -79,19 +76,26 @@ function redisMeta() {
     }
   }, 500);
 }
-
 const tableData = reactive([{}]);
 tableData.pop();
-const getloading = computed(() => {
-  if (Array.prototype.isPrototypeOf(tableData) && tableData.length === 0) {
-    return true;
-  }
-  return false;
-});
+// const getloading = computed(() => {
+//   if (Array.prototype.isPrototypeOf(tableData) && tableData.length === 0) {
+//     return true;
+//   }
+//   return false;
+// });
+const getloading = ref();
+function sleep(time: number) {
+  return new Promise((resolve) => setTimeout(resolve, time));
+}
+if (Array.prototype.isPrototypeOf(tableData) && tableData.length === 0) {
+  getloading.value = true;
+  sleep(550).then(() => { getloading.value = false })
+} else { getloading.value = true; }
 //详情跳转
 const router = useRouter();
 const viewDetails = (dbnum: number) => {
-  router.push({ name: "redismetaKeys", query: { uuid: uuid, dbnumber: dbnum } })
+  router.push({ name: "redismetaKeys", query: { uuid: uuid, dbnumber: dbnum, ip: ip, username: username } })
 };
 const handleSearch = () => {
   if (searchFormdata.num >= 0 && searchFormdata.num < dbtotalNum) {
@@ -180,7 +184,8 @@ const handleFromReset = () => {
         </Col> -->
       </Row>
       <Divider style="margin-top: 0" />
-      <Table id="redismetaTable" row-key="dbnumber" :data="tableData" :bordered="false" :loading="getloading">
+      <Table id="redismetaTable" row-key="dbnumber" :data="tableData" :bordered="{ wrapper: true, cell: true }"
+        :loading="getloading">
         <template #columns>
           <!-- <TableColumn title="数据库连接uuid" :body-cell-style="{ color: 'grey' }">
             <template #cell="{ record }">

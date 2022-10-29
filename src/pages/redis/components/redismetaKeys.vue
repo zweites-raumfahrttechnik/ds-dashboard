@@ -5,7 +5,14 @@ import {
     Table,
     TableColumn,
     Space,
-    Button
+    Button,
+    TypographyTitle,
+    Row,
+    Col,
+    Form,
+    Input,
+    InputNumber,
+    FormItem
 } from '@arco-design/web-vue';
 
 import { reactive, ref } from 'vue';
@@ -20,7 +27,8 @@ let route = useRoute();
 const router = useRouter();
 const uuid = route.query.uuid as string;
 const dbnumber = Number(route.query.dbnumber);
-
+const ip = route.query.ip as string;
+const username = route.query.username as string;
 type SearchParams = redisgetkeysParams;
 
 //请求pagination
@@ -54,9 +62,7 @@ watch(
 );
 watch(
     () => data.value?.data?.data, newVal => {
-        //console.log(data.value?.data?.data.length);
         const a = data.value?.data?.count as number;
-
         if (data.value?.data?.data.length === data.value?.data?.count) {
             for (var i = 0; i < a; i++) {
                 const obj = { key: data.value?.data?.data?.[i] as string };
@@ -77,14 +83,18 @@ const handlePageChange = (page: number) => {
     pagin.current = page;
 };
 
-const dbcount = computed(() => { return data.value?.data!?.count });
+const Formdata = reactive({});
 
 </script>
 
 <template>
     <PageContainer>
         <Card class="general-card" :bordered="false">
-            <template #title> 库号为{{ dbnumber }}的redis数据库共{{ dbcount }}个键：</template>
+            <template #title>
+                <TypographyTitle :heading="6">
+                    数据库详情
+                </TypographyTitle>
+            </template>
             <template #extra>
                 <Space :size="18">
                     <Button status="success" @click="() => { router.go(-1) }" style="width: 185px;">
@@ -95,6 +105,35 @@ const dbcount = computed(() => { return data.value?.data!?.count });
                     </Button>
                 </Space>
             </template>
+            <Row>
+                <Col :flex="1">
+                <Form ref="searchFormRef" :model="Formdata" :wrapper-col-props="{ span: 18 }" label-align="right">
+                    <Row :gutter="16">
+                        <Col :span="6">
+                        <FormItem field="uuid" label="数据库连接uuid" label-col-flex="100px" :disabled="true">
+                            <Input v-model="uuid" />
+                        </FormItem>
+                        </Col>
+                        <Col :span="6">
+                        <FormItem field="ip" label="数据库地址" label-col-flex="85px" :disabled="true">
+                            <Input v-model="ip" />
+                        </FormItem>
+                        </Col>
+                        <Col :span="6">
+                        <FormItem field="username" label="用户名" label-col-flex="85px" :disabled="true" :label-attrs="{}">
+                            <Input v-model="username" />
+                        </FormItem>
+                        </Col>
+                        <Col :span="6">
+                        <FormItem field="dbnumber" label="数据库编号" label-col-flex="85px" :disabled="true"
+                            :label-attrs="{}">
+                            <InputNumber v-model="dbnumber" />
+                        </FormItem>
+                        </Col>
+                    </Row>
+                </Form>
+                </Col>
+            </Row>
             <Divider style="margin-top: 0" />
             <Table id="redismetaKeys" row-key="key" :data="tableData" :bordered="{ cell: true }" :pagination="pagin"
                 @page-change="handlePageChange">

@@ -63,10 +63,10 @@ const handleSearch = () => {
     const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
     if (searchFormdata.ip && searchFormdata.ip !== '') {
         params.ip = searchFormdata.ip;
-    }
+    } else { params.ip = '' }
     if (searchFormdata.username && searchFormdata.username !== '') {
         params.username = searchFormdata.username;
-    }
+    } else { params.username = '' }
     if (searchFormdata.type) {
         params.type = 4;
     }

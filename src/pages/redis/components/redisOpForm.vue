@@ -18,18 +18,17 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
 import { REDIS_OP_URL } from '@/api/url';
 import { FormModel } from './types';
-import { dataTool } from 'echarts/core';
 //const props = defineProps<{ uuid: string }>();
 
 interface Props {
     uuid?: string,
-    ip?:string,
-    username?:string
+    ip?: string,
+    username?: string
 }
 const props = withDefaults(defineProps<Props>(), {
     uuid: '6df74580-023a-4aa0-ae5f-c134639e618d',
-    ip:'41.55.248.156',
-    username:'Larry Williams'
+    ip: '41.55.248.156',
+    username: 'Larry Williams'
 });
 //console.log(props.uuid);
 
@@ -89,7 +88,7 @@ const handleSubmit = async () => {
     }).then(() => {
         formRef.value?.resetFields();
         emit('change-step', 1);
-        
+
         emit('getChildren', Object(data.value));
     });
 };
@@ -115,12 +114,11 @@ const formRef = ref<FormInstance>();
                 </FormItem>
                 </Col>
                 <Col :span="8">
-                <FormItem field="username" label="用户名" label-col-flex="85px" :disabled="true"
-                :label-attrs="{}">
+                <FormItem field="username" label="用户名" label-col-flex="85px" :disabled="true" :label-attrs="{}">
                     <Input v-model="username" />
                 </FormItem>
                 </Col>
-            </Row><br/>
+            </Row><br />
             <Row :gutter="20">
                 <Col :span="8">
                 <FormItem field="dbname" label="数据库编号" label-col-flex="100px"
@@ -154,7 +152,7 @@ const formRef = ref<FormInstance>();
                     </Select>
                 </FormItem>
                 </Col>
-            </Row><br/>
+            </Row><br />
             <Row :gutter="20">
                 <Col :span="8">
                 <FormItem field="key" label="键名" label-col-flex="100px" :rules="[{ required: true, message: '请输入键名' }]"
@@ -172,7 +170,7 @@ const formRef = ref<FormInstance>();
                     <Input v-model="form.parameter2" placeholder="请输入要设置的参数" />
                 </FormItem>
                 </Col>
-            </Row><br/>
+            </Row><br />
             <Row>
                 <FormItem label-col-flex="100px">
                     <Space>
