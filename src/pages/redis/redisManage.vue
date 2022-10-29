@@ -11,6 +11,7 @@ import {
   Table,
   TableColumn,
   Button,
+  Input
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
@@ -129,19 +130,38 @@ const handleFromReset = () => {
           </Button>
         </Space>
       </template>
+      <!-- <Divider style="margin-top: 0" /> -->
+      <br />
       <Row>
         <Col :flex="1">
         <Form ref="searchFormRef" :model="searchFormdata" :wrapper-col-props="{ span: 18 }" label-align="right">
           <Row :gutter="16">
-            <Col :span="11">
-            <FormItem field="number" label="数据库编号">
-              <InputNumber v-model="searchFormdata.num" :min="0" placeholder="请输入数据库编号" />
+            <Col :span="8">
+            <FormItem field="uuid" label="数据库连接uuid" label-col-flex="100px" :disabled="true">
+              <Input v-model="uuid" />
+            </FormItem>
+            </Col>
+            <Col :span="8">
+            <FormItem field="ip" label="数据库地址" label-col-flex="80px" :disabled="true">
+              <Input v-model="ip" />
+            </FormItem>
+            </Col>
+            <Col :span="8">
+            <FormItem field="username" label="用户名" label-col-flex="85px" :disabled="true" :label-attrs="{}">
+              <Input v-model="username" />
             </FormItem>
             </Col>
           </Row>
+          <!-- <Row :gutter="16">
+            <Col :span="14">
+            <FormItem field="number" label="数据库编号">
+              <InputNumber v-model="searchFormdata.num" :min="0" placeholder="请输入数据库编号" style="width:195px ;" />
+            </FormItem>
+            </Col>
+          </Row> -->
         </Form>
         </Col>
-        <Divider style="height: 34px" direction="vertical" />
+        <!-- <Divider style="height: 34px" direction="vertical" />
         <Col :flex="'86px'" style="text-align: right">
         <Space :size="18">
           <Button type="primary" @click="handleSearch">
@@ -157,12 +177,12 @@ const handleFromReset = () => {
             重置
           </Button>
         </Space>
-        </Col>
+        </Col> -->
       </Row>
       <Divider style="margin-top: 0" />
       <Table id="redismetaTable" row-key="dbnumber" :data="tableData" :bordered="false" :loading="getloading">
         <template #columns>
-          <TableColumn title="数据库连接uuid" :body-cell-style="{ color: 'grey' }">
+          <!-- <TableColumn title="数据库连接uuid" :body-cell-style="{ color: 'grey' }">
             <template #cell="{ record }">
               {{ uuid }}
             </template>
@@ -176,7 +196,7 @@ const handleFromReset = () => {
             <template #cell="{ record }">
               {{ username }}
             </template>
-          </TableColumn>
+          </TableColumn> -->
           <TableColumn title="数据库编号" data-index="dbnumber" />
           <TableColumn title="键值对数量" data-index="dbsize" />
           <TableColumn title="详情">
