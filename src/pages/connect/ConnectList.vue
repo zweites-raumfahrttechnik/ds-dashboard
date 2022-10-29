@@ -15,7 +15,7 @@ import {
   Button,
   Popconfirm,
 } from '@arco-design/web-vue';
-import { FormInstance } from '@arco-design/web-vue/es/form';//表单检验
+import { FormInstance } from '@arco-design/web-vue/es/form';
 import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
 import { useAxios } from '@vueuse/integrations/useAxios';
 
@@ -56,7 +56,7 @@ const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
 
 watch(
   () => data.value?.data?.count,
-  (newVal) => {
+  newVal => {
     pagination.total = newVal;
   },
 );
@@ -198,7 +198,7 @@ const handleDeleteConnect = (uuid: string) => {
               <span v-else>Elasticsearch</span>
             </template>
           </TableColumn>
-          <TableColumn title="操作" >
+          <TableColumn title="操作">
             <template #cell="{ record }">
               <Popconfirm
                 content="请确认是否删除此数据库连接"

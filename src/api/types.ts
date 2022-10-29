@@ -31,66 +31,66 @@ export interface ConcurrentChartValue {
   through: number[];
 }
 
-export interface DBinformationParams{
+export interface DBinformationParams {
   uuid?: string;
-  dbName?:string;
-  collectionName?:string;
-  docName?:string;
+  dbName?: string;
+  collectionName?: string;
+  docName?: string;
 }
 
-export interface DBListData{
-  count:number;
-  data:DBinformationParams[];
+export interface DBListData {
+  count: number;
+  data: DBinformationParams[];
 }
 
-export interface TreeinformationParams{
+export interface TreeinformationParams {
   uuid: string;
 }
 
-export interface TreeData{
-  data:TreeinformationParams[];
+export interface TreeData {
+  data: TreeinformationParams[];
 }
 
-export interface CollectioninformationParams{
+export interface CollectioninformationParams {
   uuid?: string;
-  dbName?:string;
+  dbName?: string;
 }
 
-export interface CollectionListData{
-  count:number;
-  data:CollectioninformationParams[];
+export interface CollectionListData {
+  count: number;
+  data: CollectioninformationParams[];
 }
 
-export interface DocinformationParams{
+export interface DocinformationParams {
   uuid?: string;
-  dbName?:string;
-  collectionName?:string;
+  dbName?: string;
+  collectionName?: string;
 }
 
-export interface DocListData{
-  count:number;
-  data:DocinformationParams[];
+export interface DocListData {
+  count: number;
+  data: DocinformationParams[];
 }
 
-export interface IndexinformationParams{
+export interface IndexinformationParams {
   uuid?: string;
-  dbName?:string;
-  collectionName?:string;
+  dbName?: string;
+  collectionName?: string;
 }
 
-export interface IndexListData{
-  count:number;
-  data:IndexinformationParams[];
+export interface IndexListData {
+  count: number;
+  data: IndexinformationParams[];
 }
 
-export interface AttrinformationParams{
+export interface AttrinformationParams {
   uuid?: string;
-  dbName?:string;
-  collectionName?:string;
-  docName?:string;
+  dbName?: string;
+  collectionName?: string;
+  docName?: string;
 }
 
-export interface AttrListData{
-  count:number;
-  data:AttrinformationParams[];
+export interface AttrListData {
+  count: number;
+  data: AttrinformationParams[];
 }

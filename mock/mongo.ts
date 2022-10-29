@@ -30,8 +30,7 @@ const requests: MockMethod[] = [
   {
     url: '/api/v1/mgdb/query',
     method: 'put',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
+    response: () => {
       return successResp({
         count: Random.integer(100, 500),
         data: {
@@ -55,11 +54,10 @@ const requests: MockMethod[] = [
   {
     url: '/api/v1/bson',
     method: 'post',
-    response: ({ query }: { query: any }) => {
-      const size = +query.size;
+    response: () => {
       return successResp({
         data: {
-          document: Random.string
+          document: Random.string,
         },
       });
     },

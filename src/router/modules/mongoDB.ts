@@ -5,8 +5,6 @@ const mongoDB: RouteRecordRaw = {
   path: '/mongoDB',
   name: 'MongoDB',
   component: MAIN_LAYOUT,
-  meta: { requireAuth: true, locale: 'MongoDB', icon: 'IconDriveFile' },
-
   children: [
     {
       path: 'edit',
@@ -39,5 +37,6 @@ const mongoDB: RouteRecordRaw = {
       },
     },
   ],
+  meta: { requireAuth: true, locale: 'MongoDB', icon: 'IconDriveFile' },
 };
 export default mongoDB;
