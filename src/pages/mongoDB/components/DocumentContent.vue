@@ -6,7 +6,7 @@ import { IconTool, IconDelete } from '@arco-design/web-vue/es/icon';
 
 import { instance, ResponseWrap } from '@/api';
 import { MongdbDocInfo } from '@/api/types';
-import { MONGODB_DOC_URL } from '@/api/url';
+import { MONGODB_DOC_URL, MONGODB_QUERY_URL } from '@/api/url';
 
 import JsonEditor from './JsonEditor.vue';
 
@@ -23,6 +23,14 @@ const { data, execute } = useAxios<ResponseWrap<MongdbDocInfo>>(
   },
   instance,
 );
+
+const { execute: executeDelete } = useAxios(MONGODB_QUERY_URL, { method: 'DELETE' }, instance, {
+  immediate: false,
+});
+
+const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, instance, {
+  immediate: false,
+});
 
 const selectJson = reactive<{ json: string; _id: string }>({ _id: '', json: '{}' });
 const visibleJsonModal = ref<boolean>(false);
@@ -47,6 +55,70 @@ const handleSelectJsonChange = (j: string) => {
   selectJson.json = JSON.stringify(rest);
   visibleJsonModal.value = true;
 };
+
+const handleDeleteSingleDoc = async (j: string) => {
+  const { _id } = JSON.parse(j);
+
+  await executeDelete({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+      isMany: true,
+      items: [
+        {
+          field: '_id',
+          op: 'EQ',
+          target: _id,
+        },
+      ],
+    },
+  });
+
+  execute({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+    },
+  });
+};
+
+const handleModifySingleDoc = async () => {
+  await executeDelete({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+      isMany: true,
+      items: [
+        {
+          field: '_id',
+          op: 'EQ',
+          target: selectJson._id,
+        },
+      ],
+    },
+  });
+
+  await executePut({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+      isMany: true,
+      documents: [selectJson.json],
+    },
+  });
+
+  execute({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+    },
+  });
+};
 </script>
 
 <template>
@@ -63,7 +135,11 @@ const handleSelectJsonChange = (j: string) => {
 
             <Divider direction="vertical" />
 
-            <Popconfirm type="warning" content="确认删除该文档？">
+            <Popconfirm
+              type="warning"
+              content="确认删除该文档？"
+              @ok="() => handleDeleteSingleDoc(item)"
+            >
               <Link status="danger" :underline="false">
                 <template #icon>
                   <IconDelete size="15" />
@@ -79,7 +155,7 @@ const handleSelectJsonChange = (j: string) => {
     </Row>
   </div>
 
-  <Modal v-model:visible="visibleJsonModal" title="浏览">
+  <Modal v-model:visible="visibleJsonModal" title="浏览" @ok="handleModifySingleDoc">
     <JsonEditor v-model:value="selectJson.json" />
   </Modal>
 </template>

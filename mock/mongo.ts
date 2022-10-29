@@ -31,24 +31,14 @@ const requests: MockMethod[] = [
     url: '/api/v1/mgdb/query',
     method: 'put',
     response: () => {
-      return successResp({
-        count: Random.integer(100, 500),
-        data: {
-          'array|count': [Random.string],
-        },
-      });
+      return successResp(null);
     },
   },
   {
     url: '/api/v1/mgdb/query',
     method: 'delete',
     response: () => {
-      return successResp({
-        count: Random.integer(100, 500),
-        data: {
-          'array|count': [Random.string],
-        },
-      });
+      return successResp(null);
     },
   },
   {
