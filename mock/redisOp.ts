@@ -9,17 +9,12 @@ const requests: MockMethod[] = [
     response: () => {
       return successResp({
         count: 500,
-        data: Array(3)
+        data: Array(1)
           .fill(1)
           .map(() => {
             return {
               uuid: Random.uuid(),
               dbname: Random.range(),
-              action: Random.pick(['set','get','count']),
-              KeyType: Random.pick(['hash','list','set']),
-              key:Random.string(),
-              parameter1: Random.string(),
-              parameter2: Random.string()
             };
           }),
       });

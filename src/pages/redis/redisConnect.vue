@@ -37,7 +37,7 @@ const pagination = reactive<{ current: number; pageSize: number; total?: number 
 
 const { data, isLoading, execute } = useAxios<ResponseWrap<GetListData>>(
     CONNECT_URL,
-    { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize, type: 4,ip:'',username:'' } },
+    { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize, type: 4, ip: '', username: '' } },
     instance,
 );
 
@@ -51,7 +51,7 @@ watch(
 watch(
     () => pagination.current,
     () => {
-        const params: SearchParams = { pg: pagination.current, size: pagination.pageSize, type: 4,ip:'',username:''};
+        const params: SearchParams = { pg: pagination.current, size: pagination.pageSize, type: 4, ip: '', username: '' };
         execute({ params });
     },
 );
@@ -60,21 +60,21 @@ const tableData = computed(() => {
 });
 
 const handleSearch = () => {
-  const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
-  if (searchFormdata.ip && searchFormdata.ip !== '') {
-    params.ip = searchFormdata.ip;
-  }
-  if (searchFormdata.username && searchFormdata.username !== '') {
-    params.username = searchFormdata.username;
-  }
-  if (searchFormdata.type) {
-    params.type = 4;
-  }
-  execute({ params });
+    const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
+    if (searchFormdata.ip && searchFormdata.ip !== '') {
+        params.ip = searchFormdata.ip;
+    }
+    if (searchFormdata.username && searchFormdata.username !== '') {
+        params.username = searchFormdata.username;
+    }
+    if (searchFormdata.type) {
+        params.type = 4;
+    }
+    execute({ params });
 };
 
 const handleFromReset = () => {
-  searchFormRef.value?.resetFields();
+    searchFormRef.value?.resetFields();
 };
 
 const handlePageChange = (page: number) => {
@@ -82,14 +82,14 @@ const handlePageChange = (page: number) => {
 };
 
 const router = useRouter();
-const redisbasicOP = (uuid: string) => {
-    router.push({ name: "redisbasicOp", query: { uuid: uuid } })
+const redisbasicOP = (uuid: string, ip: string, username: string) => {
+    router.push({ name: "redisbasicOp", query: { uuid: uuid, ip: ip, username: username } })
 }
-const rediscustomOP = (uuid: string) => {
-    router.push({ name: "rediscustomOp", query: { uuid: uuid } })
+const rediscustomOP = (uuid: string, ip: string, username: string) => {
+    router.push({ name: "rediscustomOp", query: { uuid: uuid, ip: ip, username: username } })
 }
-const redisMANAGE = (uuid: string) => {
-    router.push({ name: 'redisManagement', query: { uuid: uuid } })
+const redisMANAGE = (uuid: string, ip: string, username: string) => {
+    router.push({ name: 'redisManagement', query: { uuid: uuid, ip: ip, username: username } })
 };
 </script>
 
@@ -99,46 +99,39 @@ const redisMANAGE = (uuid: string) => {
             <template #title>redis数据库连接列表</template>
             <Row>
                 <Col :flex="1">
-                <Form
-                    ref="searchFormRef"
-                    :model="searchFormdata"
-                    :label-col-props="{ span: 6 }"
-                    :wrapper-col-props="{ span: 18 }"
-                    label-align="left"
-                >
+                <Form ref="searchFormRef" :model="searchFormdata" :label-col-props="{ span: 6 }"
+                    :wrapper-col-props="{ span: 18 }" label-align="left">
                     <Row :gutter="16">
-                    <Col :span="9">
+                        <Col :span="9">
                         <FormItem field="ip" label="数据库地址" auto-label-width="true">
-                        <Input v-model="searchFormdata.ip" placeholder="请输入数据库地址" />
+                            <Input v-model="searchFormdata.ip" placeholder="请输入数据库地址" />
                         </FormItem>
-                    </Col>
-                    &nbsp;&nbsp;&nbsp;&nbsp;
-                    <Col :span="7">
+                        </Col>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <Col :span="7">
                         <FormItem field="username" label="用户名" auto-label-width="true">
-                        <Input v-model="searchFormdata.username" placeholder="请输入Root用户名" />
+                            <Input v-model="searchFormdata.username" placeholder="请输入用户名" />
                         </FormItem>
-                    </Col>
+                        </Col>
                     </Row>
                 </Form>
                 </Col>
-
                 <Divider style="height: 34px" direction="vertical" />
-
                 <Col :flex="'86px'" style="text-align: right">
-                    <Space :size="18">
-                        <Button type="primary" @click="handleSearch">
+                <Space :size="18">
+                    <Button type="primary" @click="handleSearch">
                         <template #icon>
                             <IconSearch />
                         </template>
                         搜索
-                        </Button>
-                        <Button @click="handleFromReset">
+                    </Button>
+                    <Button @click="handleFromReset">
                         <template #icon>
                             <IconRefresh />
                         </template>
                         重置
-                        </Button>
-                    </Space>
+                    </Button>
+                </Space>
                 </Col>
             </Row>
             <Divider style="margin-top: 0" />
@@ -151,18 +144,20 @@ const redisMANAGE = (uuid: string) => {
                     <TableColumn title="用户名" data-index="username" />
                     <TableColumn title="元数据查询">
                         <template #cell="{ record }">
-                            <Button  status="success" v-if="record.type === 4"
-                                @click="() => redisMANAGE(record.uuid)">查看</Button>
+                            <Button status="success" v-if="record.type === 4"
+                                @click="() => redisMANAGE(record.uuid, record.ip, record.username)">查看</Button>
                         </template>
                     </TableColumn>
                     <TableColumn title="基本操作">
                         <template #cell="{ record }">
-                            <Button status="warning"  @click="() => redisbasicOP(record.uuid)">进入</Button>
+                            <Button status="warning"
+                                @click="() => redisbasicOP(record.uuid, record.ip, record.username)">进入</Button>
                         </template>
                     </TableColumn>
                     <TableColumn title="自定义操作">
                         <template #cell="{ record }">
-                            <Button  @click="() => rediscustomOP(record.uuid)">进入</Button>
+                            <Button status="warning"
+                                @click="() => rediscustomOP(record.uuid, record.ip, record.username)">进入</Button>
                         </template>
                     </TableColumn>
                 </template>

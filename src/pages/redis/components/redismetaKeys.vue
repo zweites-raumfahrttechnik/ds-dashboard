@@ -4,6 +4,8 @@ import {
     Divider,
     Table,
     TableColumn,
+    Space,
+    Button
 } from '@arco-design/web-vue';
 
 import { reactive, ref } from 'vue';
@@ -15,6 +17,7 @@ import { REDIS_KEYS_URL } from '@/api/url';
 import { redisKeys, redisgetkeysParams } from '@/api/types';
 
 let route = useRoute();
+const router = useRouter();
 const uuid = route.query.uuid as string;
 const dbnumber = Number(route.query.dbnumber);
 
@@ -82,6 +85,16 @@ const dbcount = computed(() => { return data.value?.data!?.count });
     <PageContainer>
         <Card class="general-card" :bordered="false">
             <template #title> 库号为{{ dbnumber }}的redis数据库共{{ dbcount }}个键：</template>
+            <template #extra>
+                <Space :size="18">
+                    <Button status="success" @click="() => { router.go(-1) }" style="width: 185px;">
+                        <template #icon>
+                            <icon-backward />
+                        </template>
+                        <template #default> 返回上一级 </template>
+                    </Button>
+                </Space>
+            </template>
             <Divider style="margin-top: 0" />
             <Table id="redismetaKeys" row-key="key" :data="tableData" :bordered="{ cell: true }" :pagination="pagin"
                 @page-change="handlePageChange">

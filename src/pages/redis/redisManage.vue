@@ -28,7 +28,8 @@ setTimeout(function () {
 
 let route = useRoute();
 const uuid = route.query.uuid as string;
-
+const ip = route.query.ip as string;
+const username = route.query.username as string;
 const searchFormRef = ref<FormInstance>();
 const searchFormdata = reactive({ num: NaN });
 const { data, isLoading, execute } = useAxios<ResponseWrap<string>>(
@@ -36,12 +37,11 @@ const { data, isLoading, execute } = useAxios<ResponseWrap<string>>(
   { method: 'GET', params: { uuid: uuid } },
   instance, { immediate: true }
 );
-let dbtotalNum:number =0;
-watch(()=>data.value?.data,newVal=>{
-  dbtotalNum=Number(newVal);
-  console.log("数据库总数",dbtotalNum);
+let dbtotalNum: number = 0;
+watch(() => data.value?.data, newVal => {
+  dbtotalNum = Number(newVal);
+  //console.log("数据库总数", dbtotalNum);
 })
-//const dbtotalNum = computed(() => { return data.value?.data });
 
 //dbsize
 const tablesize: number[] = new Array(dbtotalNum);
@@ -54,7 +54,7 @@ function getdbsize(dbtotal: number[]) {
     );
     watch(dataSize, (value, oldValue) => {
       const dbsize = computed(() => { return dataSize.value?.data });
-      console.log(dbsize.value);
+      //console.log(dbsize.value);
       tablesize.push(dbsize.value as number);
     })
   }
@@ -72,7 +72,7 @@ function redisMeta() {
   getdbsize(dbtotal);
   setTimeout(function () {
     //console.log(tablesize);
-    for (var i = 0; i <Number(dbtotalNum); i++) {
+    for (var i = 0; i < Number(dbtotalNum); i++) {
       var dataItem = { dbnumber: dbtotal[i], dbsize: tablesize[i] };
       tableData.push(dataItem);
     }
@@ -93,7 +93,7 @@ const viewDetails = (dbnum: number) => {
   router.push({ name: "redismetaKeys", query: { uuid: uuid, dbnumber: dbnum } })
 };
 const handleSearch = () => {
-  if (searchFormdata.num >= 0) {
+  if (searchFormdata.num >= 0 && searchFormdata.num < dbtotalNum) {
     const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
       REDIS_META_SIZE_URL,
       { method: 'GET', params: { uuid: uuid, dbnumber: searchFormdata.num } },
@@ -121,11 +121,11 @@ const handleFromReset = () => {
       <template #title>redis元数据查询</template>
       <template #extra>
         <Space :size="18">
-          <Button type="text" size="medium" @click="()=>{router.go(-1)}">
+          <Button status="success" @click="() => { router.go(-1) }" style="width: 185px;">
             <template #icon>
               <icon-backward />
             </template>
-            <template #default>返回上一级</template>
+            <template #default> 返回上一级 </template>
           </Button>
         </Space>
       </template>
@@ -141,8 +141,8 @@ const handleFromReset = () => {
           </Row>
         </Form>
         </Col>
+        <Divider style="height: 34px" direction="vertical" />
         <Col :flex="'86px'" style="text-align: right">
-        
         <Space :size="18">
           <Button type="primary" @click="handleSearch">
             <template #icon>
@@ -162,11 +162,26 @@ const handleFromReset = () => {
       <Divider style="margin-top: 0" />
       <Table id="redismetaTable" row-key="dbnumber" :data="tableData" :bordered="false" :loading="getloading">
         <template #columns>
+          <TableColumn title="数据库连接uuid" :body-cell-style="{ color: 'grey' }">
+            <template #cell="{ record }">
+              {{ uuid }}
+            </template>
+          </TableColumn>
+          <TableColumn title="数据库地址" :body-cell-style="{ color: 'grey' }">
+            <template #cell="{ record }">
+              {{ ip }}
+            </template>
+          </TableColumn>
+          <TableColumn title="用户名" :body-cell-style="{ color: 'grey' }">
+            <template #cell="{ record }">
+              {{ username }}
+            </template>
+          </TableColumn>
           <TableColumn title="数据库编号" data-index="dbnumber" />
           <TableColumn title="键值对数量" data-index="dbsize" />
           <TableColumn title="详情">
             <template #cell="{ record }">
-              <Button type="text" @click="viewDetails(record.dbnumber)">查看</Button>
+              <Button status="warning" @click="viewDetails(record.dbnumber)">查看</Button>
             </template>
           </TableColumn>
         </template>
