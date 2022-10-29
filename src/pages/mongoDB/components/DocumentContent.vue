@@ -1,8 +1,18 @@
 <script setup lang="ts">
 import { useAxios } from '@vueuse/integrations/useAxios';
 
-import { Row, Col, Card, Divider, Link, Popconfirm, Modal } from '@arco-design/web-vue';
-import { IconTool, IconDelete } from '@arco-design/web-vue/es/icon';
+import {
+  Row,
+  Col,
+  Card,
+  Divider,
+  Link,
+  Popconfirm,
+  Modal,
+  Space,
+  Button,
+} from '@arco-design/web-vue';
+import { IconTool, IconDelete, IconPlus } from '@arco-design/web-vue/es/icon';
 
 import { instance, ResponseWrap } from '@/api';
 import { MongdbDocInfo } from '@/api/types';
@@ -34,6 +44,9 @@ const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, i
 
 const selectJson = reactive<{ json: string; _id: string }>({ _id: '', json: '{}' });
 const visibleJsonModal = ref<boolean>(false);
+
+const visibleAddModal = ref<boolean>(false);
+const addJson = ref<string>('{}');
 
 watch(
   () => props.selectedKeys,
@@ -119,10 +132,45 @@ const handleModifySingleDoc = async () => {
     },
   });
 };
+
+const handleAddButtonClick = () => {
+  visibleAddModal.value = true;
+};
+
+const handleAddDoc = async () => {
+  await executePut({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+      isMany: true,
+      documents: [addJson.value],
+    },
+  });
+
+  execute({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+    },
+  });
+};
 </script>
 
 <template>
   <div class="container">
+    <div class="button-container">
+      <Space>
+        <Button type="primary" @click="handleAddButtonClick">
+          <template #icon>
+            <IconPlus />
+          </template>
+          添加记录
+        </Button>
+      </Space>
+    </div>
+
     <Row :gutter="16" :wrap="true">
       <Col v-for="item in data?.data?.data" :key="item" :span="6">
         <Card>
@@ -158,12 +206,22 @@ const handleModifySingleDoc = async () => {
   <Modal v-model:visible="visibleJsonModal" title="浏览" @ok="handleModifySingleDoc">
     <JsonEditor v-model:value="selectJson.json" />
   </Modal>
+
+  <Modal v-model:visible="visibleAddModal" title="添加" @ok="handleAddDoc">
+    <JsonEditor v-model:value="addJson" />
+  </Modal>
 </template>
 
 <style lang="less" scoped>
 .container {
   :deep(.arco-card) {
     margin-bottom: 10px;
+  }
+
+  .button-container {
+    margin-bottom: 15px;
+    display: flex;
+    justify-content: flex-end;
   }
 
   .content {
