@@ -9,13 +9,13 @@ export const POOL_CHART_URL = `${v1}/chart/pool`;
 export const STORAGE_CHART_URL = `${v1}/chart/storage`;
 export const CONCURRENT_CHART_URL = `${v1}/chart/concurrent`;
 
-export const DB_URL = `${v1}/mgdb/meta/db`;
-export const COLLECTION_URL = `${v1}/mgdb/meta/collection`;
-export const DOC_URL = `${v1}/mgdb/meta/doc`;
-export const INDEX_URL = `${v1}/mgdb/meta/index`;
-export const ATTR_URL = `${v1}/mgdb/meta/attr`;
-export const QUERY_URL = `${v1}/mgdb/query`;
-export const READ_URL = `${v1}/mgdb/read`;
+export const MONGODB_DB_URL = `${v1}/mgdb/meta/db`;
+export const MONGODB_COLLECTION_URL = `${v1}/mgdb/meta/collection`;
+export const MONGODB_DOC_URL = `${v1}/mgdb/meta/doc`;
+export const MONGODB_INDEX_URL = `${v1}/mgdb/meta/index`;
+export const MONGODB_ATTR_URL = `${v1}/mgdb/meta/attr`;
+export const MONGODB_QUERY_URL = `${v1}/mgdb/query`;
+export const MONGODB_READ_URL = `${v1}/mgdb/read`;
 
 export const BSON_URL = `${v1}/exexute/bson`;
 

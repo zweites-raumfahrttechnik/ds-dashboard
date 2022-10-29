@@ -13,30 +13,27 @@ const mongoDB: RouteRecordRaw = {
       meta: {
         requireAuth: true,
         locale: '数据操作',
-        icon: 'IconDriveFile',
       },
     },
     {
-      path: 'mongoManagement',
+      path: 'management',
       name: 'MongoManagement',
       component: () => import('@/pages/mongoDB/MongoManagement.vue'),
       meta: {
         requireAuth: true,
-        locale: 'Mongo管理',
-        icon: 'IconApps',
+        locale: '元数据查看',
       },
     },
     {
-      path: 'mongoCustomize',
+      path: 'customize',
       name: 'MongoCustomize',
       component: () => import('@/pages/mongoDB/MongoCustomize.vue'),
       meta: {
         requireAuth: true,
-        locale: 'Mongo自定义操作',
-        icon: 'IconInteraction',
+        locale: '自定义操作',
       },
     },
   ],
-  meta: { requireAuth: true, locale: 'MongoDB', icon: 'IconDriveFile' },
+  meta: { requireAuth: true, locale: 'MongoDB', icon: 'icon-layers', order: 3 },
 };
 export default mongoDB;

@@ -8,19 +8,12 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp({
-        count: 500,
+        count: 10,
         //自定义-可修改
-        data: Array(500)
+        data: Array(10)
           .fill(1)
           .map(() => {
-            return {
-              uuid: '@uuid',
-              username: Random.name(),
-              ip: Random.ip(),
-              port: Random.integer(1000, 50000),
-              export_port: Random.integer(1000, 50000),
-              export_ip: Random.ip(),
-            };
+            return Random.name();
           }),
       });
     },
@@ -30,10 +23,13 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp({
-        count: Random.integer(100, 500),
-        data: {
-          'array|count': [Random.string],
-        },
+        count: 10,
+        //自定义-可修改
+        data: Array(10)
+          .fill(1)
+          .map(() => {
+            return Random.name();
+          }),
       });
     },
   },
@@ -42,10 +38,32 @@ const requests: MockMethod[] = [
     method: 'get',
     response: () => {
       return successResp({
-        count: Random.integer(100, 500),
-        data: {
-          'array|count': [Random.string],
+        count: 16,
+        data: [
+          `{
+    "uuid": "28",
+    "dbName": "还无张八",
+    "collectionName": "斗地又类造",
+    "isMany": false,
+    "items": [
+        {
+            "filed": "consectetur",
+            "op": "aute proident aliqua ex dolore",
+            "target": "esse Duis culpa veniam et"
         },
+        {
+            "filed": "Ut magna quis tempor",
+            "op": "consequat Excepteur",
+            "target": "velit"
+        }
+    ],
+    "documents": [
+        "aliquip ipsum ullamco qui exercitation",
+        "aute",
+        "elit laborum magna aute"
+    ]
+}`,
+        ],
       });
     },
   },

@@ -1,3 +1,4 @@
+// 获取链接数据
 export interface GetConnectListParams {
   pg: number;
   size: number;
@@ -19,6 +20,7 @@ export interface GetListData {
   data: GetListDataItem[];
 }
 
+// 图表数据
 export interface ChartValue {
   count: number;
   growth: number;
@@ -31,66 +33,18 @@ export interface ConcurrentChartValue {
   through: number[];
 }
 
-export interface DBinformationParams {
-  uuid?: string;
-  dbName?: string;
-  collectionName?: string;
-  docName?: string;
-}
-
-export interface DBListData {
+// Mongdb 数据
+export interface MongodbDBInfo {
   count: number;
-  data: DBinformationParams[];
+  data: string[];
 }
 
-export interface TreeinformationParams {
-  uuid: string;
-}
-
-export interface TreeData {
-  data: TreeinformationParams[];
-}
-
-export interface CollectioninformationParams {
-  uuid?: string;
-  dbName?: string;
-}
-
-export interface CollectionListData {
+export interface MongodbCollectionInfo {
   count: number;
-  data: CollectioninformationParams[];
+  data: string[];
 }
 
-export interface DocinformationParams {
-  uuid?: string;
-  dbName?: string;
-  collectionName?: string;
-}
-
-export interface DocListData {
+export interface MongdbDocInfo {
   count: number;
-  data: DocinformationParams[];
-}
-
-export interface IndexinformationParams {
-  uuid?: string;
-  dbName?: string;
-  collectionName?: string;
-}
-
-export interface IndexListData {
-  count: number;
-  data: IndexinformationParams[];
-}
-
-export interface AttrinformationParams {
-  uuid?: string;
-  dbName?: string;
-  collectionName?: string;
-  docName?: string;
-}
-
-export interface AttrListData {
-  count: number;
-  data: AttrinformationParams[];
+  data: string[];
 }

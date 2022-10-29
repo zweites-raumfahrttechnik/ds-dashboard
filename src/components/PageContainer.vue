@@ -13,6 +13,7 @@ const props = defineProps<{ items?: string[] }>();
 
 <style lang="less" scoped>
 .container {
+  min-height: 100%;
   padding: 0 20px 20px;
   flex-direction: column;
   display: flex;
