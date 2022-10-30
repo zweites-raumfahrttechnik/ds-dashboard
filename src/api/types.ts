@@ -48,3 +48,7 @@ export interface MongdbDocInfo {
   count: number;
   data: string[];
 }
+
+export interface MongodbCustom {
+  document: string;
+}

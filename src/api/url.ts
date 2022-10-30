@@ -17,7 +17,4 @@ export const MONGODB_ATTR_URL = `${v1}/mgdb/meta/attr`;
 export const MONGODB_QUERY_URL = `${v1}/mgdb/query`;
 export const MONGODB_READ_URL = `${v1}/mgdb/read`;
 
-export const BSON_URL = `${v1}/exexute/bson`;
-
-//自行引入为了生成树下数据，可删
-export const TREE_URL = `${v1}/mgdb/meta/Tree`;
+export const BSON_URL = `${v1}/execute/bson`;

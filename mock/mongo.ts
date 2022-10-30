@@ -42,13 +42,11 @@ const requests: MockMethod[] = [
     },
   },
   {
-    url: '/api/v1/bson',
+    url: '/api/v1/execute/bson',
     method: 'post',
     response: () => {
       return successResp({
-        data: {
-          document: Random.string,
-        },
+        document: `{"status":"success"}`,
       });
     },
   },
