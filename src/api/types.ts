@@ -52,3 +52,8 @@ export interface MongdbDocInfo {
 export interface MongodbCustom {
   document: string;
 }
+
+export interface MongdbIndexInfo {
+  count: number;
+  data: string[];
+}

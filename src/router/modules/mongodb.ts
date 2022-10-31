@@ -7,15 +7,6 @@ const mongoDB: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     {
-      path: 'edit',
-      name: 'DataEdit',
-      component: () => import('@/pages/mongoDB/MongoEdit.vue'),
-      meta: {
-        requireAuth: true,
-        locale: '数据操作',
-      },
-    },
-    {
       path: 'management',
       name: 'MongoManagement',
       component: () => import('@/pages/mongoDB/MongoManagement.vue'),
