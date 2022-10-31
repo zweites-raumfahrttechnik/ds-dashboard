@@ -98,6 +98,7 @@ const { connect, isLoading: connectLoading } = useLoadMoreConnect();
 watch(
   () => form.uuid,
   newVal => {
+    form.dbName = '';
     dbExecute({ params: { newVal } });
   },
 );
