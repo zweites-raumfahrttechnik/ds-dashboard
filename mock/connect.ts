@@ -14,7 +14,7 @@ const requests: MockMethod[] = [
     url: '/api/v1/connect',
     method: 'get',
     response: ({ query }: { query: any }) => {
-      const size = +query.size;
+      const size = +query.size || 20;
 
       return successResp({
         count: 500,
