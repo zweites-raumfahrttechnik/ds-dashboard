@@ -1,12 +1,10 @@
 <script lang="ts" setup>
-import { Card, Split } from '@arco-design/web-vue';
+import { Card, Row, Col, Divider } from '@arco-design/web-vue';
 
 import PageContainer from '@/components/PageContainer.vue';
 
 import DbTree from './components/DbTree.vue';
 import CollectionDetail from './components/CollectionDetail.vue';
-
-const splitSize = ref<number>(0.15);
 
 const selectedKeys = ref<string[]>([]);
 </script>
@@ -16,23 +14,19 @@ const selectedKeys = ref<string[]>([]);
     <Card class="general-card card-container" :bordered="false">
       <template #title>MongoDB元数据视图</template>
 
-      <Split
-        v-model:size="splitSize"
-        min="0.15"
-        :style="{
-          height: '750px',
-          width: '100%',
-          minWidth: '500px',
-        }"
-      >
-        <template #first>
+      <Row :wrap="false">
+        <Col class="col-height" :span="3">
           <DbTree v-model:selected-keys="selectedKeys" />
-        </template>
+        </Col>
 
-        <template #second>
+        <Col class="col-height line-center" :span="1">
+          <Divider direction="vertical" :style="{ height: '100%' }" />
+        </Col>
+
+        <Col class="col-height" :span="20">
           <CollectionDetail :selected-keys="selectedKeys" />
-        </template>
-      </Split>
+        </Col>
+      </Row>
     </Card>
   </PageContainer>
 </template>
@@ -41,6 +35,16 @@ const selectedKeys = ref<string[]>([]);
 .card-container {
   height: 100%;
   flex: 1;
+
+  .col-height {
+    height: 750px;
+    overflow: auto;
+  }
+
+  .line-center {
+    display: flex;
+    justify-content: center;
+  }
 
   :deep(.arco-card-body) {
     position: relative;
