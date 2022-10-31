@@ -15,7 +15,6 @@ const requests: MockMethod[] = [
     method: 'get',
     response: ({ query }: { query: any }) => {
       const size = +query.size;
-
       return successResp({
         count: 500,
         data: Array(size)
@@ -26,7 +25,7 @@ const requests: MockMethod[] = [
               username: Random.name(),
               ip: Random.ip(),
               port: Random.integer(1000, 50000),
-              type: Random.pick([1, 2, 3, 4, 5, 6]),
+              type: 4,
             };
           }),
       });

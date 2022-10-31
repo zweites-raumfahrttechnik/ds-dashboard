@@ -15,7 +15,6 @@ instance.interceptors.response.use(
     if (resp.data.code !== 0) {
       return Promise.reject(new Error(resp.data.msg));
     }
-
     return resp;
   },
   error => {
@@ -24,5 +23,4 @@ instance.interceptors.response.use(
 );
 
 export type { ResponseWrap };
-
 export { instance };
