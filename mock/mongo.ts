@@ -20,10 +20,34 @@ const requests: MockMethod[] = [
     method: 'post',
     response: () => {
       return successResp({
-        count: Random.integer(100, 500),
-        data: {
-          'array|count': [Random.string],
+        count: 4,
+        data: Array(4)
+          .fill(1)
+          .map(
+            () => `{
+    "uuid": "28",
+    "dbName": "还无张八",
+    "collectionName": "斗地又类造",
+    "isMany": false,
+    "items": [
+        {
+            "filed": "consectetur",
+            "op": "aute proident aliqua ex dolore",
+            "target": "esse Duis culpa veniam et"
         },
+        {
+            "filed": "Ut magna quis tempor",
+            "op": "consequat Excepteur",
+            "target": "velit"
+        }
+    ],
+    "documents": [
+        "aliquip ipsum ullamco qui exercitation",
+        "aute",
+        "elit laborum magna aute"
+    ]
+}`,
+          ),
       });
     },
   },
