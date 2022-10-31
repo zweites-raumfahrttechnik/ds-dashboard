@@ -1,7 +1,16 @@
 <script setup lang="ts">
 import { useAxios } from '@vueuse/integrations/useAxios';
 
-import { Row, Col, Divider, Modal, Space, Button, Pagination } from '@arco-design/web-vue';
+import {
+  Row,
+  Col,
+  Divider,
+  Modal,
+  Space,
+  Button,
+  Pagination,
+  Popconfirm,
+} from '@arco-design/web-vue';
 import { IconPlus } from '@arco-design/web-vue/es/icon';
 
 import { instance, ResponseWrap } from '@/api';
@@ -23,6 +32,10 @@ const { data, execute } = useAxios<ResponseWrap<MongdbDocInfo>>(
 );
 
 const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, instance, {
+  immediate: false,
+});
+
+const { execute: executeDelete } = useAxios(MONGODB_QUERY_URL, { method: 'DELETE' }, instance, {
   immediate: false,
 });
 
@@ -80,6 +93,23 @@ const handleAddDoc = async () => {
 
   handleRefresh();
 };
+
+const handleDeleteAll = async () => {
+  await executeDelete({
+    data: {
+      uuid: props.selectedKeys[0],
+      dbName: props.selectedKeys[1],
+      collectionName: props.selectedKeys[2],
+      isMany: true,
+      items: condition.value,
+    },
+  });
+
+  condition.value = [];
+  nextTick(() => {
+    handleRefresh();
+  });
+};
 </script>
 
 <template>
@@ -88,13 +118,19 @@ const handleAddDoc = async () => {
       <QueryCondition v-model:value="condition" />
 
       <Space>
+        <Button type="primary" @click="handleRefresh">查询</Button>
+        <Popconfirm content="确认删除所有信息吗？" @ok="handleDeleteAll">
+          <Button type="primary" status="danger">删除所有</Button>
+        </Popconfirm>
+
+        <Divider direction="vertical" :style="{ height: '40px' }" />
+
         <Button type="primary" @click="handleAddButtonClick">
           <template #icon>
             <IconPlus />
           </template>
           添加记录
         </Button>
-        <Button type="primary" status="danger">删除所有</Button>
       </Space>
     </div>
 
