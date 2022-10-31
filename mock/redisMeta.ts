@@ -7,18 +7,14 @@ const requests: MockMethod[] = [
     url: '/api/v1/execute/redis/meta/dbnumber',
     method: 'get',
     response: () => {
-      return successResp(
-        "100"
-      );
+      return successResp('100');
     },
   },
   {
     url: '/api/v1/execute/redis/meta/dbsize',
     method: 'get',
     response: ({ query }: { query: any }) => {
-      return successResp(
-        Random.integer(0,100)
-      );
+      return successResp(Random.integer(0, 100));
     },
   },
   {
@@ -27,8 +23,12 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
       return successResp({
-        count:3,
-        data:Array(size).fill(1).map(()=>{return Random.string()})
+        count: 3,
+        data: Array(size)
+          .fill(1)
+          .map(() => {
+            return Random.string();
+          }),
       });
     },
   },

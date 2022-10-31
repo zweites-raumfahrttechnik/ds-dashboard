@@ -23,4 +23,3 @@ const requests: MockMethod[] = [
 ];
 
 export default requests;
-

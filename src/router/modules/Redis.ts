@@ -31,7 +31,7 @@ const redis: RouteRecordRaw = {
       component: () => import('@/pages/redis/redisbasicOp.vue'),
       meta: {
         requireAuth: true,
-        hideInMenu:true,
+        hideInMenu: true,
         locale: 'redis基本操作',
       },
     },
@@ -41,7 +41,7 @@ const redis: RouteRecordRaw = {
       component: () => import('@/pages/redis/rediscustomOp.vue'),
       meta: {
         requireAuth: true,
-        hideInMenu:true,
+        hideInMenu: true,
         locale: 'redis自定义操作',
       },
     },
@@ -51,7 +51,7 @@ const redis: RouteRecordRaw = {
       component: () => import('@/pages/redis/components/redismetaKeys.vue'),
       meta: {
         requireAuth: true,
-        hideInMenu:true,
+        hideInMenu: true,
         locale: 'redis键名',
       },
     },

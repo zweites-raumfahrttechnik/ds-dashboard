@@ -15,10 +15,10 @@ export interface FormModel {
   uuid?: string;
 }
 export interface CustomFormModel {
-  args:    string[] | undefined;
+  args: string[] | undefined;
   command: string;
   dbnumber: number;
-  uuid:    string;
+  uuid: string;
 }
 
 // export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
@@ -77,8 +77,6 @@ export interface CustomFormModel {
 //     parameter2: ''
 //   },
 // };
-
-
 
 // export const defaultCustomFromValue: Record<number, CustomFormModel> = {
 //   0:{
