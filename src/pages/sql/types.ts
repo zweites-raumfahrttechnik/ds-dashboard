@@ -1,62 +1,83 @@
-export interface ApifoxModal {
-  //标识符
+export interface ConnectFormModel {
   uuid: string;
-  //数据库类型
-  type: 1 | 2 | 3;
-  //表名
+  type: number;
+  schema: string;
   table: string;
-  //过滤条件where
-  whereList: Empty[];
-  //过滤条件列表
-  columnList: string[];
-  //分组条件列表
-  groupByList: string[];
-  orderByList: OrderByList[];
-  //'01GDN72EPTEWDSKXR3KFBR2EC1': any;
 }
 
-export interface OrderByList {
-  //列名
-  column?: string;
-  //降序还是顺序--ASC/DESC
-  type?: 'ASC' | 'DESC';
-}
-
-export interface Empty {
-  //列名
+export interface WhereParams {
   column: string;
-  //列的类型是字符型还是整型
-  columnType: 'int' | 'string';
-  //查询类型--< > like =
-  queryType: '<' | '>' | 'like' | '=';
-  //数值
+  columnType: string;
   value: string;
-  //'01GDPZVTVYAA5YZRH0VC5DM1A9': any;
+  queryType: '<' | '>' | 'like' | '=' | '>=' | '<=';
 }
 
-export const defaultInqueryValue: Record<number, Omit<ApifoxModal, 'type'>> = {
-  1: {
-    uuid: '',
-    table: '',
-    whereList: [],
-    columnList: [],
-    groupByList: [],
-    orderByList: [],
-  },
-  2: {
-    uuid: '',
-    table: '',
-    whereList: [],
-    columnList: [],
-    groupByList: [],
-    orderByList: [],
-  },
-  3: {
-    uuid: '',
-    table: '',
-    whereList: [],
-    columnList: [],
-    groupByList: [],
-    orderByList: [],
-  },
+export interface OrderParams {
+  column: string;
+  type: 'ASC' | 'DESC';
+}
+
+export interface ColumnParams {
+  column: string;
+}
+
+export interface QueryFormModel {
+  columnList: Array<string>;
+  whereList: Array<WhereParams>;
+  orderList: Array<OrderParams>;
+}
+
+export interface QueryParams {
+  uuid: string;
+  type: number;
+  table: string;
+  columnList: Array<string>;
+  whereList: Array<WhereParams>;
+  orderList: Array<OrderParams>;
+  pg?: number;
+  size?: number;
+}
+
+export const defaultConnectFormValue: ConnectFormModel = {
+  uuid: '',
+  type: 1,
+  schema: '',
+  table: '',
+};
+
+export const defaultQueryFormValue: QueryFormModel = {
+  columnList: [],
+  whereList: [{ column: '', columnType: '', value: '', queryType: '=' }],
+  orderList: [{ column: '', type: 'ASC' }],
+};
+
+export const defaultQueryParams: QueryParams = {
+  uuid: '',
+  type: 1,
+  table: '',
+  columnList: [''],
+  whereList: [{ column: '', columnType: '', value: '', queryType: '=' }],
+  orderList: [{ column: '', type: 'ASC' }],
+  pg: 1,
+  size: 15,
+};
+
+export const boxTabCol = (arr: Array<Record<string, string> | undefined> | undefined) => {
+  if (arr != undefined) {
+    const res = Array(0);
+
+    arr.forEach(obj => {
+      if (obj != undefined) {
+        res.push({
+          title: obj.columnName,
+          dataIndex: obj.columnName,
+          sortable: {
+            sortDirections: ['ascend', 'descend'],
+          },
+        });
+      }
+    });
+    return res;
+  }
+  return [];
 };

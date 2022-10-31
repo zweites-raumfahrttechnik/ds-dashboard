@@ -13,6 +13,7 @@ export interface GetListDataItem {
   ip: string;
   port: number;
   type: number;
+  name: string;
 }
 
 export interface GetListData {
@@ -44,4 +45,34 @@ export interface UserlistParams {
 // 响应的数组
 export interface UserlistData {
   data: UserlistParams[];
+}
+
+export interface GetExecuteSql {
+  data: [Record<string, any>];
+  columnList: [
+    {
+      columnName: string;
+      columnTypeName: string;
+    },
+  ];
+}
+
+export interface PostTableQueryData {
+  data: [Record<string, any>];
+  columnList: [
+    {
+      columnName: string;
+      columnTypeName: string;
+    },
+  ];
+}
+
+export interface GetSqlSchema {
+  names: string[];
+  allData: GetExecuteSql;
+  briefData: GetExecuteSql;
+}
+
+export interface GetSqlTable {
+  names: string[];
 }

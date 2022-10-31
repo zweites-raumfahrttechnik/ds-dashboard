@@ -11,158 +11,217 @@ import {
   Input,
   Divider,
   Table,
+  Spin,
 } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
-import { reactive } from 'vue';
-//上传数据
-const form = reactive({
-  type: '',
-  table: '',
-  name: '',
-  columnList: [{ column: '' }],
-  whereList: [{ column: '', columnType: '', value: '', queryType: '' }],
-  groupByList: [{ column: '' }],
-  orderByList: [{ type: '', column: '' }],
-});
-const handleAddInquery = () => {
-  form.columnList.push({
+import ConnectSelect from './components/ConnectTableSelect.vue';
+import {
+  ConnectFormModel,
+  QueryFormModel,
+  QueryParams,
+  defaultQueryFormValue,
+  defaultQueryParams,
+  boxTabCol,
+} from './types';
+
+import { instance, ResponseWrap } from '@/api';
+import { QUERY_DATABASE_URL } from '@/api/url';
+import { PostTableQueryData } from '@/api/types';
+import { useAxios } from '@vueuse/integrations/useAxios';
+
+const buttonSize = 16;
+
+const queryForm = reactive<QueryFormModel>({ ...defaultQueryFormValue });
+
+const colFormList = reactive<Array<{ name: string; type: string }>>(Array(0));
+
+const tabCol = ref<any[]>([]);
+
+const tabData = ref<any[]>([]);
+
+const handleAddWhere = () => {
+  queryForm.whereList.push({
+    column: '',
+    columnType: '',
+    value: '',
+    queryType: '=',
+  });
+};
+
+const handleAddOrder = () => {
+  queryForm.orderList.push({
+    type: 'ASC',
     column: '',
   });
 };
 
-const handleAddGroup = () => {
-  form.groupByList.push({
-    column: '',
-  });
+const handleDeleteWhere = (index: number) => {
+  queryForm.whereList.splice(index, 1);
 };
-const handleAddWhere = () => {
-  form.whereList.push({
-    column: '',
-    columnType: '',
-    value: '',
-    queryType: '',
-  });
-};
-const handleAddOrder = () => {
-  form.orderByList.push({
-    type: '',
-    column: '',
-  });
-};
-const handleDelteWhere = (index: number) => {
-  form.whereList.splice(index, 1);
-};
-const handleDeleteInquery = (index: number) => {
-  form.columnList.splice(index, 1);
-};
-const handleDeleteGroup = (index: number) => {
-  form.groupByList.splice(index, 1);
-};
+
 const handleDeleteOrder = (index: number) => {
-  form.orderByList.splice(index, 1);
+  queryForm.orderList.splice(index, 1);
+};
+
+const concatQueryParams = (connectFormData: ConnectFormModel) => {
+  const params = reactive<QueryParams>({
+    ...defaultQueryParams,
+  });
+  params.uuid = connectFormData.uuid;
+  params.type = connectFormData.type;
+  params.table = connectFormData.schema + '.' + connectFormData.table;
+
+  params.columnList = queryForm.columnList.filter(item => {
+    return item && item !== '';
+  });
+  params.whereList = queryForm.whereList.filter(item => {
+    return item.column !== '' && item.value !== '';
+  });
+  params.orderList = queryForm.orderList.filter(item => {
+    return item.column !== '';
+  });
+  params.pg = pagination.current;
+  params.size = pagination.pageSize;
+  return params;
+};
+
+const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
+  current: 1,
+  pageSize: 15,
+});
+
+const { data, isLoading, execute } = useAxios<ResponseWrap<PostTableQueryData>>(
+  QUERY_DATABASE_URL,
+  { method: 'POST' },
+  instance,
+  { immediate: false },
+);
+
+watch(
+  () => data.value?.data?.columnList,
+  newVal => {
+    tabCol.value = boxTabCol(newVal);
+    if (colFormList.length === 0) {
+      const temp = newVal || [];
+      temp.forEach(item => {
+        colFormList.push({
+          name: item.columnName,
+          type: item.columnTypeName,
+        });
+      });
+    }
+  },
+);
+
+watch(
+  () => data.value?.data?.data,
+  newVal => {
+    tabData.value = newVal || [];
+  },
+);
+
+const handleChangeTable = (connectFormData: ConnectFormModel) => {
+  colFormList.length = 0;
+  resetForm();
+  resetTable();
+  exec(connectFormData);
+};
+
+const resetForm = () => {
+  queryForm.whereList = [{ column: '', columnType: '', value: '', queryType: '=' }];
+  queryForm.columnList = [];
+  queryForm.orderList = [{ column: '', type: 'ASC' }];
+};
+
+const resetTable = () => {
+  tabCol.value = [];
+  tabData.value = [];
+};
+
+const exec = async (connectFormData: ConnectFormModel) => {
+  const params = concatQueryParams(connectFormData);
+  execute({
+    data: { ...params },
+  });
+};
+
+const handlePageChange = (page: number) => {
+  pagination.current = page;
 };
 </script>
 <template>
   <PageContainer>
-    <Card>
-      <template #title> 单表数据库查询 </template>
-      <Form :model="form" :style="{ width: '75%' }">
-        <FormItem
-          field="type"
-          label="数据库类型"
-          :content-flex="false"
-          :merge-props="false"
-          required
-        >
-          <Row :gutter="8">
-            <Col :span="23">
-              <FormItem no-style>
-                <Select v-model="form.type" default-value="1">
-                  <Option :value="1">MySQL</Option>
-                  <Option :value="2">达梦数据库</Option>
-                  <Option :value="3">金仓数据库</Option>
-                </Select>
-              </FormItem>
-            </Col>
-          </Row>
-        </FormItem>
+    <Card class="general-card" :bordered="false">
+      <template #title>连接选择</template>
+      <ConnectSelect
+        @exec="exec"
+        @handle-change-table="handleChangeTable"
+        @reset-form="resetForm"
+      />
+    </Card>
 
-        <FormItem field="table" label="表名" :content-flex="false" :merge-props="false" required>
-          <Row :gutter="8">
-            <Col :span="23">
-              <FormItem no-style>
-                <Input v-model="form.table" placeholder="请输入查询表名" allow-clear />
-              </FormItem>
-            </Col>
-          </Row>
-        </FormItem>
+    <Divider style="margin-top: 0" />
 
-        <FormItem
-          v-for="(post, index) of form.columnList"
-          :key="index"
-          :field="`columnList.${index + 1}.column`"
-          :label="`查询列名${index + 1}`"
-          :content-flex="false"
-          :merge-props="false"
-        >
+    <Card class="general-card" :bordered="false">
+      <template #title>单表查询</template>
+      <Form :model="queryForm">
+        <FormItem label="查询列名" :content-flex="false" :merge-props="false" field="columnList">
           <Row :gutter="8">
-            <Col :span="20">
-              <FormItem no-style>
-                <Input v-model="post.column" placeholder="请输入查询列名" />
-              </FormItem>
-            </Col>
-            <Col :span="4">
-              <FormItem no-style>
-                <Button type="primary" status="success" shape="circle" @click="handleAddInquery">
-                  <template #icon>
-                    <icon-plus size="25" />
-                  </template>
-                </Button>
-                <Button
-                  :style="{ marginLeft: '10px' }"
-                  status="danger"
-                  shape="circle"
-                  @click="handleDeleteInquery(index)"
+            <Col :span="16">
+              <Select
+                v-model="queryForm.columnList"
+                placeholder="请选择列名"
+                multiple
+                :max-tag-count="10"
+                allow-clear
+              >
+                <Option
+                  v-for="item in colFormList"
+                  :key="item.name"
+                  :value="item.name"
+                  :label="item.name"
                 >
-                  <template #icon>
-                    <icon-close size="25" />
-                  </template>
-                </Button>
-              </FormItem>
+                  <span>{{ item.name }}</span>
+                  <span :style="{ float: 'right', color: '#909399' }">{{ item.type }}</span>
+                </Option>
+              </Select>
             </Col>
           </Row>
         </FormItem>
 
         <FormItem
-          v-for="(post, index) in form.whereList"
+          v-for="(item, index) in queryForm.whereList"
           :key="index"
           :field="`whereList.${index}`"
-          :label="`过滤条件${index + 1}`"
+          :label="index === 0 ? '过滤条件' : ''"
           :content-flex="false"
           :merge-props="false"
         >
           <Row :gutter="8">
-            <Col :span="5">
-              <FormItem no-style>
-                <Input v-model="post.column" placeholder="请输入查询列名" />
-              </FormItem>
-            </Col>
-            <Col :span="5">
-              <FormItem no-style>
-                <Select v-model="post.columnType" defalut-value="int">
-                  <Option>int</Option>
-                  <Option>string</Option>
+            <FormItem no-style field="column">
+              <Col :span="8">
+                <Select
+                  v-model="item.column"
+                  placeholder="请选择相关条件列"
+                  allow-clear
+                  :allow-search="true"
+                >
+                  <Option
+                    v-for="column in colFormList"
+                    :key="column.name"
+                    :value="column.name"
+                    :label="column.name"
+                  >
+                    <span>{{ column.name }}</span>
+                    <span :style="{ float: 'right', color: '#909399' }">{{ column.type }}</span>
+                  </Option>
                 </Select>
-              </FormItem>
-            </Col>
-            <Col :span="5">
-              <FormItem no-style>
-                <Input v-model="post.value" placeholder="请输入过滤条件值" />
-              </FormItem>
-            </Col>
-            <Col :span="5">
-              <FormItem no-style>
-                <Select v-model="post.queryType">
+              </Col>
+            </FormItem>
+
+            <Col :span="4">
+              <FormItem no-style field="queryType">
+                <Select v-model="item.queryType" placeholder="请输入条件比较方式">
                   <Option>&gt;</Option>
                   <Option>&lt;</Option>
                   <Option>like</Option>
@@ -174,114 +233,138 @@ const handleDeleteOrder = (index: number) => {
             </Col>
             <Col :span="4">
               <FormItem no-style>
-                <Button type="primary" status="success" shape="circle" @click="handleAddWhere">
-                  <template #icon>
-                    <icon-plus size="25" />
-                  </template>
-                </Button>
-
-                <Button
-                  :style="{ marginLeft: '10px' }"
-                  status="danger"
-                  shape="circle"
-                  @click="handleDelteWhere(index)"
-                >
-                  <template #icon>
-                    <icon-close size="25" />
-                  </template>
-                </Button>
-              </FormItem>
-            </Col>
-          </Row>
-        </FormItem>
-
-        <FormItem
-          v-for="(post, index) of form.groupByList"
-          :key="index"
-          :field="`groupByList.${index + 1}.column`"
-          :label="`分组列名${index + 1}`"
-          :content-flex="false"
-          :merge-props="false"
-        >
-          <Row :gutter="8">
-            <Col :span="20">
-              <FormItem no-style>
-                <Input v-model="post.column" placeholder="请输入分组条件列" />
+                <Input v-model="item.value" placeholder="请输入过滤条件值" />
               </FormItem>
             </Col>
             <Col :span="4">
               <FormItem no-style>
-                <Button type="primary" status="success" shape="circle" @click="handleAddGroup">
-                  <template #icon> <icon-plus size="25" /> </template>
+                <Button
+                  v-if="
+                    item.column !== '' &&
+                    item.value !== '' &&
+                    index === queryForm.whereList.length - 1
+                  "
+                  type="text"
+                  shape="circle"
+                  @click="handleAddWhere"
+                >
+                  <template #icon>
+                    <icon-plus :size="buttonSize" />
+                  </template>
                 </Button>
                 <Button
-                  :style="{ marginLeft: '10px' }"
+                  v-if="queryForm.whereList.length !== 1"
+                  type="text"
                   status="danger"
                   shape="circle"
-                  @click="handleDeleteGroup(index)"
+                  @click="handleDeleteWhere(index)"
                 >
-                  <template #icon> <icon-close size="25" /> </template
-                ></Button>
+                  <template #icon>
+                    <icon-close :size="buttonSize" />
+                  </template>
+                </Button>
               </FormItem>
             </Col>
           </Row>
         </FormItem>
 
         <FormItem
-          v-for="(post, index) in form.orderByList"
+          v-for="(item, index) in queryForm.orderList"
           :key="index"
-          :field="`orderByList.${index}`"
-          :label="`排序条件${index + 1}`"
+          :field="`orderList.${index}`"
+          :label="index === 0 ? '排序条件' : ''"
           :content-flex="false"
           :merge-props="false"
         >
           <Row :gutter="8">
-            <Col :span="10">
-              <FormItem filed="orderByList.type" no-style>
-                <Select v-model="post.type">
-                  <Option>ASC</Option>
-                  <Option>DESC</Option>
+            <Col :span="8">
+              <FormItem no-style>
+                <Select v-model="item.type" placeholder="请选择排序方式">
+                  <Option label="升序" value="ASC"></Option>
+                  <Option label="降序" value="DESC"></Option>
                 </Select>
               </FormItem>
             </Col>
-            <Col :span="10">
+            <Col :span="8">
               <FormItem no-style>
-                <Input v-model="post.column" placeholder="请输入查询列名" />
+                <Select
+                  v-model="item.column"
+                  placeholder="请选择排序列"
+                  allow-clear
+                  :allow-search="true"
+                >
+                  <Option
+                    v-for="column in colFormList.filter(item => {
+                      return !queryForm.orderList.some(selected => selected.column === item.name);
+                    })"
+                    :key="column.name"
+                    :value="column.name"
+                    :label="column.name"
+                  ></Option>
+                </Select>
               </FormItem>
             </Col>
             <Col :span="4">
               <FormItem no-style>
-                <Button type="primary" status="success" shape="circle" @click="handleAddOrder">
-                  <template #icon> <icon-plus size="25" /> </template>
+                <Button
+                  v-if="item.column !== '' && index === queryForm.orderList.length - 1"
+                  type="text"
+                  shape="circle"
+                  @click="handleAddOrder"
+                >
+                  <template #icon>
+                    <icon-plus :size="buttonSize" />
+                  </template>
                 </Button>
                 <Button
-                  :style="{ marginLeft: '10px' }"
+                  v-if="queryForm.orderList.length !== 1"
+                  type="text"
                   status="danger"
                   shape="circle"
                   @click="handleDeleteOrder(index)"
                 >
-                  <template #icon> <icon-close size="25" /> </template
-                ></Button>
+                  <template #icon>
+                    <icon-close :size="buttonSize" />
+                  </template>
+                </Button>
               </FormItem>
             </Col>
           </Row>
         </FormItem>
-
-        <FormItem>
-          <Button html-type="submit" type="primary">提交</Button>
-        </FormItem>
       </Form>
+    </Card>
 
-      <Divider />
-      <Table>
-        <template #columns>
-          <TableColumn title="ip" data-index="ip" />
-          <TableColumn title="name" data-index="name" />
-          <TableColumn title="password" data-index="password" />
-          <TableColumn title="port" data-index="port" />
-          <TableColumn title="type" data-index="type" />
-        </template>
-      </Table>
+    <Divider style="margin-top: 0" />
+
+    <Card class="general-card" :bordered="false">
+      <template #title>执行结果</template>
+      <Divider style="margin-top: 0" />
+      <Spin :style="{ width: '100%' }" :loading="isLoading">
+        <Table
+          :scroll="{ minWidth: 1500 }"
+          :bordered="false"
+          :columns="tabCol"
+          :data="tabData"
+          :pagination="pagination"
+          @page-change="handlePageChange"
+        />
+      </Spin>
     </Card>
   </PageContainer>
 </template>
+
+<style lang="less">
+.arco-checkbox-label {
+  display: block !important;
+  width: 100% !important;
+}
+
+.arco-select-option-checkbox {
+  width: 100% !important;
+}
+
+.arco-select-option-content {
+  display: block !important;
+  width: 100% !important;
+}
+</style>
