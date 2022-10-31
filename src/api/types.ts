@@ -1,3 +1,4 @@
+// 获取链接数据
 export interface GetConnectListParams {
   pg: number;
   size: number;
@@ -19,6 +20,7 @@ export interface GetListData {
   data: GetListDataItem[];
 }
 
+// 图表数据
 export interface ChartValue {
   count: number;
   growth: number;
@@ -29,4 +31,29 @@ export interface ConcurrentChartValue {
   xAxis: string[];
   concurrent: number[];
   through: number[];
+}
+
+// Mongdb 数据
+export interface MongodbDBInfo {
+  count: number;
+  data: string[];
+}
+
+export interface MongodbCollectionInfo {
+  count: number;
+  data: string[];
+}
+
+export interface MongdbDocInfo {
+  count: number;
+  data: string[];
+}
+
+export interface MongodbCustom {
+  document: string;
+}
+
+export interface MongdbIndexInfo {
+  count: number;
+  data: string[];
 }
