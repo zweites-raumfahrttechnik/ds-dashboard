@@ -54,12 +54,14 @@ const handleModalClose = () => {
 
 <template>
   <Space>
-    <Link @click="handleAddCondition">
-      <template #icon>
-        <IconPlus />
-      </template>
-      添加条件
-    </Link>
+    <div :style="{ minWidth: '90px' }">
+      <Link @click="handleAddCondition">
+        <template #icon>
+          <IconPlus />
+        </template>
+        添加条件
+      </Link>
+    </div>
 
     <Space>
       <Tag

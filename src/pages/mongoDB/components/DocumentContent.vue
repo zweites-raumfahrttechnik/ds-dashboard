@@ -115,7 +115,9 @@ const handleDeleteAll = async () => {
 <template>
   <div class="container">
     <div class="button-container">
-      <QueryCondition v-model:value="condition" />
+      <div :style="{ overflow: 'auto' }" class="condition-container">
+        <QueryCondition v-model:value="condition" />
+      </div>
 
       <Space>
         <Button type="primary" @click="handleRefresh">查询</Button>
@@ -166,6 +168,23 @@ const handleDeleteAll = async () => {
     margin-bottom: 15px;
     display: flex;
     justify-content: space-between;
+  }
+
+  .condition-container {
+    margin-right: 10px;
+    display: flex;
+    align-items: center;
+    overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+      background-color: #ecf0f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #bdc3c7;
+    }
   }
 }
 
