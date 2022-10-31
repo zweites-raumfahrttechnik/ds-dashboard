@@ -20,7 +20,7 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { ConnectFormModel, defaultConnectFormValue } from '../types';
 
 const emit = defineEmits<{
-  (event: 'exec', connectFormData: ConnectFormModel): void;
+  (event: 'exec'): void;
   (event: 'handleChangeTable', connectFormData: ConnectFormModel): void;
   (event: 'resetForm'): void;
 }>();
@@ -171,7 +171,7 @@ const handleExec = async () => {
   if (res) {
     return;
   }
-  emit('exec', connectFormData);
+  emit('exec');
 };
 
 const resetForm = () => {

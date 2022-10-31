@@ -65,6 +65,7 @@ export interface PostTableQueryData {
       columnTypeName: string;
     },
   ];
+  count: number;
 }
 
 export interface GetSqlSchema {

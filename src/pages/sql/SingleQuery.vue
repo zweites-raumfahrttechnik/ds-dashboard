@@ -21,6 +21,7 @@ import {
   QueryParams,
   defaultQueryFormValue,
   defaultQueryParams,
+  defaultConnectFormValue,
   boxTabCol,
 } from './types';
 
@@ -38,6 +39,8 @@ const colFormList = reactive<Array<{ name: string; type: string }>>(Array(0));
 const tabCol = ref<any[]>([]);
 
 const tabData = ref<any[]>([]);
+
+const connectFormData = reactive<ConnectFormModel>({ ...defaultConnectFormValue });
 
 const handleAddWhere = () => {
   queryForm.whereList.push({
@@ -120,11 +123,34 @@ watch(
   },
 );
 
-const handleChangeTable = (connectFormData: ConnectFormModel) => {
+watch(
+  () => data.value?.data?.count,
+  newVal => {
+    pagination.total = newVal;
+  },
+);
+
+watch(
+  () => pagination.current,
+  () => {
+    exec();
+  },
+);
+
+const handleConnectFormData = (data: ConnectFormModel) => {
+  connectFormData.uuid = data.uuid;
+  connectFormData.type = data.type;
+  connectFormData.schema = data.schema;
+  connectFormData.table = data.table;
+};
+
+const handleChangeTable = (data: ConnectFormModel) => {
+  handleConnectFormData(data);
   colFormList.length = 0;
   resetForm();
   resetTable();
-  exec(connectFormData);
+  pagination.current = 1;
+  exec();
 };
 
 const resetForm = () => {
@@ -138,7 +164,7 @@ const resetTable = () => {
   tabData.value = [];
 };
 
-const exec = async (connectFormData: ConnectFormModel) => {
+const exec = async () => {
   const params = concatQueryParams(connectFormData);
   execute({
     data: { ...params },
