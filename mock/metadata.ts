@@ -39,8 +39,10 @@ const requests: MockMethod[] = [
     response: () => {
       return successResp({
         count: 16,
-        data: [
-          `{
+        data: Array(8)
+          .fill(1)
+          .map(
+            () => `{
     "uuid": "28",
     "dbName": "还无张八",
     "collectionName": "斗地又类造",
@@ -63,7 +65,7 @@ const requests: MockMethod[] = [
         "elit laborum magna aute"
     ]
 }`,
-        ],
+          ),
       });
     },
   },

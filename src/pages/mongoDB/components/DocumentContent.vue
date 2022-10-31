@@ -11,6 +11,7 @@ import {
   Modal,
   Space,
   Button,
+  Tag,
 } from '@arco-design/web-vue';
 import { IconTool, IconDelete, IconPlus } from '@arco-design/web-vue/es/icon';
 
@@ -19,6 +20,15 @@ import { MongdbDocInfo } from '@/api/types';
 import { MONGODB_DOC_URL, MONGODB_QUERY_URL } from '@/api/url';
 
 import JsonEditor from './JsonEditor.vue';
+
+const opMap = {
+  EQ: '=',
+  GT: '>',
+  GTE: '>=',
+  LT: '<',
+  LTE: '<=',
+  NE: '!=',
+};
 
 const props = defineProps<{ selectedKeys: string[] }>();
 
@@ -47,6 +57,10 @@ const visibleJsonModal = ref<boolean>(false);
 
 const visibleAddModal = ref<boolean>(false);
 const addJson = ref<string>('{}');
+
+const condition = ref<
+  { field: string; op: 'EQ' | 'GT' | 'GTE' | 'LT' | 'LTE' | 'NE'; target: string }[]
+>([{ field: 'name', op: 'EQ', target: 'lihuiyang' }]);
 
 watch(
   () => props.selectedKeys,
@@ -156,11 +170,38 @@ const handleAddDoc = async () => {
     },
   });
 };
+
+const handleDeleteTag = (key: string) => {
+  condition.value = condition.value.filter(item => `${item.field}${item.op}${item.target}` !== key);
+};
 </script>
 
 <template>
   <div class="container">
     <div class="button-container">
+      <Space>
+        <Link>
+          <template #icon>
+            <IconPlus />
+          </template>
+          添加条件
+        </Link>
+
+        <Space>
+          <Tag
+            v-for="item in condition"
+            :key="`${item.field}${item.op}${item.target}`"
+            closable
+            color="#86909c"
+            @close="() => handleDeleteTag(`${item.field}${item.op}${item.target}`)"
+          >
+            {{ item.field }}
+            {{ opMap[item.op] }}
+            {{ item.target }}
+          </Tag>
+        </Space>
+      </Space>
+
       <Space>
         <Button type="primary" @click="handleAddButtonClick">
           <template #icon>
@@ -168,8 +209,11 @@ const handleAddDoc = async () => {
           </template>
           添加记录
         </Button>
+        <Button type="primary" status="danger">删除所有</Button>
       </Space>
     </div>
+
+    <Divider />
 
     <Row :gutter="16" :wrap="true">
       <Col v-for="item in data?.data?.data" :key="item" :span="6">
@@ -221,7 +265,7 @@ const handleAddDoc = async () => {
   .button-container {
     margin-bottom: 15px;
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
   }
 
   .content {

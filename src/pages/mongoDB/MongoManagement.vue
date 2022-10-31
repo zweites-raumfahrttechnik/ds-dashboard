@@ -39,6 +39,16 @@ const selectedKeys = ref<string[]>([]);
   .col-height {
     height: 750px;
     overflow: auto;
+
+    &::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+      background-color: #ecf0f1;
+    }
+
+    &::-webkit-scrollbar-thumb {
+      background: #bdc3c7;
+    }
   }
 
   .line-center {
