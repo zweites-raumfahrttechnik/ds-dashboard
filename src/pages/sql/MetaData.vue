@@ -15,12 +15,6 @@ import {
 import { reactive, ref } from 'vue';
 import PageContainer from '@/components/PageContainer.vue';
 
-//子组件
-import Formlist from './components/AddDBUser.vue';
-import Successadd from './components/AddSuccess.vue';
-import ReviseForm from './components/ReviseUserData.vue';
-import Treepermission from './components/PermissionList.vue';
-
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
 import { REQUEST_USERLIST_URL, DELETE_USER_URL } from '@/api/url';
