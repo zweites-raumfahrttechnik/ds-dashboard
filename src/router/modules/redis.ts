@@ -28,7 +28,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/redisbasicOp',
       name: 'redisbasicOp',
-      component: () => import('@/pages/redis/RedisbasicOp.vue'),
+      component: () => import('@/pages/redis/RedisBasicOp.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
@@ -38,7 +38,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/rediscustomOp',
       name: 'rediscustomOp',
-      component: () => import('@/pages/redis/RediscustomOp.vue'),
+      component: () => import('@/pages/redis/RedisCustomOp.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
