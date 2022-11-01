@@ -24,16 +24,17 @@ const emit = defineEmits<{
 
 const formRef = ref<FormInstance>();
 
+// 初始化表单初值
 const formdata = reactive<FormModel>({
   ...defaultFromValue[1],
   type: 1,
 });
 
+// 计算当前是否选择了关系型数据库
 const isSQL = computed(() => {
   if (formdata.type === 1 || formdata.type === 2 || formdata.type === 3) {
     return true;
   }
-
   return false;
 });
 
@@ -41,7 +42,7 @@ const { execute, isLoading } = useAxios(CONNECT_URL, { method: 'POST' }, instanc
   immediate: false,
 });
 
-// 更新默认值
+// 更新表单数据
 watch(
   () => formdata.type,
   newVal => {
@@ -53,6 +54,7 @@ watch(
   },
 );
 
+// 提交表单数据
 const handleSubmit = async () => {
   const res = await formRef.value?.validate();
   if (res) {

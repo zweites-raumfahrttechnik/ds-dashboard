@@ -34,7 +34,7 @@ export interface ConcurrentChartValue {
   through: number[];
 }
 
-//用户列表的参数的接口
+// 用户列表的参数的接口
 export interface UserlistParams {
   uuid: string;
   type: 1 | 2 | 3;
@@ -42,9 +42,41 @@ export interface UserlistParams {
   host: string;
   password: string;
 }
-//响应的数组
+
+// 响应的数组
 export interface UserlistData {
   data: UserlistParams[];
+}
+
+export interface GetExecuteSql {
+  data: [Record<string, unknown>];
+  columnList: [
+    {
+      columnName: string;
+      columnTypeName: string;
+    },
+  ];
+}
+
+export interface PostTableQueryData {
+  data: [Record<string, unknown>];
+  columnList: [
+    {
+      columnName: string;
+      columnTypeName: string;
+    },
+  ];
+  count: number;
+}
+
+export interface GetSqlSchema {
+  names: string[];
+  allData: GetExecuteSql;
+  briefData: GetExecuteSql;
+}
+
+export interface GetSqlTable {
+  names: string[];
 }
 
 // Mongdb 数据
