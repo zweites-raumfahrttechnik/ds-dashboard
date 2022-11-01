@@ -26,7 +26,7 @@ const requests: MockMethod[] = [
               username: Random.name(),
               ip: Random.ip(),
               port: Random.integer(1000, 50000),
-              type: 4,
+              type: Random.pick([1, 2, 3, 4, 5, 6]),
             };
           }),
       });
