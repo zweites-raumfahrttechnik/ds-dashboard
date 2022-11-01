@@ -9,7 +9,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/redisConnect',
       name: 'redisConnect',
-      component: () => import('@/pages/redis/redisConnect.vue'),
+      component: () => import('@/pages/redis/RedisConnect.vue'),
       meta: {
         requireAuth: true,
         locale: 'redis列表',
@@ -18,7 +18,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/redisManagement',
       name: 'redisManagement',
-      component: () => import('@/pages/redis/redisManage.vue'),
+      component: () => import('@/pages/redis/RedisManage.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
@@ -28,7 +28,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/redisbasicOp',
       name: 'redisbasicOp',
-      component: () => import('@/pages/redis/redisbasicOp.vue'),
+      component: () => import('@/pages/redis/RedisbasicOp.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
@@ -38,7 +38,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/rediscustomOp',
       name: 'rediscustomOp',
-      component: () => import('@/pages/redis/rediscustomOp.vue'),
+      component: () => import('@/pages/redis/RediscustomOp.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
@@ -48,7 +48,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/redismetaKeys',
       name: 'redismetaKeys',
-      component: () => import('@/pages/redis/components/redismetaKeys.vue'),
+      component: () => import('@/pages/redis/components/RedismetaKeys.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
