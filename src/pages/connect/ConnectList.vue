@@ -105,6 +105,14 @@ const handleSearch = () => {
 // 重置 form 表单
 const handleFromReset = () => {
   searchFormRef.value?.resetFields();
+
+  if (pagination.current === 1) {
+    const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
+    execute({ params });
+    return;
+  }
+
+  pagination.current = 1;
 };
 
 // 更新分页参数, 触发请求
