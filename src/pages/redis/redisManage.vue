@@ -10,7 +10,7 @@ import {
   Table,
   TableColumn,
   Button,
-  Input
+  Input,
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { reactive, ref } from 'vue';
@@ -33,100 +33,48 @@ const { data, isLoading, execute } = useAxios<ResponseWrap<string>>(
   instance, { immediate: true }
 );
 let dbtotalNum: number = 0;
-watch(() => data.value?.data, newVal => {
-  dbtotalNum = Number(newVal);
-  //console.log("数据库总数", dbtotalNum);
-})
 
 //dbsize
-const tablesize: number[] = new Array(dbtotalNum);
+const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
+  current: 1,
+  pageSize: 10,
+});
 
-const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
+const { data: dataSize,isLoading:sizeloading, execute: executeSize } = useAxios<ResponseWrap<Number[]>>(
   REDIS_META_SIZE_URL,
-  { method: 'GET' },
+  { method: 'GET',params: { uuid: uuid,dbnumber:-1,pg:pagination.current,size:pagination.pageSize } },
   instance,
 );
-watch(dataSize, (value, oldValue) => {
-  tablesize.push(dataSize.value?.data as number);
+
+const tableData = computed(()=>{
+  return dataSize.value?.data?.map((val,index)=>{
+    return {dbnumber:index+(pagination.current-1)*pagination.pageSize,dbsize:val}
+  })
 })
-tablesize.pop();
-function getdbsize(dbtotal: number[]) {
-  for (var i = 0; i < dbtotal.length; i++) {
-    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
-      REDIS_META_SIZE_URL,
-      { method: 'GET', params: { uuid: uuid, dbnumber: dbtotal[i] } },
-      instance,
-    );
-    watch(dataSize, newVal => {
-      const dbsize = computed(() => { return dataSize.value?.data });
-      //console.log(dbsize.value);
-      tablesize.push(dbsize.value as number);
-    })
-  }
-}
 
-//数据库编号接口与数据库大小接口的数据组织//redisMetaKeys接口，表格索引程序
-function redisMeta() {
-  console.log(dbtotalNum);
-  const dbtotal: number[] = new Array(dbtotalNum);
-  for (var i = 0; i < dbtotalNum; i++) {
-    dbtotal[i] = i;
-  }
-  getdbsize(dbtotal);
-  setTimeout(function () {
-    //console.log(tablesize);
-    for (var i = 0; i < dbtotalNum; i++) {
-      var dataItem = { dbnumber: dbtotal[i], dbsize: tablesize[i] };
-      tableData.push(dataItem);
-    }
-  }, 1002);
-}
-const tableData = reactive([{}]);
-tableData.pop();
+watch(()=>data.value?.data,newVal=>{
+  dbtotalNum=Number(newVal);
+  pagination.total=Number(newVal);
+  //console.log(dbtotalNum,pagination.total);
+})
 
-//接口数据执行
-setTimeout(function () {
-  redisMeta();
-}, 5)
-// const getloading = computed(() => {
-//   if (Array.prototype.isPrototypeOf(tableData) && tableData.length === 0) {
-//     return true;
-//   }
-//   return false;
-// });
-const getloading = ref();
-function sleep(time: number) {
-  return new Promise((resolve) => setTimeout(resolve, time));
-}
-if (Array.prototype.isPrototypeOf(tableData) && tableData.length === 0) {
-  getloading.value = true;
-  sleep(1100).then(() => { getloading.value = false })
-} else { getloading.value = true; }
+watch(
+  () => pagination.current,
+  () => {
+    const params = {uuid:uuid,dbnumber:-1, pg: pagination.current, size: pagination.pageSize };
+    executeSize({ params });
+  },
+);
+
+
 //详情跳转
 const router = useRouter();
 const viewDetails = (dbnum: number) => {
   router.push({ name: "redismetaKeys", query: { uuid: uuid, dbnumber: dbnum, ip: ip, username: username } })
 };
-const handleSearch = () => {
-  if (searchFormdata.num >= 0 && searchFormdata.num < dbtotalNum) {
-    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
-      REDIS_META_SIZE_URL,
-      { method: 'GET', params: { uuid: uuid, dbnumber: searchFormdata.num } },
-      instance,
-    );
-    const dbsize = computed(() => { return dataSize.value?.data });
-    tableData.splice(1, tableData.length);
-    tableData.pop();
-    setTimeout(function () {
-      tableData.push({ dbnumber: searchFormdata.num, dbsize: dbsize });
-    }, 10)
-  }
-};
-const handleFromReset = () => {
-  searchFormdata.num = NaN;
-  tableData.splice(1, tableData.length);
-  tableData.pop();
-  setTimeout(function () { redisMeta(); }, 10);
+
+const handlePageChange = (page: number) => {
+  pagination.current = page;
 };
 </script>
 
@@ -166,53 +114,18 @@ const handleFromReset = () => {
             </FormItem>
             </Col>
           </Row>
-          <!-- <Row :gutter="16">
-            <Col :span="14">
-            <FormItem field="number" label="数据库编号">
-              <InputNumber v-model="searchFormdata.num" :min="0" placeholder="请输入数据库编号" style="width:195px ;" />
-            </FormItem>
-            </Col>
-          </Row> -->
         </Form>
         </Col>
-        <!-- <Divider style="height: 34px" direction="vertical" />
-        <Col :flex="'86px'" style="text-align: right">
-        <Space :size="18">
-          <Button type="primary" @click="handleSearch">
-            <template #icon>
-              <IconSearch />
-            </template>
-            搜索
-          </Button>
-          <Button @click="handleFromReset">
-            <template #icon>
-              <IconRefresh />
-            </template>
-            重置
-          </Button>
-        </Space>
-        </Col> -->
       </Row>
       <Divider style="margin-top: 0" />
       <Table id="redismetaTable" row-key="dbnumber" :data="tableData" :bordered="{ wrapper: true, cell: true }"
-        :loading="getloading">
+        :loading="isLoading"
+        :pagination="pagination"
+        @page-change="handlePageChange">
         <template #columns>
-          <!-- <TableColumn title="数据库连接uuid" :body-cell-style="{ color: 'grey' }">
-            <template #cell="{ record }">
-              {{ uuid }}
-            </template>
+          <TableColumn title="数据库编号" data-index="dbnumber" >
+            
           </TableColumn>
-          <TableColumn title="数据库地址" :body-cell-style="{ color: 'grey' }">
-            <template #cell="{ record }">
-              {{ ip }}
-            </template>
-          </TableColumn>
-          <TableColumn title="用户名" :body-cell-style="{ color: 'grey' }">
-            <template #cell="{ record }">
-              {{ username }}
-            </template>
-          </TableColumn> -->
-          <TableColumn title="数据库编号" data-index="dbnumber" />
           <TableColumn title="键值对数量" data-index="dbsize" />
           <TableColumn title="详情">
             <template #cell="{ record }">

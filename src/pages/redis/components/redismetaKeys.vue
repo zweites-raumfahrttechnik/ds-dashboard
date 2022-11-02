@@ -51,37 +51,22 @@ watch(
     () => data.value?.data?.count,
     newVal => {
         pagination.total = newVal;
-        pagin.total = newVal;
-        pagination.pageSize = newVal as number;
-        const params: SearchParams = {
-            uuid: uuid, dbnumber: dbnumber,
-            pg: pagination.current, size: pagination.pageSize
-        };
-        execute({ params });
-        watch(
-            () => data.value?.data?.data, newVal => {
-                const a = data.value?.data?.count as number;
-                if (data.value?.data?.data.length === data.value?.data?.count) {
-                    for (var i = 0; i < a; i++) {
-                        const obj = { key: data.value?.data?.data?.[i] as string };
-                        tableData.push(obj);
-                    }
-                }
-            }
-        );
     },
 );
-
-const tableData = reactive([{ key: '' }]);
-tableData.pop();
-//表格pagination
-const pagin = reactive<{ current: number; pageSize: number; total?: number }>({
-    current: 1,
-    pageSize: 10,
-});
-
+watch(
+  () => pagination.current,
+  () => {
+    const params = {uuid:uuid,dbnumber:dbnumber, pg: pagination.current, size: pagination.pageSize };
+    execute({ params });
+  },
+);
+const tableData = computed(()=>{
+    return data.value?.data?.data.map((val,index)=>{
+        return {keyIndex:index+(pagination.current-1)*pagination.pageSize,key:val}
+    })
+})
 const handlePageChange = (page: number) => {
-    pagin.current = page;
+    pagination.current = page;
 };
 
 const Formdata = reactive({});
@@ -136,9 +121,10 @@ const Formdata = reactive({});
                 </Col>
             </Row>
             <Divider style="margin-top: 0" />
-            <Table id="redismetaKeys" row-key="key" :data="tableData" :bordered="{ cell: true }" :pagination="pagin"
+            <Table id="redismetaKeys" row-key="key" :data="tableData" :bordered="{ cell: true }" :pagination="pagination"
                 @page-change="handlePageChange">
                 <template #columns>
+                    <TableColumn title="序号" data-index="keyIndex" :width=80 />
                     <TableColumn title="键名" data-index="key" />
                 </template>
             </Table>

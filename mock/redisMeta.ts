@@ -14,7 +14,8 @@ const requests: MockMethod[] = [
     url: '/api/v1/execute/redis/meta/dbsize',
     method: 'get',
     response: ({ query }: { query: any }) => {
-      return successResp(Random.integer(0, 100));
+      const size=+query.size;
+      return successResp(Array(size).fill(1).map(()=>{return Random.integer(0,50)}));
     },
   },
   {
@@ -23,7 +24,7 @@ const requests: MockMethod[] = [
     response: ({ query }: { query: any }) => {
       const size = +query.size;
       return successResp({
-        count: 3,
+        count: 50,
         data: Array(size)
           .fill(1)
           .map(() => {

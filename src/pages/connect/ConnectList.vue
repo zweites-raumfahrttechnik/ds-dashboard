@@ -74,7 +74,6 @@ watch(
     if (searchFormdata.type) {
       params.type = searchFormdata.type;
     }
-
     execute({ params });
   },
 );
