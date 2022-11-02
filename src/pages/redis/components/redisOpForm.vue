@@ -10,7 +10,6 @@ import {
     Option,
     Button,
     Space,
-    Descriptions
 } from '@arco-design/web-vue';
 import { reactive } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
@@ -36,6 +35,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
     (e: 'change-step', idx: number): void;
     (e: 'getChildren', num: object): void;
+    (e: 'isright', num: boolean): void;
 }>();
 
 const form = reactive<FormModel>({
@@ -63,42 +63,36 @@ const isDelExist = computed(() => {
     return true;
 });
 
-const { data, execute, isLoading } = useAxios<ResponseWrap<FormModel>>
+const { data, execute, cancel,isLoading } = useAxios<ResponseWrap<FormModel>>
     (REDIS_OP_URL,
         { method: 'POST' },
         instance, {
         immediate: false,
     });
 
-// const json1={
-//         库:'1,2,3,4,5,6,7,8,9',
-//         number:10,
-//         1:{hello:'redisOp操作',halou:'redisManagement'},
-//         2:{zhuxian:'gujian',qingyun:'dazhufeng'}
-// }
-
 const handleSubmit = async () => {
     const res = await formRef.value?.validate();
     if (res) {
         return;
     }
+    cancel();
     execute({
         data: {
             ...form,
         },
     }).then(() => {
         formRef.value?.resetFields();
+        if(data.value?.code!==0 || data.value?.msg!=='success'){
+            emit('isright', true);
+        }else{emit('isright', false);}
         emit('change-step', 1);
-
         emit('getChildren', Object(data.value));
     });
 };
-
 const handleFromReset = () => {
     formRef.value?.resetFields();
 };
 const formRef = ref<FormInstance>();
-
 </script>
 
 <template>

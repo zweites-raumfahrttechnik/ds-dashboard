@@ -13,7 +13,8 @@ import {
 import { reactive } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { instance, ResponseWrap } from '@/api';
+import axios, { AxiosResponse } from 'axios';
+import { ResponseWrap } from '@/api';
 import { REDIS_OP_CUSTOM_URL } from '@/api/url';
 import { CustomFormModel } from './types';
 //const props = defineProps<{ uuid: string }>();
@@ -32,6 +33,7 @@ const props = withDefaults(defineProps<Props>(), {
 const emit = defineEmits<{
   (e: 'change-step', idx: number): void;
   (e: 'getChildren', num: object): void;
+  (e: 'isright', num: boolean): void;
 }>();
 
 const form = reactive<CustomFormModel>({
@@ -41,26 +43,31 @@ const form = reactive<CustomFormModel>({
   dbnumber: 0,
   uuid: props.uuid
 });
-
-const { data, execute, isLoading } = useAxios<ResponseWrap<CustomFormModel>>
+const instance = axios.create({
+  baseURL: '/api',
+})
+const { data, execute,cancel, isLoading } = useAxios<ResponseWrap<CustomFormModel>>
   (REDIS_OP_CUSTOM_URL,
     { method: 'POST' },
     instance, {
     immediate: false,
   });
 
-
 const handleSubmit = async () => {
   const res = await formRef.value?.validate();
   if (res) {
     return;
   }
+  cancel();
   execute({
     data: {
       ...form,
     },
   }).then(() => {
     formRef.value?.resetFields();
+    if(data.value?.code!==0 || data.value?.msg!=='success'){
+      emit('isright', true);
+    }else{emit('isright', false);}
     emit('change-step', 1);
     emit('getChildren', Object(data.value));
   });
@@ -106,9 +113,8 @@ const formRef = ref<FormInstance>();
       <br />
       <Row :gutter="16">
         <Col :span="16">
-        <FormItem field="args" label="参数列表" label-col-flex="100px"
-          :rules="[{ required: true, message: '请输入自定义参数后，按Enter键' }]" :validate-trigger="['change', 'input']">
-          <InputTag v-model="form.args" placeholder="请输入自定义参数后，按Enter键输入下一个参数" allow-clear />
+        <FormItem field="args" label="参数列表" label-col-flex="100px">
+          <InputTag v-model="form.args" placeholder="请输入自定义参数后，按Enter键输入下一个参数，否则默认为空" allow-clear />
         </FormItem>
         </Col>
       </Row>

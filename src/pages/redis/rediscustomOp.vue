@@ -16,6 +16,10 @@ const uuid = route.query.uuid as string;
 const ip = route.query.ip as string;
 const username = route.query.username as string;
 //console.log(uuid);
+const right=ref<boolean>();
+const getCustomright = (num: boolean) => {
+    right.value = num;
+};
 const customJson1 = ref();
 const getCustomJson = (num: Object) => {
     customJson1.value = num;
@@ -31,7 +35,7 @@ const changeCustomStep = (idx: number) => {
         <div>
             <Card class="general-card" :bordered="false">
                 <template #title>redis自定义操作</template>
-                <template #extra>
+                <template #extra v-if="customStep===0">
                     <Space :size="18">
                         <Button status="success" @click="() => { router.go(-1) }" style="width: 185px;">
                             <template #icon>
@@ -44,14 +48,14 @@ const changeCustomStep = (idx: number) => {
                 <div class="wrap">
                     <KeepAlive>
                         <CustomForm v-if="customStep === 0" :uuid="uuid" :ip="ip" :username="username"
-                            @change-step="changeCustomStep" @getChildren="getCustomJson" />
+                            @change-step="changeCustomStep" @getChildren="getCustomJson" @isright="getCustomright"/>
                         <CustomSuccess v-else-if="customStep === 1" @change-step="changeCustomStep"
-                            @get-children="getCustomJson" />
+                            @get-children="getCustomJson" :bo="right"/>
                     </KeepAlive>
                 </div>
             </Card>
             <Divider direction="horizontal" type="dashed" margin="10px" />
-            <Card class="general-card" :bordered="false" :style="{ height: '280px' }">
+            <Card class="general-card" :bordered="false" :style="{ height: '300px' }">
                 <template #title>redis自定义操作结果</template>
                 <RedisOpJson :data="customJson1" />
             </Card>
