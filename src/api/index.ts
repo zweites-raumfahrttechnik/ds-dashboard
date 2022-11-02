@@ -1,4 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
+import { Message } from '@arco-design/web-vue';
 
 interface ResponseWrap<T> {
   code: number;
@@ -13,6 +14,7 @@ const instance = axios.create({
 instance.interceptors.response.use(
   (resp: AxiosResponse<ResponseWrap<unknown>>) => {
     if (resp.data.code !== 0) {
+      Message.error(resp.data.msg);
       return Promise.reject(new Error(resp.data.msg));
     }
 
