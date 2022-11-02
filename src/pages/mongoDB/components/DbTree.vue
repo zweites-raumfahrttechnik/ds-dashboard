@@ -89,7 +89,7 @@ const handleLoadMore = async (data: TreeNodeData) => {
   }
 
   // 获取 DB
-  const val = await dbExecute();
+  const val = await dbExecute({ params: { uuid: keys[0] } });
   const idx = treeData.value.findIndex(item => item.key === data.key);
   if (idx === -1) {
     return;
