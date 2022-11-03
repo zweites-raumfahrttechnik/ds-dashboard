@@ -113,6 +113,23 @@ const contextMenuKey = ref<string[]>([]);
 const menuVisible = ref(false);
 const menuPosition = ref({ top: '', left: '' });
 
+const handleCloseMenu = () => {
+  menuVisible.value = false;
+};
+
+onMounted(() => {
+  document.body.addEventListener('click', handleCloseMenu);
+
+  document.body.addEventListener('contextmenu', handleCloseMenu);
+});
+
+onUnmounted(() => {
+  menuVisible.value = false;
+
+  document.body.removeEventListener('click', handleCloseMenu);
+  document.body.removeEventListener('contextmenu', handleCloseMenu);
+});
+
 const handleContextMenu = (e: ContextMenuEvent) => {
   // 确定点击的元素是否是 title
   const target = e.target as HTMLElement;
@@ -126,6 +143,7 @@ const handleContextMenu = (e: ContextMenuEvent) => {
 
   // 阻止浏览器原生事件
   e.preventDefault();
+  e.stopPropagation();
 
   menuPosition.value.left = e.clientX + 'px';
   menuPosition.value.top = e.clientY + 'px';
