@@ -1,12 +1,16 @@
 <script setup lang="ts">
 import { Space } from '@arco-design/web-vue';
 import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon';
+
+const props = defineProps<{ menuKeys: string[] }>();
+
+const level = computed(() => props.menuKeys.length);
 </script>
 
 <template>
   <div class="container">
     <ul class="list-wrap">
-      <li class="list-item">
+      <li v-if="level === 1 || level === 2" class="list-item">
         <Space>
           <span>
             <IconPlus />
@@ -14,12 +18,31 @@ import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon';
           <span>新建数据库</span>
         </Space>
       </li>
-      <li class="list-item">
+
+      <li v-if="level === 2" class="list-item">
         <Space>
           <span>
             <IconDelete />
           </span>
           <span>删除数据库</span>
+        </Space>
+      </li>
+
+      <li v-if="level === 3" class="list-item">
+        <Space>
+          <span>
+            <IconPlus />
+          </span>
+          <span>新建数据集合</span>
+        </Space>
+      </li>
+
+      <li v-if="level === 3" class="list-item">
+        <Space>
+          <span>
+            <IconDelete />
+          </span>
+          <span>删除数据集合</span>
         </Space>
       </li>
     </ul>
@@ -30,7 +53,7 @@ import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon';
 @import '@arco-design/web-vue/es/style/theme/global.less';
 
 .container {
-  width: 150px;
+  width: 180px;
   position: absolute;
   background-color: var(--color-bg-3);
   // border: @border-1 solid var(--color-border-3);

@@ -164,26 +164,36 @@ const handleContextMenu = (e: ContextMenuEvent) => {
   // 获取本身的 key
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const lastEle = treeNode.lastElementChild?.lastElementChild as any;
-  const text = lastEle.innerText;
-  const idx = treeData.value.findIndex(item => item.title === text);
-  if (idx === -1) {
-    return;
-  }
-  res.unshift(treeData.value[idx].key as string);
+  res.unshift(lastEle.innerText);
 
   // 获取其父层级节点
-  let i = 0;
+  let i = 0,
+    tail = 0;
   let ele: Element | null = treeNode;
   while (i < indent && ele !== null) {
     if (ele.classList.contains('arco-tree-node-expanded')) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const lastEle = ele.lastElementChild?.lastElementChild as any;
-      res.unshift(lastEle.innerText);
-      i++;
+      if (tail === 0) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const lastEle = ele.lastElementChild?.lastElementChild as any;
+        res.unshift(lastEle.innerText);
+        i++;
+      } else {
+        tail--;
+      }
     }
 
+    if (ele.classList.contains('arco-tree-node-is-tail')) {
+      tail++;
+    }
     ele = ele.previousElementSibling;
   }
+
+  // 将父节点更换为uuid
+  const idx = treeData.value.findIndex(item => item.title === res[0]);
+  if (idx === -1) {
+    return;
+  }
+  res[0] = treeData.value[idx].key as string;
 
   contextMenuKey.value = res;
   menuVisible.value = true;
@@ -200,6 +210,6 @@ const handleContextMenu = (e: ContextMenuEvent) => {
   />
 
   <Teleport to="#app">
-    <ContextMenu v-if="menuVisible" :style="menuPosition" />
+    <ContextMenu v-if="menuVisible" :style="menuPosition" :menu-keys="contextMenuKey" />
   </Teleport>
 </template>
