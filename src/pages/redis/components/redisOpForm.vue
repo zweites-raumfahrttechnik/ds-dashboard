@@ -14,7 +14,8 @@ import {
 import { reactive } from 'vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { instance, ResponseWrap } from '@/api';
+import { ResponseWrap } from '@/api';
+import axios, { AxiosResponse } from 'axios';
 import { REDIS_OP_URL } from '@/api/url';
 import { FormModel } from './types';
 //const props = defineProps<{ uuid: string }>();
@@ -62,7 +63,9 @@ const isDelExist = computed(() => {
     }
     return true;
 });
-
+const instance = axios.create({
+  baseURL: '/api',
+})
 const { data, execute, cancel,isLoading } = useAxios<ResponseWrap<FormModel>>
     (REDIS_OP_URL,
         { method: 'POST' },

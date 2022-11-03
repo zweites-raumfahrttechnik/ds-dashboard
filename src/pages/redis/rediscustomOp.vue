@@ -55,7 +55,7 @@ const changeCustomStep = (idx: number) => {
                 </div>
             </Card>
             <Divider direction="horizontal" type="dashed" margin="10px" />
-            <Card class="general-card" :bordered="false" :style="{ height: '300px' }">
+            <Card class="general-card" :bordered="false" :style="{ height: '285px' }">
                 <template #title>redis自定义操作结果</template>
                 <RedisOpJson :data="customJson1" />
             </Card>

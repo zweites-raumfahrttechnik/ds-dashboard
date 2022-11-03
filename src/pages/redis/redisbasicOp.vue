@@ -55,7 +55,7 @@ const changeStep = (idx: number) => {
                 </div>
             </Card>
             <Divider direction="horizontal" type="dashed" margin="10px" />
-            <Card class="general-card" :bordered="false" :style="{ height: '300px' }" :headStyle="{ color: '#0785fd' }"
+            <Card class="general-card" :bordered="false" :style="{ height: '285px' }" :headStyle="{ color: '#0785fd' }"
                 :bodyStyle="{ padding: '0' }">
                 <template #title>redis基本操作结果</template>
                 <RedisOpJson :data="json1" />
