@@ -6,7 +6,15 @@ import { instance, ResponseWrap } from '@/api';
 import { GetListData, MongodbDBInfo, MongodbCollectionInfo } from '@/api/types';
 import { CONNECT_URL, MONGODB_DB_URL, MONGODB_COLLECTION_URL } from '@/api/url';
 
+import ContextMenu from './ContextMenu.vue';
+
+interface ContextMenuEvent extends PointerEvent {
+  target: HTMLElement;
+  path: HTMLElement[];
+}
+
 defineProps<{ selectedKeys: string[] }>();
+
 const emit = defineEmits<{ (event: 'update:selectedKeys', val: string[]): void }>();
 
 const treeData = ref<TreeNodeData[]>([]);
@@ -100,6 +108,68 @@ const handleLoadMore = async (data: TreeNodeData) => {
     title: item,
   }));
 };
+
+const contextMenuKey = ref<string[]>([]);
+const menuVisible = ref(false);
+const menuPosition = ref({ top: '', left: '' });
+
+const handleContextMenu = (e: ContextMenuEvent) => {
+  // 确定点击的元素是否是 title
+  const target = e.target as HTMLElement;
+  if (
+    target.localName !== 'span' ||
+    (!target.classList.contains('arco-tree-node-title-text') &&
+      !target.classList.contains('arco-tree-node-title'))
+  ) {
+    return;
+  }
+
+  // 阻止浏览器原生事件
+  e.preventDefault();
+
+  menuPosition.value.left = e.clientX + 'px';
+  menuPosition.value.top = e.clientY + 'px';
+
+  // 根据类名拿到 tree-node
+  const path = e.path as HTMLElement[];
+  let treeNode: HTMLElement = path[2];
+  if (target.classList.contains('arco-tree-node-title')) {
+    treeNode = path[1];
+  }
+
+  // 确定点击的层级
+  const indent = (treeNode.firstElementChild as HTMLSpanElement).children.length;
+
+  // 返回右键点击的 key
+  const res: string[] = [];
+
+  // 获取本身的 key
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const lastEle = treeNode.lastElementChild?.lastElementChild as any;
+  const text = lastEle.innerText;
+  const idx = treeData.value.findIndex(item => item.title === text);
+  if (idx === -1) {
+    return;
+  }
+  res.unshift(treeData.value[idx].key as string);
+
+  // 获取其父层级节点
+  let i = 0;
+  let ele: Element | null = treeNode;
+  while (i < indent && ele !== null) {
+    if (ele.classList.contains('arco-tree-node-expanded')) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const lastEle = ele.lastElementChild?.lastElementChild as any;
+      res.unshift(lastEle.innerText);
+      i++;
+    }
+
+    ele = ele.previousElementSibling;
+  }
+
+  contextMenuKey.value = res;
+  menuVisible.value = true;
+};
 </script>
 
 <template>
@@ -108,5 +178,10 @@ const handleLoadMore = async (data: TreeNodeData) => {
     block-node
     :data="treeData"
     :load-more="handleLoadMore"
+    @contextmenu="handleContextMenu"
   />
+
+  <Teleport to="#app">
+    <ContextMenu v-if="menuVisible" :style="menuPosition" />
+  </Teleport>
 </template>
