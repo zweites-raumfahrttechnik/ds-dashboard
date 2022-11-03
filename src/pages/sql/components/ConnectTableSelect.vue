@@ -14,7 +14,7 @@ import {
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { instance, ResponseWrap } from '@/api';
 import { CONNECT_URL, SQL_META_SCHEMA, SQL_META_TABLE } from '@/api/url';
-import { GetListData, GetListDataItem, GetSqlSchema, GetSqlTable } from '@/api/types';
+import { GetListData, GetListDataItem, GetSqlMetaData } from '@/api/types';
 import { useAxios } from '@vueuse/integrations/useAxios';
 
 import { ConnectFormModel, defaultConnectFormValue } from '../types';
@@ -60,7 +60,7 @@ const {
   data: schemaList,
   isLoading: schemaListLoading,
   execute: schemaListExec,
-} = useAxios<ResponseWrap<GetSqlSchema>>(SQL_META_SCHEMA, { method: 'GET' }, instance, {
+} = useAxios<ResponseWrap<GetSqlMetaData>>(SQL_META_SCHEMA, { method: 'GET' }, instance, {
   immediate: false,
 });
 
@@ -68,7 +68,7 @@ const {
   data: tableList,
   isLoading: tableListLoading,
   execute: tableListExec,
-} = useAxios<ResponseWrap<GetSqlTable>>(SQL_META_TABLE, { method: 'GET' }, instance, {
+} = useAxios<ResponseWrap<GetSqlMetaData>>(SQL_META_TABLE, { method: 'GET' }, instance, {
   immediate: false,
 });
 
@@ -190,7 +190,7 @@ const resetForm = () => {
         label-align="left"
       >
         <Row :gutter="16">
-          <Col :span="4">
+          <Col :span="5">
             <FormItem
               field="type"
               label="类型"
@@ -219,12 +219,13 @@ const resetForm = () => {
                 @dropdown-reach-bottom="selectLoadMore"
               >
                 <Option v-for="item in connections" :key="item.uuid" :value="item.uuid">
-                  {{ item.ip }}:{{ item.port }}{{ item.name === '' ? '' : '/' + item.name }}
+                  {{ item.ip }}:{{ item.port
+                  }}{{ item.name === null || item.name === '' ? '' : '/' + item.name }}
                 </Option>
               </Select>
             </FormItem>
           </Col>
-          <Col :span="6">
+          <Col :span="5">
             <FormItem
               field="schema"
               label="模式名"
