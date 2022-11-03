@@ -2,33 +2,33 @@ import { RouteRecordRaw } from 'vue-router';
 import { MAIN_LAYOUT } from '@/router/constant';
 
 const redis: RouteRecordRaw = {
-  path: '/redis',
+  path: '/Redis',
   name: 'Redis',
   component: MAIN_LAYOUT,
   children: [
     {
-      path: '/redisConnect',
-      name: 'redisConnect',
-      component: () => import('@/pages/redis/redisConnect.vue'),
+      path: '/RedisConnect',
+      name: 'RedisConnect',
+      component: () => import('@/pages/redis/RedisConnect.vue'),
       meta: {
         requireAuth: true,
-        locale: 'redis列表',
+        locale: 'redis数据库连接列表',
       },
     },
     {
-      path: '/redisManagement',
-      name: 'redisManagement',
-      component: () => import('@/pages/redis/redisManage.vue'),
+      path: '/RedisManage',
+      name: 'RedisManage',
+      component: () => import('@/pages/redis/RedisManage.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
-        locale: 'redis元数据管理',
+        locale: 'redis元数据查询',
       },
     },
     {
-      path: '/redisbasicOp',
-      name: 'redisbasicOp',
-      component: () => import('@/pages/redis/redisbasicOp.vue'),
+      path: '/RedisBasicOp',
+      name: 'RedisBasicOp',
+      component: () => import('@/pages/redis/RedisBasicOp.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
@@ -36,9 +36,9 @@ const redis: RouteRecordRaw = {
       },
     },
     {
-      path: '/rediscustomOp',
-      name: 'rediscustomOp',
-      component: () => import('@/pages/redis/rediscustomOp.vue'),
+      path: '/RedisCustomOp',
+      name: 'RedisCustomOp',
+      component: () => import('@/pages/redis/RedisCustomOp.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
@@ -46,13 +46,13 @@ const redis: RouteRecordRaw = {
       },
     },
     {
-      path: '/redismetaKeys',
-      name: 'redismetaKeys',
-      component: () => import('@/pages/redis/components/redismetaKeys.vue'),
+      path: '/RedismetaKeys',
+      name: 'RedismetaKeys',
+      component: () => import('@/pages/redis/components/RedismetaKeys.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
-        locale: 'redis键名',
+        locale: '数据库详情',
       },
     },
   ],
@@ -63,5 +63,4 @@ const redis: RouteRecordRaw = {
     order: 3,
   },
 };
-
 export default redis;

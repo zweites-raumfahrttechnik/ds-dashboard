@@ -6,24 +6,27 @@ import {
     Button,
 } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
-import { ref, watch } from 'vue';
-import Form from './components/redisOpForm.vue';
-import Success from './components/redisOpSuccess.vue';
-import RedisOpJson from './components/redisOpJson.vue';
+import { ref } from 'vue';
+import Form from './components/RedisOpBasicForm.vue';
+import Success from './components/RedisOpBasicSuccess.vue';
+import RedisOpJson from './components/RedisOpJson.vue';
+//RedisConnect.vue传递过来的参数
 let route = useRoute();
 const router = useRouter();
 const uuid = route.query.uuid as string;
 const ip = route.query.ip as string;
 const username = route.query.username as string;
-const right=ref<boolean>();
-const getCustomright = (num: boolean) => {
+//接收RedisOpForm.vue子组件传递过来的判断操作请求是否成功的数据
+const right = ref<boolean>();
+const getBasicRight = (num: boolean) => {
     right.value = num;
 };
-const json1 = ref();
+//接收RedisOpForm.vue子组件传递过来的响应数据data
+const data = ref();
 const getJson = (num: Object) => {
-    json1.value = num;
+    data.value = num;
 };
-
+//接收RedisOpForm.vue和RedisOpSuccess.vue子组件传递过来的表单提交成功信息的数据
 const step = ref(0);
 const changeStep = (idx: number) => {
     step.value = idx;
@@ -48,9 +51,9 @@ const changeStep = (idx: number) => {
                 <div class="wrap">
                     <KeepAlive>
                         <Form v-if="step === 0" :uuid="uuid" :ip="ip" :username="username" @change-step="changeStep"
-                            @isright="getCustomright"
+                            @isright="getBasicRight"
                             @getChildren="getJson" />
-                        <Success v-else-if="step === 1" @change-step="changeStep" @get-children="getJson" :bo="right"/>
+                        <Success v-else-if="step === 1" @change-step="changeStep" @get-children="getJson" :right="right"/>
                     </KeepAlive>
                 </div>
             </Card>
@@ -58,7 +61,7 @@ const changeStep = (idx: number) => {
             <Card class="general-card" :bordered="false" :style="{ height: '285px' }" :headStyle="{ color: '#0785fd' }"
                 :bodyStyle="{ padding: '0' }">
                 <template #title>redis基本操作结果</template>
-                <RedisOpJson :data="json1" />
+                <RedisOpJson :data="data" />
             </Card>
         </div>
     </PageContainer>

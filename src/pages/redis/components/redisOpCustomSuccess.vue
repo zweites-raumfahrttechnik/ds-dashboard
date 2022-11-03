@@ -7,10 +7,10 @@ const emit = defineEmits<{
 }>();
 
 interface Props {
-    bo?:boolean
+    right?:boolean
 }
 const props = withDefaults(defineProps<Props>(), {
-    bo:true
+    right:true
 });
 const handlePre = () => {
   emit('change-step', 0);
@@ -20,15 +20,14 @@ const handlePre = () => {
 
 <template>
   <div>
-    <Result status="success" title="redis数据库自定义操作成功" v-if="props.bo===false">
-      <!-- <template #subtitle> 请在连接列表页面查看添加的数据库连接 </template> -->
+    <Result status="success" title="redis数据库自定义操作成功" v-if="props.right===false">
       <template #extra>
         <Space :size="16">
           <Button type="primary" @click="handlePre">再次操作</Button>
         </Space>
       </template>
     </Result>
-    <Result status="error" title="redis数据库自定义操作失败" subtitle="可能是您表单输入的信息有误" v-else-if="props.bo===true">
+    <Result status="error" title="redis数据库自定义操作失败" subtitle="可能是您表单输入的信息有误" v-else-if="props.right===true">
       <template #extra>
         <Space :size="16">
           <Button type="primary" @click="handlePre">返回重新操作</Button>

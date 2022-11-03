@@ -29,7 +29,6 @@ const searchFormdata = reactive<Pick<SearchParams, 'ip' | 'username' | 'type'>>(
     type: 4
 });
 
-//请求数据的pg、size参数
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
     current: 1,
     pageSize: 15,
@@ -47,7 +46,7 @@ watch(
         pagination.total = newVal;
     },
 );
-
+//分页实时请求
 watch(
     () => pagination.current,
     () => {
@@ -55,9 +54,11 @@ watch(
         execute({ params });
     },
 );
+
 const tableData = computed(() => {
     return data.value?.data?.data;
 });
+//表单值为空，则get请求参数也为空
 const handleSearch = async () => {
     const res = await searchFormRef.value?.validate();
     if (res) {
@@ -77,6 +78,7 @@ const handleSearch = async () => {
 };
 const handleFromReset = () => {
     searchFormRef.value?.resetFields();
+    //非刷新，重新请求数据方法
     // const params: SearchParams = { pg: pagination.current, size: pagination.pageSize, type: 4, ip: '', username: '' };
     // execute({ params });
     router.go(0);
@@ -85,14 +87,14 @@ const handlePageChange = (page: number) => {
     pagination.current = page;
 };
 const router = useRouter();
-const redisbasicOP = (uuid: string, ip: string, username: string) => {
-    router.push({ name: "redisbasicOp", query: { uuid: uuid, ip: ip, username: username } })
+const RedisBasicOP = (uuid: string, ip: string, username: string) => {
+    router.push({ name: "RedisBasicOp", query: { uuid: uuid, ip: ip, username: username } })
 }
-const rediscustomOP = (uuid: string, ip: string, username: string) => {
-    router.push({ name: "rediscustomOp", query: { uuid: uuid, ip: ip, username: username } })
+const RedisCustomOP = (uuid: string, ip: string, username: string) => {
+    router.push({ name: "RedisCustomOp", query: { uuid: uuid, ip: ip, username: username } })
 }
-const redisMANAGE = (uuid: string, ip: string, username: string) => {
-    router.push({ name: 'redisManagement', query: { uuid: uuid, ip: ip, username: username } })
+const RedisManage = (uuid: string, ip: string, username: string) => {
+    router.push({ name: 'RedisManage', query: { uuid: uuid, ip: ip, username: username } })
 };
 </script>
 
@@ -102,45 +104,45 @@ const redisMANAGE = (uuid: string, ip: string, username: string) => {
             <template #title>redis数据库连接列表</template>
             <Row>
                 <Col :flex="1">
-                <Form ref="searchFormRef" :model="searchFormdata" :label-col-props="{ span: 6 }"
-                    :wrapper-col-props="{ span: 18 }" label-align="left">
-                    <Row :gutter="16">
-                        <Col :span="9">
-                        <FormItem field="ip" label="数据库地址" auto-label-width="true" :rules="[
-                            { required: true, message: '请输入IP地址' },
-                            {
-                                match:
-                                    /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
-                                message: 'IP地址格式不正确',
-                            }]" :hide-asterisk=true>
-                            <Input v-model="searchFormdata.ip" placeholder="请输入数据库地址" />
-                        </FormItem>
-                        </Col>
-                        &nbsp;&nbsp;&nbsp;&nbsp;
-                        <Col :span="7">
-                        <FormItem field="username" label="用户名" auto-label-width="true">
-                            <Input v-model="searchFormdata.username" placeholder="请输入用户名" />
-                        </FormItem>
-                        </Col>
-                    </Row>
-                </Form>
+                    <Form ref="searchFormRef" :model="searchFormdata" :label-col-props="{ span: 6 }"
+                        :wrapper-col-props="{ span: 18 }" label-align="left">
+                        <Row :gutter="16">
+                            <Col :span="9">
+                                <FormItem field="ip" label="数据库地址" auto-label-width="true" :rules="[
+                                { required: true, message: '请输入IP地址' },
+                                {
+                                    match:
+                                        /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
+                                    message: 'IP地址格式不正确',
+                                }]" :hide-asterisk=true>
+                                    <Input v-model="searchFormdata.ip" placeholder="请输入数据库地址" />
+                                </FormItem>
+                            </Col>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <Col :span="7">
+                                <FormItem field="username" label="用户名" auto-label-width="true">
+                                    <Input v-model="searchFormdata.username" placeholder="请输入用户名" />
+                                </FormItem>
+                            </Col>
+                        </Row>
+                    </Form>
                 </Col>
                 <Divider style="height: 34px" direction="vertical" />
                 <Col :flex="'86px'" style="text-align: right">
-                <Space :size="18">
-                    <Button type="primary" @click="handleSearch">
-                        <template #icon>
-                            <IconSearch />
-                        </template>
-                        搜索
-                    </Button>
-                    <Button @click="handleFromReset">
-                        <template #icon>
-                            <IconRefresh />
-                        </template>
-                        重置
-                    </Button>
-                </Space>
+                    <Space :size="18">
+                        <Button type="primary" @click="handleSearch">
+                            <template #icon>
+                                <IconSearch />
+                            </template>
+                            搜索
+                        </Button>
+                        <Button @click="handleFromReset">
+                            <template #icon>
+                                <IconRefresh />
+                            </template>
+                            重置
+                        </Button>
+                    </Space>
                 </Col>
             </Row>
             <Divider style="margin-top: 0" />
@@ -154,19 +156,19 @@ const redisMANAGE = (uuid: string, ip: string, username: string) => {
                     <TableColumn title="元数据查询">
                         <template #cell="{ record }">
                             <Button status="success" v-if="record.type === 4"
-                                @click="() => redisMANAGE(record.uuid, record.ip, record.username)">查看</Button>
+                                @click="() => RedisManage(record.uuid, record.ip, record.username)">查看</Button>
                         </template>
                     </TableColumn>
                     <TableColumn title="基本操作">
                         <template #cell="{ record }">
                             <Button status="warning"
-                                @click="() => redisbasicOP(record.uuid, record.ip, record.username)">进入</Button>
+                                @click="() => RedisBasicOP(record.uuid, record.ip, record.username)">进入</Button>
                         </template>
                     </TableColumn>
                     <TableColumn title="自定义操作">
                         <template #cell="{ record }">
                             <Button status="warning"
-                                @click="() => rediscustomOP(record.uuid, record.ip, record.username)">进入</Button>
+                                @click="() => RedisCustomOP(record.uuid, record.ip, record.username)">进入</Button>
                         </template>
                     </TableColumn>
                 </template>

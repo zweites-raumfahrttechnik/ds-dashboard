@@ -20,21 +20,23 @@ import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
 import { redisMetaTotal_URL, REDIS_META_SIZE_URL } from '@/api/url';
 //引入参数
-
+//RedisConnect.vue传递过来的参数
 let route = useRoute();
 const uuid = route.query.uuid as string;
 const ip = route.query.ip as string;
 const username = route.query.username as string;
+
 const searchFormRef = ref<FormInstance>();
 const searchFormdata = reactive({ num: NaN });
-const { data, isLoading, execute } = useAxios<ResponseWrap<string>>(
+
+const { data, isLoading } = useAxios<ResponseWrap<string>>(
   redisMetaTotal_URL,
   { method: 'GET', params: { uuid: uuid } },
   instance, { immediate: true }
 );
+//数据库总数
 let dbtotalNum: number = 0;
 
-//dbsize
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
   current: 1,
   pageSize: 10,
@@ -55,7 +57,6 @@ const tableData = computed(()=>{
 watch(()=>data.value?.data,newVal=>{
   dbtotalNum=Number(newVal);
   pagination.total=Number(newVal);
-  //console.log(dbtotalNum,pagination.total);
 })
 
 watch(
@@ -66,11 +67,10 @@ watch(
   },
 );
 
-
 //详情跳转
 const router = useRouter();
 const viewDetails = (dbnum: number) => {
-  router.push({ name: "redismetaKeys", query: { uuid: uuid, dbnumber: dbnum, ip: ip, username: username } })
+  router.push({ name: "RedismetaKeys", query: { uuid: uuid, dbnumber: dbnum, ip: ip, username: username } })
 };
 
 const handlePageChange = (page: number) => {
@@ -96,25 +96,25 @@ const handlePageChange = (page: number) => {
       <br />
       <Row>
         <Col :flex="1">
-        <Form ref="searchFormRef" :model="searchFormdata" :wrapper-col-props="{ span: 18 }" label-align="right">
-          <Row :gutter="16">
-            <Col :span="8">
-            <FormItem field="uuid" label="数据库连接uuid" label-col-flex="100px" :disabled="true">
-              <Input v-model="uuid" />
-            </FormItem>
-            </Col>
-            <Col :span="8">
-            <FormItem field="ip" label="数据库地址" label-col-flex="80px" :disabled="true">
-              <Input v-model="ip" />
-            </FormItem>
-            </Col>
-            <Col :span="8">
-            <FormItem field="username" label="用户名" label-col-flex="85px" :disabled="true" :label-attrs="{}">
-              <Input v-model="username" />
-            </FormItem>
-            </Col>
-          </Row>
-        </Form>
+          <Form ref="searchFormRef" :model="searchFormdata" :wrapper-col-props="{ span: 18 }" label-align="right">
+            <Row :gutter="16">
+              <Col :span="8">
+                <FormItem field="uuid" label="数据库连接uuid" label-col-flex="100px" :disabled="true">
+                  <Input v-model="uuid" />
+                </FormItem>
+              </Col>
+              <Col :span="8">
+                <FormItem field="ip" label="数据库地址" label-col-flex="80px" :disabled="true">
+                  <Input v-model="ip" />
+                </FormItem>
+              </Col>
+              <Col :span="8">
+                <FormItem field="username" label="用户名" label-col-flex="85px" :disabled="true" :label-attrs="{}">
+                  <Input v-model="username" />
+                </FormItem>
+              </Col>
+            </Row>
+          </Form>
         </Col>
       </Row>
       <Divider style="margin-top: 0" />
@@ -123,9 +123,7 @@ const handlePageChange = (page: number) => {
         :pagination="pagination"
         @page-change="handlePageChange">
         <template #columns>
-          <TableColumn title="数据库编号" data-index="dbnumber" >
-            
-          </TableColumn>
+          <TableColumn title="数据库编号" data-index="dbnumber" />
           <TableColumn title="键值对数量" data-index="dbsize" />
           <TableColumn title="详情">
             <template #cell="{ record }">
