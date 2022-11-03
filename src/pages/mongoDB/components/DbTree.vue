@@ -169,7 +169,7 @@ const handleContextMenu = (e: ContextMenuEvent) => {
   // 获取其父层级节点
   let i = 0,
     tail = 0;
-  let ele: Element | null = treeNode;
+  let ele: Element | null = treeNode.previousElementSibling;
   while (i < indent && ele !== null) {
     if (ele.classList.contains('arco-tree-node-expanded')) {
       if (tail === 0) {
