@@ -38,6 +38,7 @@
     "echarts": "^5.4.0",
     "jsoneditor": "^9.9.2",
     "nprogress": "^0.2.0",
+    "qs": "^6.11.0",
     "sql-formatter": "^11.0.2",
     "vue": "^3.2.41",
     "vue-codemirror": "^6.1.1",
@@ -47,6 +48,7 @@
   "devDependencies": {
     "@types/jsoneditor": "^9.9.0",
     "@types/mockjs": "^1.0.7",
+    "@types/qs": "^6.9.7",
     "@typescript-eslint/eslint-plugin": "^5.41.0",
     "@typescript-eslint/parser": "^5.41.0",
     "@vitejs/plugin-vue": "^3.2.0",
