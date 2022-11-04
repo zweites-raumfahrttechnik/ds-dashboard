@@ -4,10 +4,12 @@ import { Card, Row, Col, Divider } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
 
 import DbTree from './components/DbTree.vue';
+import MetaDetails from './components/MetaDetail.vue';
+
 import { GetListDataItem } from '@/api/types';
 
 const selectedKeys = ref<string>('');
-const conMap = ref<Record<string, GetListDataItem>>();
+const conMap = ref<Record<string, GetListDataItem>>({});
 
 const getConMap = (val: Record<string, GetListDataItem>) => {
   conMap.value = val;
@@ -29,7 +31,7 @@ const getConMap = (val: Record<string, GetListDataItem>) => {
         </Col>
 
         <Col class="col-height" :span="20">
-          <DbTree :selected-keys="selectedKeys" :con-map="conMap" />
+          <MetaDetails :selected-keys="selectedKeys" :con-map="conMap" />
         </Col>
       </Row>
     </Card>

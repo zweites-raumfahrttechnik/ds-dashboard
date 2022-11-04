@@ -47,14 +47,14 @@ onMounted(() => {
     conMap.value = {};
     val.data.value?.data?.data.forEach(item => {
       treeData.value.push({
-        title: `${item.ip}:${item.port}${item.name === null || item.name === '' ? '' : '/'}${
-          item.name
+        title: `${item.ip}:${item.port}${
+          item.name === null || item.name === '' ? '' : '/' + item.name
         }`,
         key: item.uuid,
       });
       conMap.value[item.uuid] = item;
     });
-    emit('getConMap', conMap);
+    emit('getConMap', conMap.value);
   });
 });
 
@@ -71,7 +71,7 @@ const handleLoadMore = async (data: TreeNodeData) => {
   // 获取表名
   if (keys.length === 2) {
     const val = await tableExecute({
-      params: { uuid: keys[0], type: conMap.value.get(keys[0]), schema: keys[1] },
+      params: { uuid: keys[0], type: conMap.value[keys[0]], schema: keys[1] },
     });
 
     // 寻找 connect

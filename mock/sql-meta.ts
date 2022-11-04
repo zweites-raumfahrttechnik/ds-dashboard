@@ -61,6 +61,36 @@ const requests: MockMethod[] = [
       });
     },
   },
+  {
+    url: '/api/v1/sql/meta/view',
+    method: 'get',
+    response: () => {
+      return successResp({
+        names: Array(Random.integer(20, 30))
+          .fill(1)
+          .map(() => {
+            return Random.name();
+          }),
+        briefData: getSqlMetaData(),
+        allData: getSqlMetaData(),
+      });
+    },
+  },
+  {
+    url: '/api/v1/sql/meta/column',
+    method: 'get',
+    response: () => {
+      return successResp({
+        names: Array(Random.integer(20, 30))
+          .fill(1)
+          .map(() => {
+            return Random.name();
+          }),
+        briefData: getSqlMetaData(),
+        allData: getSqlMetaData(),
+      });
+    },
+  },
 ];
 
 export default requests;

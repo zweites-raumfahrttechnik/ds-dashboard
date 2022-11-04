@@ -9,6 +9,7 @@ import {
   Select,
   Option,
   Space,
+  Optgroup,
 } from '@arco-design/web-vue';
 
 import { FormInstance } from '@arco-design/web-vue/es/form';
@@ -34,6 +35,8 @@ const connections = ref<GetListDataItem[]>([]);
 const schemas = ref<string[]>([]);
 
 const tables = ref<string[]>([]);
+
+const views = ref<string[]>([]);
 
 const pagination = reactive<{ pg: number; size: number }>({
   pg: 1,
@@ -72,6 +75,14 @@ const {
   immediate: false,
 });
 
+const {
+  data: viewList,
+  isLoading: viewListLoading,
+  execute: viewListExec,
+} = useAxios<ResponseWrap<GetSqlMetaData>>(SQL_META_TABLE, { method: 'GET' }, instance, {
+  immediate: false,
+});
+
 watch(
   () => conList.value?.data?.data,
   newVal => {
@@ -98,6 +109,13 @@ watch(
   () => tableList.value?.data?.names,
   () => {
     tables.value = tableList.value?.data?.names || [];
+  },
+);
+
+watch(
+  () => viewList.value?.data?.names,
+  () => {
+    views.value = viewList.value?.data?.names || [];
   },
 );
 
@@ -130,8 +148,16 @@ watch(
   newVal => {
     connectFormData.table = '';
     tables.value = [];
+    views.value = [];
     if (newVal !== '') {
       tableListExec({
+        params: {
+          uuid: connectFormData.uuid,
+          type: connectFormData.type,
+          schema: connectFormData.schema,
+        },
+      });
+      viewListExec({
         params: {
           uuid: connectFormData.uuid,
           type: connectFormData.type,
@@ -255,7 +281,12 @@ const resetForm = () => {
                 :loading="tableListLoading"
                 :allow-search="true"
               >
-                <Option v-for="item in tables" :key="item" :value="item">{{ item }}</Option>
+                <Optgroup label="Table">
+                  <Option v-for="item in tables" :key="item" :value="item">{{ item }}</Option>
+                </Optgroup>
+                <Optgroup label="View">
+                  <Option v-for="item in views" :key="item" :value="item">{{ item }}</Option>
+                </Optgroup>
               </Select>
             </FormItem>
           </Col>
