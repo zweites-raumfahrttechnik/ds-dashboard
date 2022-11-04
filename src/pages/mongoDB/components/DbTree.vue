@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { Tree, TreeNodeData, Modal, Form, FormItem, Input } from '@arco-design/web-vue';
+import es, { Tree, TreeNodeData, Modal, Form, FormItem, Input } from '@arco-design/web-vue';
 
 import { instance, ResponseWrap } from '@/api';
 import { GetListData, MongodbDBInfo, MongodbCollectionInfo } from '@/api/types';
@@ -167,6 +167,7 @@ const handleContextMenu = (e: ContextMenuEvent) => {
 
   // 确定点击的层级
   const indent = (treeNode.firstElementChild as HTMLSpanElement).children.length;
+  console.log(indent);
 
   // 返回右键点击的 key
   const res: string[] = [];
@@ -190,11 +191,10 @@ const handleContextMenu = (e: ContextMenuEvent) => {
       } else {
         tail--;
       }
-    }
-
-    if (ele.classList.contains('arco-tree-node-is-tail')) {
+    } else if (ele.classList.contains('arco-tree-node-is-tail')) {
       tail++;
     }
+
     ele = ele.previousElementSibling;
   }
 
@@ -222,6 +222,10 @@ const { execute: newDBExecute } = useAxios(MONGODB_META_DB_URL, { method: 'POST'
 
 const handleCreateNewDB = () => {
   createDBVisible.value = true;
+};
+
+const handleNewDBModalClose = () => {
+  createDBForm.name = '';
 };
 
 const handleOkNewDB = async () => {
@@ -261,7 +265,7 @@ const createCollectionForm = reactive({
   name: '',
 });
 
-const createCollectionButtonDisable = computed(() => createDBForm.name === '');
+const createCollectionButtonDisable = computed(() => createCollectionForm.name === '');
 
 const { execute: newCollectionExecute } = useAxios(
   MONGODB_META_COLLECTION_URL,
@@ -274,6 +278,10 @@ const { execute: newCollectionExecute } = useAxios(
 
 const handleCreateNewCollection = () => {
   createCollectionVisible.value = true;
+};
+
+const handleNewCollectionModalClose = () => {
+  createCollectionForm.name = '';
 };
 
 const handleOkNewCollection = async () => {
@@ -312,7 +320,16 @@ const handleOkDeleteCollection = async () => {
     },
   });
 
-  await refreshCollection(contextMenuKey.value[0], contextMenuKey.value[1]);
+  const connect = treeData.value.find(item => item.key === contextMenuKey.value[0]);
+  const db = connect?.children?.find(
+    item => item.key === `${contextMenuKey.value[0]}@*@${contextMenuKey.value[1]}`,
+  );
+
+  if (db?.children?.length && db.children.length <= 1) {
+    await refreshDB(contextMenuKey.value[0]);
+  } else {
+    await refreshCollection(contextMenuKey.value[0], contextMenuKey.value[1]);
+  }
 };
 </script>
 
@@ -341,6 +358,7 @@ const handleOkDeleteCollection = async () => {
     v-model:visible="createDBVisible"
     :ok-button-props="{ disabled: createDBButtonDisable }"
     @ok="handleOkNewDB"
+    @close="handleNewDBModalClose"
   >
     <template #title>新建数据库</template>
 
@@ -355,6 +373,7 @@ const handleOkDeleteCollection = async () => {
     v-model:visible="createCollectionVisible"
     :ok-button-props="{ disabled: createCollectionButtonDisable }"
     @ok="handleOkNewCollection"
+    @close="handleNewCollectionModalClose"
   >
     <template #title>新建数据集合</template>
 
