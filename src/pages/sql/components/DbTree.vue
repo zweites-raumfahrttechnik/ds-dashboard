@@ -6,13 +6,15 @@ import { instance, ResponseWrap } from '@/api';
 import { GetListData, GetListDataItem, GetSqlMetaData } from '@/api/types';
 import { CONNECT_URL, SQL_META_SCHEMA, SQL_META_TABLE } from '@/api/url';
 
-defineProps<{ selectedKeys: string[] }>();
-const emit = defineEmits<{ (event: 'update:selectedKeys', val: string[]): void }>();
+const emit = defineEmits<{
+  (event: 'update:selectedKeys', val: string): void;
+  (event: 'getConMap', val: Record<string, GetListDataItem>): void;
+}>();
 
 const treeData = ref<TreeNodeData[]>([]);
 const selectedKeys = ref<string[]>([]);
 
-const conMap = ref<Map<string, GetListDataItem>>(new Map());
+const conMap = ref<Record<string, GetListDataItem>>({});
 
 const { execute: connectExecute } = useAxios<ResponseWrap<GetListData>>(
   CONNECT_URL,
@@ -42,6 +44,7 @@ const { execute: tableExecute } = useAxios<ResponseWrap<GetSqlMetaData>>(
 // 获取链接实例
 onMounted(() => {
   connectExecute().then(val => {
+    conMap.value = {};
     val.data.value?.data?.data.forEach(item => {
       treeData.value.push({
         title: `${item.ip}:${item.port}${item.name === null || item.name === '' ? '' : '/'}${
@@ -49,16 +52,16 @@ onMounted(() => {
         }`,
         key: item.uuid,
       });
-      conMap.value = new Map();
-      conMap.value.set(item.uuid, item);
+      conMap.value[item.uuid] = item;
     });
+    emit('getConMap', conMap);
   });
 });
 
 watch(
   () => selectedKeys.value,
   val => {
-    emit('update:selectedKeys', val[0].split('@*@'));
+    emit('update:selectedKeys', val[0]);
   },
 );
 
@@ -102,7 +105,7 @@ const handleLoadMore = async (data: TreeNodeData) => {
   }
 
   // 获取 schema
-  const val = await schemaExecute({ params: { uuid: keys[0], type: conMap.value.get(keys[0]) } });
+  const val = await schemaExecute({ params: { uuid: keys[0], type: conMap.value[keys[0]].type } });
   const idx = treeData.value.findIndex(item => item.key === data.key);
   if (idx === -1) {
     return;

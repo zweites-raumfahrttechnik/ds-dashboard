@@ -16,7 +16,7 @@ const getSqlMetaData = () => {
     data: Array(Random.integer(50, 100))
       .fill(1)
       .map(() => {
-        const item: Record<columnType, any> = {
+        const item: Record<columnType, unknown> = {
           name: '',
           age: '',
           email: '',

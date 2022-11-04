@@ -8,7 +8,7 @@ import { instance, ResponseWrap } from '@/api';
 
 import { boxTabCol } from '../types';
 
-const props = defineProps<{ selectedKeys: string; conMap: Map<string, GetListDataItem> }>();
+const props = defineProps<{ selectedKeys: string; conMap: Record<string, GetListDataItem> }>();
 const detailTabs = ref<{ selectedKeys: string; showType: 0 | 1 }[]>([]);
 
 const activeTab = ref<string>('');
@@ -98,13 +98,13 @@ watch(
     const keys = val.split('@*@');
     if (keys.length === 2) {
       tableListExec({
-        params: { uuid: keys[0], type: props.conMap.get(keys[0])?.type, schema: keys[1] },
+        params: { uuid: keys[0], type: props.conMap[keys[0]]?.type, schema: keys[1] },
       });
     } else if (keys.length === 3) {
       columnListExec({
         params: {
           uuid: keys[0],
-          type: props.conMap.get(keys[0])?.type,
+          type: props.conMap[keys[0]]?.type,
           schema: keys[1],
           table: keys[2],
         },
@@ -122,21 +122,16 @@ const handleDelete = (key: string | number) => {
 const showTabTitle = (item: { selectedKeys: string; showType: 0 | 1 }) => {
   const keys = item.selectedKeys.split('@*@');
   if (keys.length === 1) {
-    return props.conMap.get(keys[0])?.ip + ':' + props.conMap.get(keys[0])?.port;
+    return props.conMap[keys[0]]?.ip + ':' + props.conMap[keys[0]]?.port;
   }
   return (
     keys[keys.length - 1] +
     '(' +
-    props.conMap.get(keys[0])?.ip +
+    props.conMap[keys[0]]?.ip +
     ':' +
-    props.conMap.get(keys[0])?.port +
+    props.conMap[keys[0]]?.port +
     ')'
   );
-};
-
-const handleClearAllTabs = () => {
-  detailTabs.value = [];
-  activeTab.value = '';
 };
 
 const handlePageChange = (page: number) => {

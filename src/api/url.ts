@@ -23,6 +23,8 @@ export const EXECUTE_DATABASE_URL = `${v1}/execute/sql`;
 
 export const SQL_META_SCHEMA = `${v1}/sql/meta/schema`;
 export const SQL_META_TABLE = `${v1}/sql/meta/table`;
+export const SQL_META_VIEW = `${v1}/sql/meta/view`;
+export const SQL_META_COLUMN = `${v1}/sql/meta/column`;
 
 export const MONGODB_DB_URL = `${v1}/mgdb/meta/db`;
 export const MONGODB_COLLECTION_URL = `${v1}/mgdb/meta/collection`;

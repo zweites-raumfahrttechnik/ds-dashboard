@@ -4,8 +4,14 @@ import { Card, Row, Col, Divider } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
 
 import DbTree from './components/DbTree.vue';
+import { GetListDataItem } from '@/api/types';
 
-const selectedKeys = ref<string[]>([]);
+const selectedKeys = ref<string>('');
+const conMap = ref<Record<string, GetListDataItem>>();
+
+const getConMap = (val: Record<string, GetListDataItem>) => {
+  conMap.value = val;
+};
 </script>
 
 <template>
@@ -14,12 +20,16 @@ const selectedKeys = ref<string[]>([]);
       <template #title>关系型数据库</template>
 
       <Row :wrap="false">
-        <Col class="col-height" :span="4">
-          <DbTree v-model:selected-keys="selectedKeys" />
+        <Col class="col-height" :span="3">
+          <DbTree v-model:selected-keys="selectedKeys" @get-con-map="getConMap" />
         </Col>
 
         <Col class="col-height line-center" :span="1">
           <Divider direction="vertical" :style="{ height: '100%' }" />
+        </Col>
+
+        <Col class="col-height" :span="20">
+          <DbTree :selected-keys="selectedKeys" :con-map="conMap" />
         </Col>
       </Row>
     </Card>
