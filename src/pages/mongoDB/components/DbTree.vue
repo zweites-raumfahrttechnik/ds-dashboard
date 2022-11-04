@@ -1,10 +1,16 @@
 <script lang="ts" setup>
 import { useAxios } from '@vueuse/integrations/useAxios';
-import { Tree, TreeNodeData } from '@arco-design/web-vue';
+import { Tree, TreeNodeData, Modal, Form, FormItem, Input } from '@arco-design/web-vue';
 
 import { instance, ResponseWrap } from '@/api';
 import { GetListData, MongodbDBInfo, MongodbCollectionInfo } from '@/api/types';
-import { CONNECT_URL, MONGODB_DB_URL, MONGODB_COLLECTION_URL } from '@/api/url';
+import {
+  CONNECT_URL,
+  MONGODB_DB_URL,
+  MONGODB_COLLECTION_URL,
+  MONGODB_META_DB_URL,
+  MONGODB_META_COLLECTION_URL,
+} from '@/api/url';
 
 import ContextMenu from './ContextMenu.vue';
 
@@ -40,6 +46,48 @@ const { execute: collectionExecute } = useAxios<ResponseWrap<MongodbCollectionIn
   },
 );
 
+const refreshDB = async (uuid: string) => {
+  const val = await dbExecute({ params: { uuid: uuid } });
+  const idx = treeData.value.findIndex(item => item.key === uuid);
+  if (idx === -1) {
+    return;
+  }
+
+  treeData.value[idx].children = val.data.value?.data?.data.map(item => ({
+    key: `${treeData.value[idx].key}@*@${item}`,
+    title: item,
+  }));
+};
+
+const refreshCollection = async (uuid: string, dbName: string) => {
+  const val = await collectionExecute({ params: { uuid, dbName } });
+
+  // 寻找 connect
+  const connectIdx = treeData.value.findIndex(item => item.key === uuid);
+  if (connectIdx === -1) {
+    return;
+  }
+
+  const connect = treeData.value[connectIdx];
+  if (!connect.children) {
+    return;
+  }
+
+  // 寻找 db
+  const dbIdx = connect.children.findIndex(item => item.key === `${uuid}@*@${dbName}`);
+  if (dbIdx === -1) {
+    return;
+  }
+
+  const db = connect.children[dbIdx];
+
+  db.children = val.data.value?.data?.data.map(item => ({
+    key: `${uuid}@*@${dbName}@*@${item}`,
+    title: item,
+    isLeaf: true,
+  }));
+};
+
 // 获取链接实例
 onMounted(() => {
   connectExecute().then(val => {
@@ -64,49 +112,11 @@ const handleLoadMore = async (data: TreeNodeData) => {
 
   // 获取集合
   if (keys.length === 2) {
-    const val = await collectionExecute({ params: { uuid: keys[0], dbName: keys[1] } });
-
-    // 寻找 connect
-    const connectIdx = treeData.value.findIndex(item => item.key === keys[0]);
-    if (connectIdx === -1) {
-      return;
-    }
-
-    const connect = treeData.value[connectIdx];
-    if (!connect.children) {
-      return;
-    }
-
-    // 寻找 db
-    const dbIdx = connect.children.findIndex(item => item.key === `${keys[0]}@*@${keys[1]}`);
-    if (dbIdx === -1) {
-      return;
-    }
-
-    const db = connect.children[dbIdx];
-
-    if (treeData.value[connectIdx].children !== undefined) {
-      db.children = val.data.value?.data?.data.map(item => ({
-        key: `${keys[0]}@*@${keys[1]}@*@${item}`,
-        title: item,
-        isLeaf: true,
-      }));
-    }
-
+    await refreshCollection(keys[0], keys[1]);
     return;
   }
 
-  // 获取 DB
-  const val = await dbExecute({ params: { uuid: keys[0] } });
-  const idx = treeData.value.findIndex(item => item.key === data.key);
-  if (idx === -1) {
-    return;
-  }
-
-  treeData.value[idx].children = val.data.value?.data?.data.map(item => ({
-    key: `${treeData.value[idx].key}@*@${item}`,
-    title: item,
-  }));
+  await refreshDB(keys[0]);
 };
 
 const contextMenuKey = ref<string[]>([]);
@@ -198,6 +208,112 @@ const handleContextMenu = (e: ContextMenuEvent) => {
   contextMenuKey.value = res;
   menuVisible.value = true;
 };
+
+const createDBVisible = ref(false);
+const createDBForm = reactive({
+  name: '',
+});
+
+const createDBButtonDisable = computed(() => createDBForm.name === '');
+
+const { execute: newDBExecute } = useAxios(MONGODB_META_DB_URL, { method: 'POST' }, instance, {
+  immediate: false,
+});
+
+const handleCreateNewDB = () => {
+  createDBVisible.value = true;
+};
+
+const handleOkNewDB = async () => {
+  await newDBExecute({
+    data: {
+      uuid: contextMenuKey.value[0],
+      dbName: createDBForm.name,
+    },
+  });
+
+  await refreshDB(contextMenuKey.value[0]);
+};
+
+const deleteDBVisible = ref(false);
+
+const { execute: deleteDBExecute } = useAxios(MONGODB_META_DB_URL, { method: 'DELETE' }, instance, {
+  immediate: false,
+});
+
+const handleDeleteDB = () => {
+  deleteDBVisible.value = true;
+};
+
+const handleOkDeleteDB = async () => {
+  await deleteDBExecute({
+    data: {
+      uuid: contextMenuKey.value[0],
+      dbName: contextMenuKey.value[1],
+    },
+  });
+
+  await refreshDB(contextMenuKey.value[0]);
+};
+
+const createCollectionVisible = ref(false);
+const createCollectionForm = reactive({
+  name: '',
+});
+
+const createCollectionButtonDisable = computed(() => createDBForm.name === '');
+
+const { execute: newCollectionExecute } = useAxios(
+  MONGODB_META_COLLECTION_URL,
+  { method: 'POST' },
+  instance,
+  {
+    immediate: false,
+  },
+);
+
+const handleCreateNewCollection = () => {
+  createCollectionVisible.value = true;
+};
+
+const handleOkNewCollection = async () => {
+  await newCollectionExecute({
+    data: {
+      uuid: contextMenuKey.value[0],
+      dbName: contextMenuKey.value[1],
+      collectionName: createCollectionForm.name,
+    },
+  });
+
+  await refreshCollection(contextMenuKey.value[0], contextMenuKey.value[1]);
+};
+
+const deleteCollectionVisible = ref(false);
+
+const { execute: deleteCollectionExecute } = useAxios(
+  MONGODB_META_COLLECTION_URL,
+  { method: 'DELETE' },
+  instance,
+  {
+    immediate: false,
+  },
+);
+
+const handleDeleteCollection = () => {
+  deleteCollectionVisible.value = true;
+};
+
+const handleOkDeleteCollection = async () => {
+  await deleteCollectionExecute({
+    data: {
+      uuid: contextMenuKey.value[0],
+      dbName: contextMenuKey.value[1],
+      collectionName: contextMenuKey.value[2],
+    },
+  });
+
+  await refreshCollection(contextMenuKey.value[0], contextMenuKey.value[1]);
+};
 </script>
 
 <template>
@@ -210,6 +326,54 @@ const handleContextMenu = (e: ContextMenuEvent) => {
   />
 
   <Teleport to="#app">
-    <ContextMenu v-if="menuVisible" :style="menuPosition" :menu-keys="contextMenuKey" />
+    <ContextMenu
+      v-if="menuVisible"
+      :style="menuPosition"
+      :menu-keys="contextMenuKey"
+      @new-db="handleCreateNewDB"
+      @new-collection="handleCreateNewCollection"
+      @delete-db="handleDeleteDB"
+      @delete-collection="handleDeleteCollection"
+    />
   </Teleport>
+
+  <Modal
+    v-model:visible="createDBVisible"
+    :ok-button-props="{ disabled: createDBButtonDisable }"
+    @ok="handleOkNewDB"
+  >
+    <template #title>新建数据库</template>
+
+    <Form :model="createDBForm">
+      <FormItem label="数据库名称" :required="true">
+        <Input v-model="createDBForm.name" />
+      </FormItem>
+    </Form>
+  </Modal>
+
+  <Modal
+    v-model:visible="createCollectionVisible"
+    :ok-button-props="{ disabled: createCollectionButtonDisable }"
+    @ok="handleOkNewCollection"
+  >
+    <template #title>新建数据集合</template>
+
+    <Form :model="createCollectionForm">
+      <FormItem label="集合名称" :required="true">
+        <Input v-model="createCollectionForm.name" />
+      </FormItem>
+    </Form>
+  </Modal>
+
+  <Modal v-model:visible="deleteDBVisible" @ok="handleOkDeleteDB">
+    <template #title>确认</template>
+
+    <div>你确认删除数据库吗？</div>
+  </Modal>
+
+  <Modal v-model:visible="deleteCollectionVisible" @ok="handleOkDeleteCollection">
+    <template #title>确认</template>
+
+    <div>你确认删除数据集合吗？</div>
+  </Modal>
 </template>

@@ -4,13 +4,20 @@ import { IconPlus, IconDelete } from '@arco-design/web-vue/es/icon';
 
 const props = defineProps<{ menuKeys: string[] }>();
 
+const emit = defineEmits<{
+  (event: 'newDb'): void;
+  (event: 'newCollection'): void;
+  (event: 'deleteDb'): void;
+  (event: 'deleteCollection'): void;
+}>();
+
 const level = computed(() => props.menuKeys.length);
 </script>
 
 <template>
   <div class="container">
     <ul class="list-wrap">
-      <li v-if="level === 1 || level === 2" class="list-item">
+      <li v-if="level === 1 || level === 2" class="list-item" @click="() => emit('newDb')">
         <Space>
           <span>
             <IconPlus />
@@ -19,7 +26,7 @@ const level = computed(() => props.menuKeys.length);
         </Space>
       </li>
 
-      <li v-if="level === 2" class="list-item">
+      <li v-if="level === 2" class="list-item" @click="() => emit('deleteDb')">
         <Space>
           <span>
             <IconDelete />
@@ -28,7 +35,7 @@ const level = computed(() => props.menuKeys.length);
         </Space>
       </li>
 
-      <li v-if="level === 2 || level === 3" class="list-item">
+      <li v-if="level === 2 || level === 3" class="list-item" @click="() => emit('newCollection')">
         <Space>
           <span>
             <IconPlus />
@@ -37,7 +44,7 @@ const level = computed(() => props.menuKeys.length);
         </Space>
       </li>
 
-      <li v-if="level === 3" class="list-item">
+      <li v-if="level === 3" class="list-item" @click="() => emit('deleteCollection')">
         <Space>
           <span>
             <IconDelete />
