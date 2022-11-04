@@ -28,7 +28,7 @@ const level = computed(() => props.menuKeys.length);
         </Space>
       </li>
 
-      <li v-if="level === 3" class="list-item">
+      <li v-if="level === 2 || level === 3" class="list-item">
         <Space>
           <span>
             <IconPlus />
