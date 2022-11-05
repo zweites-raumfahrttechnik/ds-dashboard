@@ -32,6 +32,10 @@ export const MONGODB_QUERY_URL = `${v1}/mgdb/query`;
 export const MONGODB_READ_URL = `${v1}/mgdb/read`;
 
 export const BSON_URL = `${v1}/execute/bson`;
+
+export const MONGODB_META_DB_URL = `${v1}/mgdb/meta/db`;
+export const MONGODB_META_COLLECTION_URL = `${v1}/mgdb/meta/collection`;
+
 export const REDIS_OP_URL = `${v1}/execute/redis`;
 export const REDIS_OP_CUSTOM_URL = `${v1}/execute/redis/complex`;
 
