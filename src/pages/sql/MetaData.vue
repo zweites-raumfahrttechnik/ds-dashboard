@@ -11,6 +11,10 @@ import { GetListDataItem } from '@/api/types';
 const selectedKeys = ref<string>('');
 const conMap = ref<Record<string, GetListDataItem>>({});
 
+const getSelectedKeys = (val: string) => {
+  selectedKeys.value = val;
+};
+
 const getConMap = (val: Record<string, GetListDataItem>) => {
   conMap.value = val;
 };
@@ -23,7 +27,7 @@ const getConMap = (val: Record<string, GetListDataItem>) => {
 
       <Row :wrap="false">
         <Col class="col-height" :span="3">
-          <DbTree v-model:selected-keys="selectedKeys" @get-con-map="getConMap" />
+          <DbTree @get-selected-keys="getSelectedKeys" @get-con-map="getConMap" />
         </Col>
 
         <Col class="col-height line-center" :span="1">

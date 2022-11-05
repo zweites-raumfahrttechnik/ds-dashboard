@@ -7,7 +7,7 @@ import { GetListData, GetListDataItem, GetSqlMetaData } from '@/api/types';
 import { CONNECT_URL, SQL_META_SCHEMA, SQL_META_TABLE } from '@/api/url';
 
 const emit = defineEmits<{
-  (event: 'update:selectedKeys', val: string): void;
+  (event: 'getSelectedKeys', val: string): void;
   (event: 'getConMap', val: Record<string, GetListDataItem>): void;
 }>();
 
@@ -61,7 +61,7 @@ onMounted(() => {
 watch(
   () => selectedKeys.value,
   val => {
-    emit('update:selectedKeys', val[0]);
+    emit('getSelectedKeys', val[0]);
   },
 );
 
