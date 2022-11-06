@@ -14,7 +14,7 @@ import {
   Spin,
 } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
-import ConnectSelect from './components/ConnectTableSelect.vue';
+import ConnectTableSelect from './components/ConnectTableSelect.vue';
 import {
   ConnectFormModel,
   QueryFormModel,
@@ -181,7 +181,7 @@ const handlePageChange = (page: number) => {
   <PageContainer>
     <Card class="general-card" :bordered="false">
       <template #title>连接选择</template>
-      <ConnectSelect
+      <ConnectTableSelect
         @exec="exec"
         @handle-change-table="handleChangeTable"
         @reset-form="resetForm"

@@ -25,6 +25,6 @@ const mongoDB: RouteRecordRaw = {
       },
     },
   ],
-  meta: { requireAuth: true, locale: 'MongoDB', icon: 'icon-layers', order: 3 },
+  meta: { requireAuth: true, locale: 'MongoDB', icon: 'icon-layers', order: 4 },
 };
 export default mongoDB;

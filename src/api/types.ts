@@ -99,3 +99,7 @@ export interface MongdbIndexInfo {
   count: number;
   data: string[];
 }
+
+export interface ESMetaInfo {
+  data: string;
+}

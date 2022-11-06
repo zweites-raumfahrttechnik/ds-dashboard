@@ -35,3 +35,8 @@ export const MONGODB_QUERY_URL = `${v1}/mgdb/query`;
 export const MONGODB_READ_URL = `${v1}/mgdb/read`;
 
 export const BSON_URL = `${v1}/execute/bson`;
+
+export const ES_META_INDEX = `${v1}/es/meta/index`;
+export const ES_META_MAPPING = `${v1}/es/meta/mapping`;
+export const ES_META_SETTING = `${v1}/es/meta/setting`;
+export const ES_META_FIELDMAPPING = `${v1}/es/meta/fildmapping`;
