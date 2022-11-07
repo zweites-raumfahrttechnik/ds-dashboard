@@ -69,14 +69,10 @@ export interface PostTableQueryData {
   count: number;
 }
 
-export interface GetSqlSchema {
+export interface GetSqlMetaData {
   names: string[];
   allData: GetExecuteSql;
   briefData: GetExecuteSql;
-}
-
-export interface GetSqlTable {
-  names: string[];
 }
 
 // Mongdb 数据

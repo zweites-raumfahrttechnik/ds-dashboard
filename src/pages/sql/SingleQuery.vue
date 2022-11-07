@@ -36,8 +36,10 @@ const queryForm = reactive<QueryFormModel>({ ...defaultQueryFormValue });
 
 const colFormList = reactive<Array<{ name: string; type: string }>>(Array(0));
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const tabCol = ref<any[]>([]);
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const tabData = ref<any[]>([]);
 
 const connectFormData = reactive<ConnectFormModel>({ ...defaultConnectFormValue });
@@ -90,7 +92,7 @@ const concatQueryParams = (connectFormData: ConnectFormModel) => {
 
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
   current: 1,
-  pageSize: 15,
+  pageSize: 5,
 });
 
 const { data, isLoading, execute } = useAxios<ResponseWrap<PostTableQueryData>>(

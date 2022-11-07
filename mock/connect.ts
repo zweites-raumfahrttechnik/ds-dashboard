@@ -13,7 +13,7 @@ const requests: MockMethod[] = [
   {
     url: '/api/v1/connect',
     method: 'get',
-    response: ({ query }: { query: { size: string; type: 1 | 2 | 3 | 4 | 5 | 6 } }) => {
+    response: ({ query }: { query: { size: string; type?: 1 | 2 | 3 | 4 | 5 | 6 } }) => {
       const size = +query.size || 20;
 
       return successResp({
@@ -27,7 +27,7 @@ const requests: MockMethod[] = [
               ip: Random.ip(),
               port: Random.integer(1000, 50000),
               type: query.type,
-              name: Random.name(),
+              name: null,
             };
           }),
       });

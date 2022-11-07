@@ -136,7 +136,8 @@ const selectLoadMore = () => {
                 @dropdown-reach-bottom="selectLoadMore"
               >
                 <Option v-for="item in connections" :key="item.uuid" :value="item.uuid">
-                  {{ item.ip }}:{{ item.port }}{{ item.name === '' ? '' : '/' + item.name }}
+                  {{ item.ip }}:{{ item.port
+                  }}{{ item.name === null || item.name === '' ? '' : '/' + item.name }}
                 </Option>
               </Select>
             </FormItem>

@@ -7,14 +7,23 @@ const sql: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     // {
-    //   path: 'user',
-    //   name: 'UserManage',
-    //   component: () => import('@/pages/sql/UserManage.vue'),
+    //   path: 'usermanage',
+    //   name: 'Manage',
+    //   component: () => import('@/pages/sql/Usermanage.vue'),
     //   meta: {
     //     requireAuth: true,
     //     locale: '用户管理',
     //   },
     // },
+    {
+      path: 'metadata',
+      name: 'MetaDataQuery',
+      component: () => import('@/pages/sql/MetaData.vue'),
+      meta: {
+        requireAuth: true,
+        locale: '数据库信息',
+      },
+    },
     {
       path: 'single',
       name: 'SingleQuery',
@@ -36,7 +45,7 @@ const sql: RouteRecordRaw = {
   ],
   meta: {
     requireAuth: true,
-    locale: '关系型数据库操作',
+    locale: '关系型数据库',
     icon: 'icon-plus-circle',
     order: 2,
   },
