@@ -61,7 +61,7 @@ const pagination = reactive<{ pageSize: number; current: number; total?: number 
   pageSize: 8,
 });
 
-const handleRefresh = () => {
+const handleRefresh = async () => {
   execute({
     data: {
       uuid: props.selectedKeys[0],
@@ -119,24 +119,26 @@ const handleSearchButtonClick = () => {
   handleRefresh();
 };
 
-const handleDeleteButtonClick = () => {
-  executeDelete({
+const handleDeleteButtonClick = async () => {
+  await executeDelete({
     data: {
       uuid: props.selectedKeys[0],
       index: props.selectedKeys[1],
       entityInfo: queryCondition.value,
     },
   });
+  handleRefresh();
 };
 
-const handleUpdateButtonClick = () => {
-  excuteUpdate({
+const handleUpdateButtonClick = async () => {
+  await excuteUpdate({
     data: {
       uuid: props.selectedKeys[0],
       index: props.selectedKeys[1],
       entityInfo: updateCondition.value,
     },
   });
+  handleRefresh();
 };
 
 const handleAddButtonClick = () => {

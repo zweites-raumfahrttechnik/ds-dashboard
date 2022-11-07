@@ -41,10 +41,10 @@ const handleDelete = async () => {
 };
 
 const handleEdit = () => {
-  const { _id } = JSON.parse(props.value);
+  const { _id, _source } = JSON.parse(props.value);
 
   selectJson._id = _id;
-  selectJson.json = '{"doc": {}}';
+  selectJson.json = JSON.stringify({ doc: { ..._source } });
   visible.value = true;
 };
 
@@ -53,7 +53,7 @@ const handleModify = async () => {
     data: {
       uuid: props.selectedKeys[0],
       index: props.selectedKeys[1],
-      doc: selectJson._id,
+      docid: selectJson._id,
       entityInfo: selectJson.json,
     },
   });

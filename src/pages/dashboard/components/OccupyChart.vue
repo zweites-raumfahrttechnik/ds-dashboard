@@ -9,15 +9,21 @@ import ChainChartItem from './ChainChartItem.vue';
 
 const props = defineProps<{ uuid: string }>();
 
-const { data, execute } = useAxios<ResponseWrap<number>>(
+const { data, execute } = useAxios<ResponseWrap<{ data: number }>>(
   STORAGE_CHART_URL,
   { params: { uuid: props.uuid } },
   instance,
+  { immediate: false },
 );
 
 watch(
   () => props.uuid,
-  () => execute({ params: { uuid: props.uuid } }),
+  val => {
+    if (val === '') {
+      return;
+    }
+    execute({ params: { uuid: props.uuid } });
+  },
 );
 
 const storage = computed(() => {
@@ -25,7 +31,7 @@ const storage = computed(() => {
     return 0;
   }
 
-  return data.value.data;
+  return data.value.data.data;
 });
 </script>
 
@@ -36,8 +42,8 @@ const storage = computed(() => {
         <template #title>硬盘占用情况</template>
 
         <div class="content">
-          <Statistic title="硬盘占用情况" :value="storage" :precision="2">
-            <template #suffix>GB</template>
+          <Statistic title="硬盘占用情况" :value="+storage" :precision="2">
+            <template #suffix>MB</template>
           </Statistic>
         </div>
       </Card>

@@ -12,6 +12,7 @@ const props = withDefaults(
     modeList?: string[];
   }>(),
   {
+    value: '{}',
     height: '500px',
     width: 'auto',
     options: null,

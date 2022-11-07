@@ -4,7 +4,7 @@ import { Tree, TreeNodeData } from '@arco-design/web-vue';
 
 import { instance, ResponseWrap } from '@/api';
 import { GetListData, GetListDataItem, GetSqlMetaData } from '@/api/types';
-import { CONNECT_URL, SQL_META_SCHEMA, SQL_META_TABLE } from '@/api/url';
+import { CONNECT_URL, SQL_META_SCHEMA, SQL_META_TABLE, SQL_META_VIEW } from '@/api/url';
 
 const emit = defineEmits<{
   (event: 'getSelectedKeys', val: string): void;
@@ -41,6 +41,15 @@ const { execute: tableExecute } = useAxios<ResponseWrap<GetSqlMetaData>>(
   },
 );
 
+const { execute: viewExecute } = useAxios<ResponseWrap<GetSqlMetaData>>(
+  SQL_META_VIEW,
+  {},
+  instance,
+  {
+    immediate: false,
+  },
+);
+
 // 获取链接实例
 onMounted(() => {
   connectExecute().then(val => {
@@ -69,11 +78,7 @@ const handleLoadMore = async (data: TreeNodeData) => {
   const keys = data.key?.toString().split('@*@') as string[];
 
   // 获取表名
-  if (keys.length === 2) {
-    const val = await tableExecute({
-      params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
-    });
-
+  if (keys.length === 3) {
     // 寻找 connect
     const connectIdx = treeData.value.findIndex(item => item.key === keys[0]);
     if (connectIdx === -1) {
@@ -92,13 +97,32 @@ const handleLoadMore = async (data: TreeNodeData) => {
     }
 
     const db = connect.children[dbIdx];
+    db.children = db.children || [];
 
-    if (treeData.value[connectIdx].children !== undefined) {
-      db.children = val.data.value?.data?.names.map(item => ({
-        key: `${keys[0]}@*@${keys[1]}@*@${item}`,
-        title: item,
-        isLeaf: true,
-      }));
+    if (keys[2] === 'tables') {
+      const val = await tableExecute({
+        params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
+      });
+
+      if (treeData.value[connectIdx].children !== undefined) {
+        db.children[0].children = val.data.value?.data?.names.map(item => ({
+          key: `${keys[0]}@*@${keys[1]}@*@tables@*@${item}`,
+          title: item,
+          isLeaf: true,
+        }));
+      }
+    } else if (keys[2] === 'views') {
+      const val = await viewExecute({
+        params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
+      });
+
+      if (treeData.value[connectIdx].children !== undefined) {
+        db.children[1].children = val.data.value?.data?.names.map(item => ({
+          key: `${keys[0]}@*@${keys[1]}@*@views@*@${item}`,
+          title: item,
+          isLeaf: true,
+        }));
+      }
     }
 
     return;
@@ -114,6 +138,10 @@ const handleLoadMore = async (data: TreeNodeData) => {
   treeData.value[idx].children = val.data.value?.data?.names.map(item => ({
     key: `${treeData.value[idx].key}@*@${item}`,
     title: item,
+    children: [
+      { key: `${treeData.value[idx].key}@*@${item}@*@tables`, title: 'tables' },
+      { key: `${treeData.value[idx].key}@*@${item}@*@views`, title: 'views' },
+    ],
   }));
 };
 </script>

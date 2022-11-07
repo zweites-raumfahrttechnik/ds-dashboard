@@ -36,13 +36,17 @@ watch(
   () => activeKey.value,
   val => {
     if (val === 'mapping') {
-      mappingExec().then(val => {
-        json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.mappings;
-      });
+      mappingExec({ params: { uuid: props.selectedKeys[0], index: props.selectedKeys[1] } }).then(
+        val => {
+          json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.mappings;
+        },
+      );
     } else if (val === 'setting') {
-      settingExec().then(val => {
-        json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.settings;
-      });
+      settingExec({ params: { uuid: props.selectedKeys[0], index: props.selectedKeys[1] } }).then(
+        val => {
+          json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.settings;
+        },
+      );
     }
   },
 );
