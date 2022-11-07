@@ -10,10 +10,10 @@ export interface GetConnectListParams {
 export interface GetListDataItem {
   uuid: string;
   username: string;
+  name: string;
   ip: string;
   port: number;
   type: number;
-  name: string;
 }
 
 export interface GetListData {
@@ -49,7 +49,7 @@ export interface UserlistData {
 }
 
 export interface GetExecuteSql {
-  data: [Record<string, any>];
+  data: [Record<string, unknown>];
   columnList: [
     {
       columnName: string;
@@ -59,7 +59,7 @@ export interface GetExecuteSql {
 }
 
 export interface PostTableQueryData {
-  data: [Record<string, any>];
+  data: [Record<string, unknown>];
   columnList: [
     {
       columnName: string;
@@ -98,6 +98,20 @@ export interface MongodbCustom {
 export interface MongdbIndexInfo {
   count: number;
   data: string[];
+}
+
+// redis元数据-keys获取接口
+export interface redisKeys {
+  count: number;
+  data: string[];
+}
+
+// redis元数据-keys获取参数
+export interface redisgetkeysParams {
+  uuid: string;
+  dbnumber: number;
+  pg: number;
+  size: number;
 }
 
 export interface ESMetaInfo {

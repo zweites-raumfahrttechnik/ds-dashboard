@@ -19,7 +19,7 @@ const { execute: executeDelete } = useAxios(MONGODB_QUERY_URL, { method: 'DELETE
   immediate: false,
 });
 
-const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, instance, {
+const { execute: executePost } = useAxios(MONGODB_QUERY_URL, { method: 'POST' }, instance, {
   immediate: false,
 });
 
@@ -39,7 +39,7 @@ const handleDelete = async () => {
         {
           field: '_id',
           op: 'EQ',
-          target: _id,
+          target: _id['$oid'],
         },
       ],
     },
@@ -51,13 +51,13 @@ const handleDelete = async () => {
 const handleEdit = () => {
   const { _id, ...rest } = JSON.parse(props.value);
 
-  selectJson._id = _id;
+  selectJson._id = _id['$oid'];
   selectJson.json = JSON.stringify(rest);
   visible.value = true;
 };
 
 const handleModify = async () => {
-  await executeDelete({
+  await executePost({
     data: {
       uuid: props.selectedKeys[0],
       dbName: props.selectedKeys[1],
@@ -70,15 +70,6 @@ const handleModify = async () => {
           target: selectJson._id,
         },
       ],
-    },
-  });
-
-  await executePut({
-    data: {
-      uuid: props.selectedKeys[0],
-      dbName: props.selectedKeys[1],
-      collectionName: props.selectedKeys[2],
-      isMany: true,
       documents: [selectJson.json],
     },
   });

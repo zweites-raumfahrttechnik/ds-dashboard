@@ -47,7 +47,7 @@ const sql: RouteRecordRaw = {
     requireAuth: true,
     locale: '关系型数据库',
     icon: 'icon-plus-circle',
-    order: 3,
+    order: 4,
   },
 };
 
