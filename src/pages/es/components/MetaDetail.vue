@@ -9,7 +9,7 @@ import { ESMetaInfo } from '@/api/types';
 
 const props = defineProps<{ selectedKeys: string[] }>();
 
-const activeKey = ref<string>('');
+const activeKey = ref<string>('mapping');
 
 const { execute: mappingExec } = useAxios<ResponseWrap<ESMetaInfo>>(
   ES_META_MAPPING,
@@ -39,6 +39,21 @@ watch(
         json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.mappings;
       });
     } else if (val === 'setting') {
+      settingExec().then(val => {
+        json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.settings;
+      });
+    }
+  },
+);
+
+watch(
+  () => props.selectedKeys[1],
+  () => {
+    if (activeKey.value === 'mapping') {
+      mappingExec().then(val => {
+        json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.mappings;
+      });
+    } else if (activeKey.value === 'setting') {
       settingExec().then(val => {
         json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.settings;
       });

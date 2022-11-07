@@ -9,21 +9,21 @@ const es: RouteRecordRaw = {
     {
       path: 'management',
       name: 'ESManagement',
-      component: () => import('@/pages/es/ESManagement.vue'),
+      component: () => import('@/pages/es/EsManagement.vue'),
       meta: {
         requireAuth: true,
         locale: '元数据查看',
       },
     },
-    // {
-    //   path: 'customize',
-    //   name: 'ESCustomize',
-    //   component: () => import('@/pages/es/EsCustomize.vue'),
-    //   meta: {
-    //     requireAuth: true,
-    //     locale: '自定义操作',
-    //   },
-    // },
+    {
+      path: 'customize',
+      name: 'ESCustomize',
+      component: () => import('@/pages/es/EsCustomize.vue'),
+      meta: {
+        requireAuth: true,
+        locale: '基础操作',
+      },
+    },
   ],
   meta: { requireAuth: true, locale: 'ElasticSearch', icon: 'icon-search', order: 5 },
 };

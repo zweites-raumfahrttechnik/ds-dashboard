@@ -103,3 +103,7 @@ export interface MongdbIndexInfo {
 export interface ESMetaInfo {
   data: string;
 }
+
+export interface ESResInfo {
+  data: string;
+}
