@@ -16,6 +16,6 @@ const es: RouteRecordRaw = {
       },
     },
   ],
-  meta: { requireAuth: true, locale: 'ElasticSearch', icon: 'icon-search', order: 5 },
+  meta: { requireAuth: true, locale: 'ElasticSearch', icon: 'icon-search', order: 6 },
 };
 export default es;

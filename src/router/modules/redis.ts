@@ -60,7 +60,7 @@ const redis: RouteRecordRaw = {
     requireAuth: true,
     locale: 'Redis',
     icon: 'icon-storage',
-    order: 3,
+    order: 5,
   },
 };
 

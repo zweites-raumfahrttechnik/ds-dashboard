@@ -158,8 +158,8 @@ const handlePageChange = (page: number) => {
       <Divider style="margin-top: 0" />
       <Spin :style="{ width: '100%' }" :loading="columnListLoading || tableListLoading">
         <Table
-          :scroll="{ minWidth: 1500 }"
           :bordered="false"
+          column-resizable
           :columns="tableCol"
           :data="tableData"
           :pagination="pagination"

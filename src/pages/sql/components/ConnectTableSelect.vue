@@ -14,7 +14,7 @@ import {
 
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { instance, ResponseWrap } from '@/api';
-import { CONNECT_URL, SQL_META_SCHEMA, SQL_META_TABLE } from '@/api/url';
+import { CONNECT_URL, SQL_META_SCHEMA, SQL_META_TABLE, SQL_META_VIEW } from '@/api/url';
 import { GetListData, GetListDataItem, GetSqlMetaData } from '@/api/types';
 import { useAxios } from '@vueuse/integrations/useAxios';
 
@@ -79,7 +79,7 @@ const {
   data: viewList,
   isLoading: viewListLoading,
   execute: viewListExec,
-} = useAxios<ResponseWrap<GetSqlMetaData>>(SQL_META_TABLE, { method: 'GET' }, instance, {
+} = useAxios<ResponseWrap<GetSqlMetaData>>(SQL_META_VIEW, { method: 'GET' }, instance, {
   immediate: false,
 });
 
@@ -278,7 +278,7 @@ const resetForm = () => {
                 v-model="connectFormData.table"
                 placeholder="请选择待查询表"
                 allow-clear
-                :loading="tableListLoading"
+                :loading="tableListLoading && viewListLoading"
                 :allow-search="true"
               >
                 <Optgroup label="Table">
