@@ -71,7 +71,7 @@ const handleLoadMore = async (data: TreeNodeData) => {
   // 获取表名
   if (keys.length === 2) {
     const val = await tableExecute({
-      params: { uuid: keys[0], type: conMap.value[keys[0]], schema: keys[1] },
+      params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
     });
 
     // 寻找 connect

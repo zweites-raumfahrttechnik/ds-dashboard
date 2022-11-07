@@ -12,16 +12,7 @@ const es: RouteRecordRaw = {
       component: () => import('@/pages/es/EsManagement.vue'),
       meta: {
         requireAuth: true,
-        locale: '元数据查看',
-      },
-    },
-    {
-      path: 'customize',
-      name: 'ESCustomize',
-      component: () => import('@/pages/es/EsCustomize.vue'),
-      meta: {
-        requireAuth: true,
-        locale: '基础操作',
+        locale: '操作面板',
       },
     },
   ],

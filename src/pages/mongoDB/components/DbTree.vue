@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { useAxios } from '@vueuse/integrations/useAxios';
-import es, { Tree, TreeNodeData, Modal, Form, FormItem, Input } from '@arco-design/web-vue';
+import { Tree, TreeNodeData, Modal, Form, FormItem, Input } from '@arco-design/web-vue';
 
 import { instance, ResponseWrap } from '@/api';
 import { GetListData, MongodbDBInfo, MongodbCollectionInfo } from '@/api/types';
@@ -167,7 +167,6 @@ const handleContextMenu = (e: ContextMenuEvent) => {
 
   // 确定点击的层级
   const indent = (treeNode.firstElementChild as HTMLSpanElement).children.length;
-  console.log(indent);
 
   // 返回右键点击的 key
   const res: string[] = [];

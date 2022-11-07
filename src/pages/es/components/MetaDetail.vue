@@ -2,6 +2,7 @@
 import { Tabs, TabPane, Empty } from '@arco-design/web-vue';
 import { instance, ResponseWrap } from '@/api';
 import { useAxios } from '@vueuse/integrations/useAxios';
+import DocumentContent from './DocumentContent.vue';
 import JSONEditor from './JsonEditor.vue';
 
 import { ES_META_MAPPING, ES_META_SETTING } from '@/api/url';
@@ -9,7 +10,7 @@ import { ESMetaInfo } from '@/api/types';
 
 const props = defineProps<{ selectedKeys: string[] }>();
 
-const activeKey = ref<string>('mapping');
+const activeKey = ref<string>('document');
 
 const { execute: mappingExec } = useAxios<ResponseWrap<ESMetaInfo>>(
   ES_META_MAPPING,
@@ -65,6 +66,10 @@ watch(
 <template>
   <div class="container">
     <Tabs v-model:active-key="activeKey">
+      <TabPane key="document" title="文档信息">
+        <Empty v-if="props.selectedKeys.length !== 2" :style="{ paddingTop: '300px' }" />
+        <DocumentContent v-else :selected-keys="props.selectedKeys" />
+      </TabPane>
       <TabPane key="mapping" title="Mapping信息">
         <Empty v-if="props.selectedKeys.length !== 2" :style="{ paddingTop: '300px' }" />
         <JSONEditor v-else height="650px" :value="json" current-mode="view" />
