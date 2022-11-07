@@ -29,6 +29,7 @@ const { data, execute } = useAxios<ResponseWrap<MongdbDocInfo>>(
   MONGODB_READ_URL,
   { method: 'POST' },
   instance,
+  { immediate: false },
 );
 
 const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, instance, {
@@ -59,6 +60,8 @@ const handleRefresh = () => {
     },
   });
 };
+
+onMounted(() => handleRefresh());
 
 watch(
   () => props.selectedKeys,

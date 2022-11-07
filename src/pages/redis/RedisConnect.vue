@@ -1,41 +1,35 @@
 <script lang="ts" setup>
 import {
   Card,
-  Row,
-  Col,
-  Form,
-  FormItem,
-  Input,
-  Select,
-  Space,
-  Option,
   Divider,
   Table,
   TableColumn,
   Button,
-  Popconfirm,
+  Row,
+  Col,
+  Form,
+  FormItem,
+  Space,
+  Input,
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
-import { IconSearch, IconRefresh } from '@arco-design/web-vue/es/icon';
 import { useAxios } from '@vueuse/integrations/useAxios';
-
+import { useRouter } from 'vue-router';
 import { instance, ResponseWrap } from '@/api';
 import { CONNECT_URL } from '@/api/url';
 import { GetConnectListParams, GetListData } from '@/api/types';
-
 import PageContainer from '@/components/PageContainer.vue';
 
 type SearchParams = GetConnectListParams;
-
-// form 实例放入 ref 中
 const searchFormRef = ref<FormInstance>();
 
 const searchFormdata = reactive<Pick<SearchParams, 'ip' | 'username' | 'type'>>({
   ip: '',
   username: '',
+  type: 4,
 });
 
-// 分页参数
+//请求数据的pg、size参数
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
   current: 1,
   pageSize: 15,
@@ -43,17 +37,11 @@ const pagination = reactive<{ current: number; pageSize: number; total?: number 
 
 const { data, isLoading, execute } = useAxios<ResponseWrap<GetListData>>(
   CONNECT_URL,
-  { method: 'GET', params: { pg: pagination.current, size: pagination.pageSize } },
-  instance,
-);
-
-const { execute: deleteExecute, isLoading: deleteIsLoading } = useAxios(
-  CONNECT_URL,
-  { method: 'DELETE' },
-  instance,
   {
-    immediate: false,
+    method: 'GET',
+    params: { pg: pagination.current, size: pagination.pageSize, type: 4, ip: '', username: '' },
   },
+  instance,
 );
 
 watch(
@@ -63,76 +51,68 @@ watch(
   },
 );
 
-// 监听分页参数变化, 发起请求
 watch(
   () => pagination.current,
   () => {
-    const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
-    if (searchFormdata.ip && searchFormdata.ip !== '') {
-      params.ip = searchFormdata.ip;
-    }
-    if (searchFormdata.username && searchFormdata.username !== '') {
-      params.username = searchFormdata.username;
-    }
-    if (searchFormdata.type) {
-      params.type = searchFormdata.type;
-    }
-
+    const params: SearchParams = {
+      pg: pagination.current,
+      size: pagination.pageSize,
+      type: 4,
+      ip: '',
+      username: '',
+    };
     execute({ params });
   },
 );
-
 const tableData = computed(() => {
   return data.value?.data?.data;
 });
-
-// 搜索按钮点击事件
-const handleSearch = () => {
+const handleSearch = async () => {
+  const res = await searchFormRef.value?.validate();
+  if (res) {
+    return;
+  }
   const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
   if (searchFormdata.ip && searchFormdata.ip !== '') {
     params.ip = searchFormdata.ip;
+  } else {
+    params.ip = '';
   }
   if (searchFormdata.username && searchFormdata.username !== '') {
     params.username = searchFormdata.username;
+  } else {
+    params.username = '';
   }
   if (searchFormdata.type) {
-    params.type = searchFormdata.type;
+    params.type = 4;
   }
-
   execute({ params });
 };
-
-// 重置 form 表单
 const handleFromReset = () => {
   searchFormRef.value?.resetFields();
-
-  if (pagination.current === 1) {
-    const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
-    execute({ params });
-    return;
-  }
-
-  pagination.current = 1;
+  // const params: SearchParams = { pg: pagination.current, size: pagination.pageSize, type: 4, ip: '', username: '' };
+  // execute({ params });
+  router.go(0);
 };
-
-// 更新分页参数, 触发请求
 const handlePageChange = (page: number) => {
   pagination.current = page;
 };
-
-// 删除连接数据
-const handleDeleteConnect = (uuid: string) => {
-  deleteExecute({ data: { uuid } }).then(() => {
-    execute({ params: { pg: pagination.current, size: pagination.pageSize } });
-  });
+const router = useRouter();
+const redisbasicOP = (uuid: string, ip: string, username: string) => {
+  router.push({ name: 'redisbasicOp', query: { uuid: uuid, ip: ip, username: username } });
+};
+const rediscustomOP = (uuid: string, ip: string, username: string) => {
+  router.push({ name: 'rediscustomOp', query: { uuid: uuid, ip: ip, username: username } });
+};
+const redisMANAGE = (uuid: string, ip: string, username: string) => {
+  router.push({ name: 'redisManagement', query: { uuid: uuid, ip: ip, username: username } });
 };
 </script>
 
 <template>
   <PageContainer>
     <Card class="general-card" :bordered="false">
-      <template #title>查看数据库连接</template>
-
+      <template #title>redis数据库连接列表</template>
       <Row>
         <Col :flex="1">
           <Form
@@ -143,34 +123,34 @@ const handleDeleteConnect = (uuid: string) => {
             label-align="left"
           >
             <Row :gutter="16">
-              <Col :span="8">
-                <FormItem field="ip" label="数据库地址">
+              <Col :span="9">
+                <FormItem
+                  field="ip"
+                  label="数据库地址"
+                  auto-label-width="true"
+                  :rules="[
+                    { required: true, message: '请输入IP地址' },
+                    {
+                      match:
+                        /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
+                      message: 'IP地址格式不正确',
+                    },
+                  ]"
+                  :hide-asterisk="true"
+                >
                   <Input v-model="searchFormdata.ip" placeholder="请输入数据库地址" />
                 </FormItem>
               </Col>
-              <Col :span="8">
-                <FormItem field="username" label="Root用户名">
-                  <Input v-model="searchFormdata.username" placeholder="请输入Root用户名" />
-                </FormItem>
-              </Col>
-              <Col :span="8">
-                <FormItem field="type" label="数据库类型">
-                  <Select v-model="searchFormdata.type" placeholder="请选择数据库类型" allow-clear>
-                    <Option :value="1">MySQL</Option>
-                    <Option :value="2">达梦数据库</Option>
-                    <Option :value="3">金仓数据库</Option>
-                    <Option :value="4">Redis</Option>
-                    <Option :value="5">MongoDB</Option>
-                    <Option :value="6">Elasticsearch</Option>
-                  </Select>
+              &nbsp;&nbsp;&nbsp;&nbsp;
+              <Col :span="7">
+                <FormItem field="username" label="用户名" auto-label-width="true">
+                  <Input v-model="searchFormdata.username" placeholder="请输入用户名" />
                 </FormItem>
               </Col>
             </Row>
           </Form>
         </Col>
-
         <Divider style="height: 34px" direction="vertical" />
-
         <Col :flex="'86px'" style="text-align: right">
           <Space :size="18">
             <Button type="primary" @click="handleSearch">
@@ -188,39 +168,46 @@ const handleDeleteConnect = (uuid: string) => {
           </Space>
         </Col>
       </Row>
-
       <Divider style="margin-top: 0" />
-
       <Table
         row-key="uuid"
         :bordered="false"
         :pagination="pagination"
         :data="tableData"
-        :loading="isLoading || deleteIsLoading"
+        :loading="isLoading"
         @page-change="handlePageChange"
       >
         <template #columns>
+          <TableColumn title="uuid" data-index="uuid" />
           <TableColumn title="数据库地址" data-index="ip" />
           <TableColumn title="数据库运行端口" data-index="port" />
-          <TableColumn title="root用户名" data-index="username" />
-          <TableColumn title="数据库类型" data-index="type">
+          <TableColumn title="用户名" data-index="username" />
+          <TableColumn title="元数据查询">
             <template #cell="{ record }">
-              <span v-if="record.type === 1">MySQL</span>
-              <span v-else-if="record.type === 2">达梦数据库</span>
-              <span v-else-if="record.type === 3">金仓数据库</span>
-              <span v-else-if="record.type === 4">Redis</span>
-              <span v-else-if="record.type === 5">MongoDB</span>
-              <span v-else>Elasticsearch</span>
+              <Button
+                v-if="record.type === 4"
+                status="success"
+                @click="() => redisMANAGE(record.uuid, record.ip, record.username)"
+                >查看</Button
+              >
             </template>
           </TableColumn>
-          <TableColumn title="操作">
+          <TableColumn title="基本操作">
             <template #cell="{ record }">
-              <Popconfirm
-                content="请确认是否删除此数据库连接"
-                @ok="() => handleDeleteConnect(record.uuid)"
+              <Button
+                status="warning"
+                @click="() => redisbasicOP(record.uuid, record.ip, record.username)"
+                >进入</Button
               >
-                <Button type="text" status="danger">删除</Button>
-              </Popconfirm>
+            </template>
+          </TableColumn>
+          <TableColumn title="自定义操作">
+            <template #cell="{ record }">
+              <Button
+                status="warning"
+                @click="() => rediscustomOP(record.uuid, record.ip, record.username)"
+                >进入</Button
+              >
             </template>
           </TableColumn>
         </template>
