@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Tabs, TabPane, Table, Spin, Card, Divider, Empty, Switch } from '@arco-design/web-vue';
 
-import { SQL_META_COLUMN, SQL_META_TABLE } from '@/api/url';
+import { SQL_META_COLUMN, SQL_META_TABLE, SQL_META_VIEW } from '@/api/url';
 import { GetListDataItem, GetSqlMetaData } from '@/api/types';
 import { useAxios } from '@vueuse/integrations/useAxios';
 import { instance, ResponseWrap } from '@/api';
@@ -37,14 +37,15 @@ const pagination = reactive<{ current: number; pageSize: number; total?: number 
 });
 
 const cardTitle = computed(() => {
-  console.log(activeTab.value);
   if (activeTab.value === null || activeTab.value === '') return '';
   const keys = activeTab.value.split('@*@');
-  if (keys.length === 1) {
-    return 'Schame信息表';
-  } else if (keys.length === 2) {
-    return 'Table信息表';
-  } else if (keys.length === 3) {
+  if (keys.length === 3) {
+    if (keys[2] === 'tables') {
+      return 'Table信息表';
+    } else {
+      return 'View信息表';
+    }
+  } else if (keys.length === 4) {
     return 'Column信息表';
   }
 });
@@ -54,6 +55,14 @@ const {
   isLoading: tableListLoading,
   execute: tableListExec,
 } = useAxios<ResponseWrap<GetSqlMetaData>>(SQL_META_TABLE, { method: 'GET' }, instance, {
+  immediate: false,
+});
+
+const {
+  data: viewList,
+  isLoading: viewListLoading,
+  execute: viewListExec,
+} = useAxios<ResponseWrap<GetSqlMetaData>>(SQL_META_VIEW, { method: 'GET' }, instance, {
   immediate: false,
 });
 
@@ -68,11 +77,14 @@ const {
 watch(
   () => props.selectedKeys,
   val => {
-    if (val.split('@*@').length > 1 && !detailTabs.value.some(item => item.selectedKeys === val)) {
-      detailTabs.value.push({
-        selectedKeys: val,
-        showType: 0,
-      });
+    if (val.split('@*@').length > 2) {
+      if (!detailTabs.value.some(item => item.selectedKeys === val)) {
+        detailTabs.value.push({
+          selectedKeys: val,
+          showType: 0,
+        });
+      }
+
       activeTab.value = val;
     }
   },
@@ -80,6 +92,13 @@ watch(
 
 watch(
   () => tableList.value?.data,
+  val => {
+    tableInfo.value = val;
+  },
+);
+
+watch(
+  () => viewList.value?.data,
   val => {
     tableInfo.value = val;
   },
@@ -96,17 +115,23 @@ watch(
   () => activeTab.value,
   val => {
     const keys = val.split('@*@');
-    if (keys.length === 2) {
-      tableListExec({
-        params: { uuid: keys[0], type: props.conMap[keys[0]]?.type, schema: keys[1] },
-      });
-    } else if (keys.length === 3) {
+    if (keys.length === 3) {
+      if (keys[2] === 'tables') {
+        tableListExec({
+          params: { uuid: keys[0], type: props.conMap[keys[0]]?.type, schema: keys[1] },
+        });
+      } else {
+        viewListExec({
+          params: { uuid: keys[0], type: props.conMap[keys[0]]?.type, schema: keys[1] },
+        });
+      }
+    } else if (keys.length === 4) {
       columnListExec({
         params: {
           uuid: keys[0],
           type: props.conMap[keys[0]]?.type,
           schema: keys[1],
-          table: keys[2],
+          table: keys[3],
         },
       });
     }
@@ -156,10 +181,13 @@ const handlePageChange = (page: number) => {
         </Switch>
       </template>
       <Divider style="margin-top: 0" />
-      <Spin :style="{ width: '100%' }" :loading="columnListLoading || tableListLoading">
+      <Spin
+        :style="{ width: '100%' }"
+        :loading="columnListLoading || tableListLoading || viewListLoading"
+      >
         <Table
-          :scroll="{ minWidth: 1500 }"
           :bordered="false"
+          column-resizable
           :columns="tableCol"
           :data="tableData"
           :pagination="pagination"

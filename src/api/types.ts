@@ -113,3 +113,11 @@ export interface redisgetkeysParams {
   pg: number;
   size: number;
 }
+
+export interface ESMetaInfo {
+  data: string;
+}
+
+export interface ESResInfo {
+  data: string;
+}

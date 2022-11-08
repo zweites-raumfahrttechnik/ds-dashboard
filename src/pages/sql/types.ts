@@ -14,7 +14,7 @@ export interface WhereParams {
 
 export interface OrderParams {
   column: string;
-  type: 'ASC' | 'DESC';
+  type: 1 | 0;
 }
 
 export interface ColumnParams {
@@ -24,7 +24,7 @@ export interface ColumnParams {
 export interface QueryFormModel {
   columnList: Array<string>;
   whereList: Array<WhereParams>;
-  orderList: Array<OrderParams>;
+  orderByList: Array<OrderParams>;
 }
 
 export interface QueryParams {
@@ -33,7 +33,7 @@ export interface QueryParams {
   table: string;
   columnList: Array<string>;
   whereList: Array<WhereParams>;
-  orderList: Array<OrderParams>;
+  orderByList: Array<OrderParams>;
   pg?: number;
   size?: number;
 }
@@ -48,7 +48,7 @@ export const defaultConnectFormValue: ConnectFormModel = {
 export const defaultQueryFormValue: QueryFormModel = {
   columnList: [],
   whereList: [{ column: '', columnType: '', value: '', queryType: '=' }],
-  orderList: [{ column: '', type: 'ASC' }],
+  orderByList: [{ column: '', type: 1 }],
 };
 
 export const defaultQueryParams: QueryParams = {
@@ -57,7 +57,7 @@ export const defaultQueryParams: QueryParams = {
   table: '',
   columnList: [''],
   whereList: [{ column: '', columnType: '', value: '', queryType: '=' }],
-  orderList: [{ column: '', type: 'ASC' }],
+  orderByList: [{ column: '', type: 1 }],
   pg: 1,
   size: 15,
 };

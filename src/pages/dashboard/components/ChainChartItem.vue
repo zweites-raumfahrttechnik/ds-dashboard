@@ -19,11 +19,17 @@ const { data, execute } = useAxios<ResponseWrap<ChartValue>>(
   props.url,
   { params: { uuid: props.uuid } },
   instance,
+  { immediate: false },
 );
 
 watch(
   () => props.uuid,
-  () => execute({ params: { uuid: props.uuid } }),
+  val => {
+    if (val === '') {
+      return;
+    }
+    execute({ params: { uuid: props.uuid } });
+  },
 );
 
 const growth = computed(() => {

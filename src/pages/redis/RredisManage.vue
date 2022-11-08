@@ -10,7 +10,7 @@ import {
   Table,
   TableColumn,
   Button,
-  Input
+  Input,
 } from '@arco-design/web-vue';
 import { FormInstance } from '@arco-design/web-vue/es/form';
 import { reactive, ref } from 'vue';
@@ -30,53 +30,55 @@ const searchFormdata = reactive({ num: NaN });
 const { data, isLoading, execute } = useAxios<ResponseWrap<string>>(
   redisMetaTotal_URL,
   { method: 'GET', params: { uuid: uuid } },
-  instance, { immediate: true }
+  instance,
+  { immediate: true },
 );
-let dbtotalNum: number = 0;
-watch(() => data.value?.data, newVal => {
-  dbtotalNum = Number(newVal);
-  //console.log("数据库总数", dbtotalNum);
-})
+const dbtotalNum = ref<number>(0);
+watch(
+  () => data.value?.data,
+  newVal => {
+    dbtotalNum.value = Number(newVal);
+  },
+);
 
 //dbsize
-const tablesize: number[] = new Array(dbtotalNum);
+const tablesize = ref<Array<number>>(new Array(dbtotalNum.value));
 
-const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
+const { data: dataSize } = useAxios<ResponseWrap<number>>(
   REDIS_META_SIZE_URL,
   { method: 'GET' },
   instance,
 );
-watch(dataSize, (value, oldValue) => {
-  tablesize.push(dataSize.value?.data as number);
-})
-tablesize.pop();
+watch(dataSize, () => {
+  tablesize.value.push(dataSize.value?.data as number);
+});
+tablesize.value.pop();
 function getdbsize(dbtotal: number[]) {
   for (var i = 0; i < dbtotal.length; i++) {
-    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
+    const { data: dataSize } = useAxios<ResponseWrap<number>>(
       REDIS_META_SIZE_URL,
       { method: 'GET', params: { uuid: uuid, dbnumber: dbtotal[i] } },
       instance,
     );
-    watch(dataSize, newVal => {
-      const dbsize = computed(() => { return dataSize.value?.data });
-      //console.log(dbsize.value);
-      tablesize.push(dbsize.value as number);
-    })
+    watch(dataSize, () => {
+      const dbsize = computed(() => {
+        return dataSize.value?.data;
+      });
+      tablesize.value.push(dbsize.value as number);
+    });
   }
 }
 
 //数据库编号接口与数据库大小接口的数据组织//redisMetaKeys接口，表格索引程序
 function redisMeta() {
-  console.log(dbtotalNum);
-  const dbtotal: number[] = new Array(dbtotalNum);
-  for (var i = 0; i < dbtotalNum; i++) {
-    dbtotal[i] = i;
+  const dbtotal = ref<Array<number>>(new Array(dbtotalNum.value));
+  for (var i = 0; i < dbtotalNum.value; i++) {
+    dbtotal.value[i] = i;
   }
-  getdbsize(dbtotal);
+  getdbsize(dbtotal.value);
   setTimeout(function () {
-    //console.log(tablesize);
-    for (var i = 0; i < dbtotalNum; i++) {
-      var dataItem = { dbnumber: dbtotal[i], dbsize: tablesize[i] };
+    for (var i = 0; i < dbtotalNum.value; i++) {
+      var dataItem = { dbnumber: dbtotal.value[i], dbsize: tablesize.value[i] };
       tableData.push(dataItem);
     }
   }, 1002);
@@ -87,7 +89,7 @@ tableData.pop();
 //接口数据执行
 setTimeout(function () {
   redisMeta();
-}, 5)
+}, 5);
 // const getloading = computed(() => {
 //   if (Array.prototype.isPrototypeOf(tableData) && tableData.length === 0) {
 //     return true;
@@ -96,37 +98,48 @@ setTimeout(function () {
 // });
 const getloading = ref();
 function sleep(time: number) {
-  return new Promise((resolve) => setTimeout(resolve, time));
+  return new Promise(resolve => setTimeout(resolve, time));
 }
-if (Array.prototype.isPrototypeOf(tableData) && tableData.length === 0) {
+if (Object.prototype.isPrototypeOf.call(tableData, Array) && tableData.length === 0) {
   getloading.value = true;
-  sleep(1100).then(() => { getloading.value = false })
-} else { getloading.value = true; }
+  sleep(1100).then(() => {
+    getloading.value = false;
+  });
+} else {
+  getloading.value = true;
+}
 //详情跳转
 const router = useRouter();
 const viewDetails = (dbnum: number) => {
-  router.push({ name: "redismetaKeys", query: { uuid: uuid, dbnumber: dbnum, ip: ip, username: username } })
+  router.push({
+    name: 'redismetaKeys',
+    query: { uuid: uuid, dbnumber: dbnum, ip: ip, username: username },
+  });
 };
 const handleSearch = () => {
-  if (searchFormdata.num >= 0 && searchFormdata.num < dbtotalNum) {
-    const { data: dataSize, execute: executeSize } = useAxios<ResponseWrap<number>>(
+  if (searchFormdata.num >= 0 && searchFormdata.num < dbtotalNum.value) {
+    const { data: dataSize } = useAxios<ResponseWrap<number>>(
       REDIS_META_SIZE_URL,
       { method: 'GET', params: { uuid: uuid, dbnumber: searchFormdata.num } },
       instance,
     );
-    const dbsize = computed(() => { return dataSize.value?.data });
+    const dbsize = computed(() => {
+      return dataSize.value?.data;
+    });
     tableData.splice(1, tableData.length);
     tableData.pop();
     setTimeout(function () {
       tableData.push({ dbnumber: searchFormdata.num, dbsize: dbsize });
-    }, 10)
+    }, 10);
   }
 };
 const handleFromReset = () => {
   searchFormdata.num = NaN;
   tableData.splice(1, tableData.length);
   tableData.pop();
-  setTimeout(function () { redisMeta(); }, 10);
+  setTimeout(function () {
+    redisMeta();
+  }, 10);
 };
 </script>
 
@@ -136,7 +149,15 @@ const handleFromReset = () => {
       <template #title>redis元数据查询</template>
       <template #extra>
         <Space :size="18">
-          <Button status="success" @click="() => { router.go(-1) }" style="width: 185px;">
+          <Button
+            status="success"
+            style="width: 185px"
+            @click="
+              () => {
+                router.go(-1);
+              }
+            "
+          >
             <template #icon>
               <icon-backward />
             </template>
@@ -148,32 +169,48 @@ const handleFromReset = () => {
       <br />
       <Row>
         <Col :flex="1">
-        <Form ref="searchFormRef" :model="searchFormdata" :wrapper-col-props="{ span: 18 }" label-align="right">
-          <Row :gutter="16">
-            <Col :span="8">
-            <FormItem field="uuid" label="数据库连接uuid" label-col-flex="100px" :disabled="true">
-              <Input v-model="uuid" />
-            </FormItem>
-            </Col>
-            <Col :span="8">
-            <FormItem field="ip" label="数据库地址" label-col-flex="80px" :disabled="true">
-              <Input v-model="ip" />
-            </FormItem>
-            </Col>
-            <Col :span="8">
-            <FormItem field="username" label="用户名" label-col-flex="85px" :disabled="true" :label-attrs="{}">
-              <Input v-model="username" />
-            </FormItem>
-            </Col>
-          </Row>
-          <!-- <Row :gutter="16">
+          <Form
+            ref="searchFormRef"
+            :model="searchFormdata"
+            :wrapper-col-props="{ span: 18 }"
+            label-align="right"
+          >
+            <Row :gutter="16">
+              <Col :span="8">
+                <FormItem
+                  field="uuid"
+                  label="数据库连接uuid"
+                  label-col-flex="100px"
+                  :disabled="true"
+                >
+                  <Input v-model="uuid" />
+                </FormItem>
+              </Col>
+              <Col :span="8">
+                <FormItem field="ip" label="数据库地址" label-col-flex="80px" :disabled="true">
+                  <Input v-model="ip" />
+                </FormItem>
+              </Col>
+              <Col :span="8">
+                <FormItem
+                  field="username"
+                  label="用户名"
+                  label-col-flex="85px"
+                  :disabled="true"
+                  :label-attrs="{}"
+                >
+                  <Input v-model="username" />
+                </FormItem>
+              </Col>
+            </Row>
+            <!-- <Row :gutter="16">
             <Col :span="14">
             <FormItem field="number" label="数据库编号">
               <InputNumber v-model="searchFormdata.num" :min="0" placeholder="请输入数据库编号" style="width:195px ;" />
             </FormItem>
             </Col>
           </Row> -->
-        </Form>
+          </Form>
         </Col>
         <!-- <Divider style="height: 34px" direction="vertical" />
         <Col :flex="'86px'" style="text-align: right">
@@ -194,8 +231,13 @@ const handleFromReset = () => {
         </Col> -->
       </Row>
       <Divider style="margin-top: 0" />
-      <Table id="redismetaTable" row-key="dbnumber" :data="tableData" :bordered="{ wrapper: true, cell: true }"
-        :loading="getloading">
+      <Table
+        id="redismetaTable"
+        row-key="dbnumber"
+        :data="tableData"
+        :bordered="{ wrapper: true, cell: true }"
+        :loading="getloading"
+      >
         <template #columns>
           <!-- <TableColumn title="数据库连接uuid" :body-cell-style="{ color: 'grey' }">
             <template #cell="{ record }">

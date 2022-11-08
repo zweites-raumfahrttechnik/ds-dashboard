@@ -7,9 +7,9 @@ const sql: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     // {
-    //   path: 'usermanage',
-    //   name: 'Manage',
-    //   component: () => import('@/pages/sql/Usermanage.vue'),
+    //   path: 'user',
+    //   name: 'UserManage',
+    //   component: () => import('@/pages/sql/UserManage.vue'),
     //   meta: {
     //     requireAuth: true,
     //     locale: '用户管理',
@@ -47,7 +47,7 @@ const sql: RouteRecordRaw = {
     requireAuth: true,
     locale: '关系型数据库',
     icon: 'icon-plus-circle',
-    order: 2,
+    order: 3,
   },
 };
 

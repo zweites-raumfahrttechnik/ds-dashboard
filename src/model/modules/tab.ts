@@ -43,7 +43,6 @@ const useTabModel = createGlobalState(() => {
   const cacheList = computed(() => Array.from(cached.value));
 
   const updateTabList = (route: RouteLocationNormalized) => {
-    console.log(route.fullPath);
     if (BAN_LIST.includes(route.name as string)) {
       return;
     }

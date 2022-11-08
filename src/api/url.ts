@@ -44,3 +44,16 @@ export const REDIS_OP_CUSTOM_URL = `${v1}/execute/redis/complex`;
 export const redisMetaTotal_URL = `${v1}/execute/redis/meta/dbnumber`;
 export const REDIS_META_SIZE_URL = `${v1}/execute/redis/meta/dbsize`;
 export const REDIS_KEYS_URL = `${v1}/execute/redis/meta/keys`;
+
+export const ES_META_INDEX = `${v1}/es/meta/index`;
+export const ES_META_MAPPING = `${v1}/es/meta/mapping`;
+export const ES_META_SETTING = `${v1}/es/meta/setting`;
+export const ES_META_FIELDMAPPING = `${v1}/es/meta/fildmapping`;
+
+export const ES_CREATE_INDEX = `${v1}/es/index/create`;
+export const ES_DELETE_INDEX = `${v1}/es/index/delete`;
+export const ES_CREATE_DOC = `${v1}/es/document/add`;
+export const ES_GET_DOC = `${v1}/es/document/get`;
+export const ES_UPDATE_DOC = `${v1}/es/document/update`;
+export const ES_DELETE_DOC = `${v1}/es/document/delete`;
+export const ES_SEARH_DOC = `${v1}/es/document/search`;

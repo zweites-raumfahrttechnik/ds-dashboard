@@ -14,7 +14,7 @@ import {
   Spin,
 } from '@arco-design/web-vue';
 import PageContainer from '@/components/PageContainer.vue';
-import ConnectSelect from './components/ConnectTableSelect.vue';
+import ConnectTableSelect from './components/ConnectTableSelect.vue';
 import {
   ConnectFormModel,
   QueryFormModel,
@@ -54,8 +54,8 @@ const handleAddWhere = () => {
 };
 
 const handleAddOrder = () => {
-  queryForm.orderList.push({
-    type: 'ASC',
+  queryForm.orderByList.push({
+    type: 1,
     column: '',
   });
 };
@@ -65,7 +65,7 @@ const handleDeleteWhere = (index: number) => {
 };
 
 const handleDeleteOrder = (index: number) => {
-  queryForm.orderList.splice(index, 1);
+  queryForm.orderByList.splice(index, 1);
 };
 
 const concatQueryParams = (connectFormData: ConnectFormModel) => {
@@ -82,7 +82,7 @@ const concatQueryParams = (connectFormData: ConnectFormModel) => {
   params.whereList = queryForm.whereList.filter(item => {
     return item.column !== '' && item.value !== '';
   });
-  params.orderList = queryForm.orderList.filter(item => {
+  params.orderByList = queryForm.orderByList.filter(item => {
     return item.column !== '';
   });
   params.pg = pagination.current;
@@ -158,7 +158,7 @@ const handleChangeTable = (data: ConnectFormModel) => {
 const resetForm = () => {
   queryForm.whereList = [{ column: '', columnType: '', value: '', queryType: '=' }];
   queryForm.columnList = [];
-  queryForm.orderList = [{ column: '', type: 'ASC' }];
+  queryForm.orderByList = [{ column: '', type: 1 }];
 };
 
 const resetTable = () => {
@@ -181,7 +181,7 @@ const handlePageChange = (page: number) => {
   <PageContainer>
     <Card class="general-card" :bordered="false">
       <template #title>连接选择</template>
-      <ConnectSelect
+      <ConnectTableSelect
         @exec="exec"
         @handle-change-table="handleChangeTable"
         @reset-form="resetForm"
@@ -297,7 +297,7 @@ const handlePageChange = (page: number) => {
         </FormItem>
 
         <FormItem
-          v-for="(item, index) in queryForm.orderList"
+          v-for="(item, index) in queryForm.orderByList"
           :key="index"
           :field="`orderList.${index}`"
           :label="index === 0 ? '排序条件' : ''"
@@ -308,8 +308,8 @@ const handlePageChange = (page: number) => {
             <Col :span="8">
               <FormItem no-style>
                 <Select v-model="item.type" placeholder="请选择排序方式">
-                  <Option label="升序" value="ASC"></Option>
-                  <Option label="降序" value="DESC"></Option>
+                  <Option label="升序" :value="1"></Option>
+                  <Option label="降序" :value="0"></Option>
                 </Select>
               </FormItem>
             </Col>
@@ -323,7 +323,7 @@ const handlePageChange = (page: number) => {
                 >
                   <Option
                     v-for="column in colFormList.filter(item => {
-                      return !queryForm.orderList.some(selected => selected.column === item.name);
+                      return !queryForm.orderByList.some(selected => selected.column === item.name);
                     })"
                     :key="column.name"
                     :value="column.name"
@@ -335,7 +335,7 @@ const handlePageChange = (page: number) => {
             <Col :span="4">
               <FormItem no-style>
                 <Button
-                  v-if="item.column !== '' && index === queryForm.orderList.length - 1"
+                  v-if="item.column !== '' && index === queryForm.orderByList.length - 1"
                   type="text"
                   shape="circle"
                   @click="handleAddOrder"
@@ -345,7 +345,7 @@ const handlePageChange = (page: number) => {
                   </template>
                 </Button>
                 <Button
-                  v-if="queryForm.orderList.length !== 1"
+                  v-if="queryForm.orderByList.length !== 1"
                   type="text"
                   status="danger"
                   shape="circle"
@@ -369,7 +369,7 @@ const handlePageChange = (page: number) => {
       <Divider style="margin-top: 0" />
       <Spin :style="{ width: '100%' }" :loading="isLoading">
         <Table
-          :scroll="{ minWidth: 1500 }"
+          column-resizable
           :bordered="false"
           :columns="tabCol"
           :data="tabData"
