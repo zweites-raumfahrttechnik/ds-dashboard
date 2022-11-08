@@ -9,7 +9,6 @@ import MetaDetail from './components/MetaDetail.vue';
 const selectedKeys = ref<string[]>([]);
 
 const handleSelectKeys = (val: string[]) => {
-  console.log(val);
   selectedKeys.value = val;
 };
 </script>

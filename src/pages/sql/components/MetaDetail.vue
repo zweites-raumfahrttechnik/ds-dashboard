@@ -37,7 +37,6 @@ const pagination = reactive<{ current: number; pageSize: number; total?: number 
 });
 
 const cardTitle = computed(() => {
-  console.log(activeTab.value);
   if (activeTab.value === null || activeTab.value === '') return '';
   const keys = activeTab.value.split('@*@');
   if (keys.length === 3) {

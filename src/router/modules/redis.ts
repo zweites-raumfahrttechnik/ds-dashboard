@@ -18,7 +18,7 @@ const redis: RouteRecordRaw = {
     {
       path: '/redisManagement',
       name: 'redisManagement',
-      component: () => import('@/pages/redis/RredisManage.vue'),
+      component: () => import('@/pages/redis/RedisManage.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,

@@ -38,7 +38,6 @@ watch(
   () => data.value?.data,
   newVal => {
     dbtotalNum.value = Number(newVal);
-    //console.log("数据库总数", dbtotalNum);
   },
 );
 
@@ -65,7 +64,6 @@ function getdbsize(dbtotal: number[]) {
       const dbsize = computed(() => {
         return dataSize.value?.data;
       });
-      //console.log(dbsize.value);
       tablesize.value.push(dbsize.value as number);
     });
   }
@@ -73,14 +71,12 @@ function getdbsize(dbtotal: number[]) {
 
 //数据库编号接口与数据库大小接口的数据组织//redisMetaKeys接口，表格索引程序
 function redisMeta() {
-  console.log(dbtotalNum);
   const dbtotal = ref<Array<number>>(new Array(dbtotalNum.value));
   for (var i = 0; i < dbtotalNum.value; i++) {
     dbtotal.value[i] = i;
   }
   getdbsize(dbtotal.value);
   setTimeout(function () {
-    //console.log(tablesize);
     for (var i = 0; i < dbtotalNum.value; i++) {
       var dataItem = { dbnumber: dbtotal.value[i], dbsize: tablesize.value[i] };
       tableData.push(dataItem);

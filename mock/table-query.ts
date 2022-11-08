@@ -8,7 +8,6 @@ const requests: MockMethod[] = [
     method: 'post',
     response: ({ body }: { body: { size: number } }) => {
       const size = +body.size;
-      console.log(size);
       const columnName = ['name', 'age', 'email', 'phone'] as const;
       type columnType = typeof columnName[number];
       return successResp({
