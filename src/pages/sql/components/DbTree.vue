@@ -77,14 +77,12 @@ watch(
 const handleLoadMore = async (data: TreeNodeData) => {
   const keys = data.key?.toString().split('@*@') as string[];
 
-  // 获取表名
-  if (keys.length === 3) {
-    // 寻找 connect
-    const connectIdx = treeData.value.findIndex(item => item.key === keys[0]);
-    if (connectIdx === -1) {
-      return;
-    }
+  const connectIdx = treeData.value.findIndex(item => item.key === keys[0]);
+  if (connectIdx === -1) {
+    return;
+  }
 
+  if (keys.length === 2) {
     const connect = treeData.value[connectIdx];
     if (!connect.children) {
       return;
@@ -95,53 +93,48 @@ const handleLoadMore = async (data: TreeNodeData) => {
     if (dbIdx === -1) {
       return;
     }
-
     const db = connect.children[dbIdx];
-    db.children = db.children || [];
+    db.children = [];
 
-    if (keys[2] === 'tables') {
-      const val = await tableExecute({
-        params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
+    const tables = await tableExecute({
+      params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
+    });
+    const views = await viewExecute({
+      params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
+    });
+
+    if (tables.data.value?.data?.names.length !== 0) {
+      db.children.push({
+        key: `${db.key}@*@tables`,
+        title: 'tables',
       });
-
-      if (treeData.value[connectIdx].children !== undefined) {
-        db.children[0].children = val.data.value?.data?.names.map(item => ({
-          key: `${keys[0]}@*@${keys[1]}@*@tables@*@${item}`,
-          title: item,
-          isLeaf: true,
-        }));
-      }
-    } else if (keys[2] === 'views') {
-      const val = await viewExecute({
-        params: { uuid: keys[0], type: conMap.value[keys[0]].type, schema: keys[1] },
-      });
-
-      if (treeData.value[connectIdx].children !== undefined) {
-        db.children[1].children = val.data.value?.data?.names.map(item => ({
-          key: `${keys[0]}@*@${keys[1]}@*@views@*@${item}`,
-          title: item,
-          isLeaf: true,
-        }));
-      }
+      db.children[0].children = tables.data.value?.data?.names.map(item => ({
+        key: `${db.key}@*@tables@*@${item}`,
+        title: item,
+        isLeaf: true,
+      }));
     }
 
+    if (views.data.value?.data?.names.length !== 0) {
+      db.children.push({
+        key: `${db.key}@*@views`,
+        title: 'views',
+      });
+      db.children[1].children = views.data.value?.data?.names.map(item => ({
+        key: `${db.key}@*@views@*@${item}`,
+        title: item,
+        isLeaf: true,
+      }));
+    }
     return;
   }
 
   // 获取 schema
   const val = await schemaExecute({ params: { uuid: keys[0], type: conMap.value[keys[0]].type } });
-  const idx = treeData.value.findIndex(item => item.key === data.key);
-  if (idx === -1) {
-    return;
-  }
 
-  treeData.value[idx].children = val.data.value?.data?.names.map(item => ({
-    key: `${treeData.value[idx].key}@*@${item}`,
+  treeData.value[connectIdx].children = val.data.value?.data?.names.map(item => ({
+    key: `${treeData.value[connectIdx].key}@*@${item}`,
     title: item,
-    children: [
-      { key: `${treeData.value[idx].key}@*@${item}@*@tables`, title: 'tables' },
-      { key: `${treeData.value[idx].key}@*@${item}@*@views`, title: 'views' },
-    ],
   }));
 };
 </script>

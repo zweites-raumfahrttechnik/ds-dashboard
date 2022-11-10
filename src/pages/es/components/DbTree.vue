@@ -8,7 +8,7 @@ import { GetListData, ESMetaInfo } from '@/api/types';
 import { CONNECT_URL, ES_CREATE_INDEX, ES_DELETE_INDEX, ES_META_INDEX } from '@/api/url';
 
 import ContextMenu from './ContextMenu.vue';
-import JsonEditor from './JsonEditor.vue';
+import JsonEditor from '@/components/JsonEditor.vue';
 
 interface ContextMenuEvent extends PointerEvent {
   target: HTMLElement;

@@ -21,7 +21,7 @@ const dashboard: RouteRecordRaw = {
       component: () => import('@/pages/dashboard/StatePage.vue'),
       meta: {
         requireAuth: true,
-        locale: '数据库运行状态',
+        locale: '运行状态',
       },
     },
   ],

@@ -1,34 +1,39 @@
 <script lang="ts" setup>
 import { Card, Row, Col, Divider } from '@arco-design/web-vue';
+import { GetListDataItem, KeyItem } from '@/api/types';
 
 import PageContainer from '@/components/PageContainer.vue';
-
 import DbTree from './components/DbTree.vue';
 import MetaDetail from './components/MetaDetail.vue';
 
-const selectedKeys = ref<string[]>([]);
+const selectedKeys = ref<string>('');
+const conMap = ref<Record<string, GetListDataItem>>({});
 
 const handleSelectKeys = (val: string[]) => {
-  selectedKeys.value = val;
+  selectedKeys.value = val.join('@*@');
+};
+
+const handleConMap = (map: Record<string, GetListDataItem>) => {
+  conMap.value = map;
 };
 </script>
 
 <template>
   <PageContainer>
     <Card class="general-card card-container" :bordered="false">
-      <template #title>ElasticSearch元数据视图</template>
+      <template #title>Redis元数据视图</template>
 
       <Row :wrap="false">
-        <Col class="col-height" :span="4">
-          <DbTree @handle-selected-keys="handleSelectKeys" />
+        <Col class="col-height" :span="3">
+          <DbTree @handle-selected-keys="handleSelectKeys" @handle-con-map="handleConMap" />
         </Col>
 
         <Col class="col-height line-center" :span="1">
           <Divider direction="vertical" :style="{ height: '100%' }" />
         </Col>
 
-        <Col class="col-height" :span="19">
-          <MetaDetail :selected-keys="selectedKeys"></MetaDetail>
+        <Col class="col-height" :span="20">
+          <MetaDetail :selected-keys="selectedKeys" :con-map="conMap"></MetaDetail>
         </Col>
       </Row>
     </Card>

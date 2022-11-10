@@ -22,7 +22,7 @@ import { instance, ResponseWrap } from '@/api';
 import { ESMetaInfo } from '@/api/types';
 import { ES_SEARH_DOC, ES_CREATE_DOC, ES_DELETE_DOC, ES_UPDATE_DOC } from '@/api/url';
 
-import JsonEditor from './JsonEditor.vue';
+import JsonEditor from '@/components/JsonEditor.vue';
 import Condition from './QueryCondition.vue';
 import DocCard from './DocCard.vue';
 

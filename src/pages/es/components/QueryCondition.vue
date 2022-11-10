@@ -2,7 +2,7 @@
 import { Link, Space, Modal, Popover } from '@arco-design/web-vue';
 import { IconSettings } from '@arco-design/web-vue/es/icon';
 
-import JsonEditor from './JsonEditor.vue';
+import JsonEditor from '@/components/JsonEditor.vue';
 
 const props = defineProps<{ linkTitle: string }>();
 

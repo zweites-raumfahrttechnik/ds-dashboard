@@ -20,7 +20,7 @@ import { MONGODB_QUERY_URL, MONGODB_READ_URL } from '@/api/url';
 import { ConditionItem } from './types';
 
 import QueryCondition from './QueryCondition.vue';
-import JsonEditor from './JsonEditor.vue';
+import JsonEditor from '@/components/JsonEditor.vue';
 import DocCard from './DocCard.vue';
 
 const props = defineProps<{ selectedKeys: string[] }>();
