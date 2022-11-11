@@ -56,4 +56,4 @@ export const ES_CREATE_DOC = `${v1}/es/document/add`;
 export const ES_GET_DOC = `${v1}/es/document/get`;
 export const ES_UPDATE_DOC = `${v1}/es/document/update`;
 export const ES_DELETE_DOC = `${v1}/es/document/delete`;
-export const ES_SEARH_DOC = `${v1}/es/document/search`;
+export const ES_SEARCH_DOC = `${v1}/es/document/search`;

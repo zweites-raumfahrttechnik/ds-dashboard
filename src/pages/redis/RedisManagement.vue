@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import { Card, Row, Col, Divider } from '@arco-design/web-vue';
-import { GetListDataItem, KeyItem } from '@/api/types';
+import { GetListDataItem } from '@/api/types';
 
 import PageContainer from '@/components/PageContainer.vue';
 import DbTree from './components/DbTree.vue';

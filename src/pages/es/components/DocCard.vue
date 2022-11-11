@@ -6,6 +6,7 @@ import { instance } from '@/api';
 import { ES_DELETE_DOC, ES_UPDATE_DOC } from '@/api/url';
 
 import JsonEditor from '@/components/JsonEditor.vue';
+
 import JsonCard from './JsonCard.vue';
 
 const props = defineProps<{

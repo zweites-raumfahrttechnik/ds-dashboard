@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { Tabs, TabPane, Empty } from '@arco-design/web-vue';
-import { instance, ResponseWrap } from '@/api';
 import { useAxios } from '@vueuse/integrations/useAxios';
-import DocumentContent from './DocumentContent.vue';
+import { Tabs, TabPane, Empty } from '@arco-design/web-vue';
+
+import { instance, ResponseWrap } from '@/api';
 import JsonEditor from '@/components/JsonEditor.vue';
+
+import DocumentContent from './DocumentContent.vue';
 
 import { ES_META_MAPPING, ES_META_SETTING } from '@/api/url';
 import { ESMetaInfo } from '@/api/types';
