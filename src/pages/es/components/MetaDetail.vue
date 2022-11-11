@@ -1,9 +1,11 @@
 <script setup lang="ts">
-import { Tabs, TabPane, Empty } from '@arco-design/web-vue';
-import { instance, ResponseWrap } from '@/api';
 import { useAxios } from '@vueuse/integrations/useAxios';
+import { Tabs, TabPane, Empty } from '@arco-design/web-vue';
+
+import { instance, ResponseWrap } from '@/api';
+import JsonEditor from '@/components/JsonEditor.vue';
+
 import DocumentContent from './DocumentContent.vue';
-import JSONEditor from './JsonEditor.vue';
 
 import { ES_META_MAPPING, ES_META_SETTING } from '@/api/url';
 import { ESMetaInfo } from '@/api/types';
@@ -76,11 +78,11 @@ watch(
       </TabPane>
       <TabPane key="mapping" title="Mapping信息">
         <Empty v-if="props.selectedKeys.length !== 2" :style="{ paddingTop: '300px' }" />
-        <JSONEditor v-else height="650px" :value="json" current-mode="view" />
+        <JsonEditor v-else height="650px" :value="json" current-mode="view" />
       </TabPane>
       <TabPane key="setting" title="Setting信息">
         <Empty v-if="props.selectedKeys.length !== 2" :style="{ paddingTop: '300px' }" />
-        <JSONEditor v-else height="650px" :value="json" current-mode="view" />
+        <JsonEditor v-else height="650px" :value="json" current-mode="view" />
       </TabPane>
     </Tabs>
   </div>

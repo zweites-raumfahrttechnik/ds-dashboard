@@ -41,8 +41,8 @@ export const MONGODB_META_COLLECTION_URL = `${v1}/mgdb/meta/collection`;
 export const REDIS_OP_URL = `${v1}/execute/redis`;
 export const REDIS_OP_CUSTOM_URL = `${v1}/execute/redis/complex`;
 
-export const redisMetaTotal_URL = `${v1}/execute/redis/meta/dbnumber`;
-export const REDIS_META_SIZE_URL = `${v1}/execute/redis/meta/dbsize`;
+export const REDIS_META_DB_TOTAL_URL = `${v1}/execute/redis/meta/dbnumber`;
+export const REDIS_META_DB_SIZE_URL = `${v1}/execute/redis/meta/dbsize`;
 export const REDIS_KEYS_URL = `${v1}/execute/redis/meta/keys`;
 
 export const ES_META_INDEX = `${v1}/es/meta/index`;
@@ -56,4 +56,4 @@ export const ES_CREATE_DOC = `${v1}/es/document/add`;
 export const ES_GET_DOC = `${v1}/es/document/get`;
 export const ES_UPDATE_DOC = `${v1}/es/document/update`;
 export const ES_DELETE_DOC = `${v1}/es/document/delete`;
-export const ES_SEARH_DOC = `${v1}/es/document/search`;
+export const ES_SEARCH_DOC = `${v1}/es/document/search`;

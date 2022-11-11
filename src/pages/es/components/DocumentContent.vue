@@ -20,16 +20,16 @@ import { FormInstance } from '@arco-design/web-vue/es/form';
 import { instance, ResponseWrap } from '@/api';
 
 import { ESMetaInfo } from '@/api/types';
-import { ES_SEARH_DOC, ES_CREATE_DOC, ES_DELETE_DOC, ES_UPDATE_DOC } from '@/api/url';
+import { ES_SEARCH_DOC, ES_CREATE_DOC, ES_DELETE_DOC, ES_UPDATE_DOC } from '@/api/url';
 
-import JsonEditor from './JsonEditor.vue';
+import JsonEditor from '@/components/JsonEditor.vue';
 import Condition from './QueryCondition.vue';
 import DocCard from './DocCard.vue';
 
 const props = defineProps<{ selectedKeys: string[] }>();
 
 const { data, execute } = useAxios<ResponseWrap<ESMetaInfo>>(
-  ES_SEARH_DOC,
+  ES_SEARCH_DOC,
   { method: 'POST' },
   instance,
   { immediate: false },
@@ -43,7 +43,7 @@ const { execute: executeDelete } = useAxios(ES_DELETE_DOC, { method: 'DELETE' },
   immediate: false,
 });
 
-const { execute: excuteUpdate } = useAxios(ES_UPDATE_DOC, { method: 'PUT' }, instance, {
+const { execute: executeUpdate } = useAxios(ES_UPDATE_DOC, { method: 'PUT' }, instance, {
   immediate: false,
 });
 
@@ -131,7 +131,7 @@ const handleDeleteButtonClick = async () => {
 };
 
 const handleUpdateButtonClick = async () => {
-  await excuteUpdate({
+  await executeUpdate({
     data: {
       uuid: props.selectedKeys[0],
       index: props.selectedKeys[1],

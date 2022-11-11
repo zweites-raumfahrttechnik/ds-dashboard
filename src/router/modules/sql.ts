@@ -21,7 +21,7 @@ const sql: RouteRecordRaw = {
       component: () => import('@/pages/sql/MetaData.vue'),
       meta: {
         requireAuth: true,
-        locale: '数据库信息',
+        locale: '元数据查看',
       },
     },
     {
@@ -45,7 +45,7 @@ const sql: RouteRecordRaw = {
   ],
   meta: {
     requireAuth: true,
-    locale: '关系型数据库',
+    locale: 'SQL数据库',
     icon: 'icon-plus-circle',
     order: 3,
   },

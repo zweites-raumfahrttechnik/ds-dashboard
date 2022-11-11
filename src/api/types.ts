@@ -100,14 +100,20 @@ export interface MongdbIndexInfo {
   data: string[];
 }
 
+export interface KeyItem {
+  key: string;
+  type: string;
+  size: number;
+}
+
 // redis元数据-keys获取接口
-export interface redisKeys {
+export interface RedisKeys {
   count: number;
-  data: string[];
+  data: KeyItem[];
 }
 
 // redis元数据-keys获取参数
-export interface redisgetkeysParams {
+export interface RedisGetKeysParams {
   uuid: string;
   dbnumber: number;
   pg: number;

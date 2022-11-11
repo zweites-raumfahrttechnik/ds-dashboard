@@ -7,52 +7,58 @@ const redis: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     {
-      path: '/redisConnect',
-      name: 'redisConnect',
+      path: 'management',
+      name: 'RedisManegement',
+      component: () => import('@/pages/redis/RedisManagement.vue'),
+      meta: {
+        requireAuth: true,
+        locale: '操作面板',
+      },
+    },
+    {
+      path: '/RedisConnect',
+      name: 'RedisConnect',
       component: () => import('@/pages/redis/RedisConnect.vue'),
       meta: {
         requireAuth: true,
-        locale: 'redis列表',
+        locale: '数据库连接列表',
       },
     },
     {
-      path: '/redisManagement',
-      name: 'redisManagement',
+      path: '/RedisManage',
+      name: 'RedisManage',
       component: () => import('@/pages/redis/RedisManage.vue'),
       meta: {
         requireAuth: true,
-        hideInMenu: true,
-        locale: 'redis元数据管理',
+        locale: '元数据查看',
       },
     },
     {
-      path: '/redisbasicOp',
-      name: 'redisbasicOp',
-      component: () => import('@/pages/redis/RedisBasicOp.vue'),
+      path: '/RedisBasicOp',
+      name: 'RedisBasicOp',
+      component: () => import('@/pages/redis/RedisbasicOp.vue'),
       meta: {
         requireAuth: true,
-        hideInMenu: true,
-        locale: 'redis基本操作',
+        locale: '基本操作',
       },
     },
     {
-      path: '/rediscustomOp',
-      name: 'rediscustomOp',
-      component: () => import('@/pages/redis/RedisCustomOp.vue'),
+      path: '/RedisCustomOp',
+      name: 'RedisCustomOp',
+      component: () => import('@/pages/redis/RediscustomOp.vue'),
       meta: {
         requireAuth: true,
-        hideInMenu: true,
-        locale: 'redis自定义操作',
+        locale: '自定义操作',
       },
     },
     {
-      path: '/redismetaKeys',
-      name: 'redismetaKeys',
+      path: '/RedismetaKeys',
+      name: 'RedismetaKeys',
       component: () => import('@/pages/redis/components/RedismetaKeys.vue'),
       meta: {
         requireAuth: true,
         hideInMenu: true,
-        locale: 'redis键名',
+        locale: '数据库详情',
       },
     },
   ],
@@ -63,5 +69,4 @@ const redis: RouteRecordRaw = {
     order: 5,
   },
 };
-
 export default redis;
