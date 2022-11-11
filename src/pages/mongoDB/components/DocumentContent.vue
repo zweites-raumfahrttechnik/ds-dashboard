@@ -16,11 +16,11 @@ import { IconPlus } from '@arco-design/web-vue/es/icon';
 import { instance, ResponseWrap } from '@/api';
 import { MongdbDocInfo } from '@/api/types';
 import { MONGODB_QUERY_URL, MONGODB_READ_URL } from '@/api/url';
+import JsonEditor from '@/components/JsonEditor.vue';
 
 import { ConditionItem } from './types';
 
 import QueryCondition from './QueryCondition.vue';
-import JsonEditor from './JsonEditor.vue';
 import DocCard from './DocCard.vue';
 
 const props = defineProps<{ selectedKeys: string[] }>();
@@ -29,6 +29,7 @@ const { data, execute } = useAxios<ResponseWrap<MongdbDocInfo>>(
   MONGODB_READ_URL,
   { method: 'POST' },
   instance,
+  { immediate: false },
 );
 
 const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, instance, {
@@ -59,6 +60,8 @@ const handleRefresh = () => {
     },
   });
 };
+
+onMounted(() => handleRefresh());
 
 watch(
   () => props.selectedKeys,

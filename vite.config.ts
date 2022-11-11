@@ -17,6 +17,11 @@ export default defineConfig({
     ...createVuePlugin(),
     ...createAutoImportPlugin(),
     ...createArcoPlugin(),
-    ...createMockPlugin(),
+    // ...createMockPlugin(),
   ],
+  server: {
+    proxy: {
+      '/api': { target: 'http://10.212.67.18:8080', rewrite: path => path.replace(/^\/api/, '') },
+    },
+  },
 });

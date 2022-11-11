@@ -12,7 +12,7 @@ const connect: RouteRecordRaw = {
       component: () => import('@/pages/connect/AddConnect.vue'),
       meta: {
         requireAuth: true,
-        locale: '添加连接',
+        locale: '实例创建',
       },
     },
     {
@@ -21,13 +21,13 @@ const connect: RouteRecordRaw = {
       component: () => import('@/pages/connect/ConnectList.vue'),
       meta: {
         requireAuth: true,
-        locale: '连接列表',
+        locale: '实例管理',
       },
     },
   ],
   meta: {
     requireAuth: true,
-    locale: '数据库连接',
+    locale: '数据库实例',
     icon: 'icon-bookmark',
     order: 2,
   },

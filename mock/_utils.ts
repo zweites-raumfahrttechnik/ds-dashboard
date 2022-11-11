@@ -1,4 +1,4 @@
-// 定义返回值接口
+// 创建接口，data的数据类型可以为任何类型
 export interface RespWrapper<T> {
   code: number;
   msg: string;

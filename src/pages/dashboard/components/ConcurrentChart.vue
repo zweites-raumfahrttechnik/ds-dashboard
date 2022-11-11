@@ -47,13 +47,19 @@ const { data, execute } = useAxios<ResponseWrap<ConcurrentChartValue>>(
   CONCURRENT_CHART_URL,
   { params: { uuid: props.uuid } },
   instance,
+  { immediate: false },
 );
 
 const { state } = useAppModel();
 
 watch(
   () => props.uuid,
-  () => execute({ params: { uuid: props.uuid } }),
+  val => {
+    if (val === '') {
+      return;
+    }
+    execute({ params: { uuid: props.uuid } });
+  },
 );
 
 const isDark = computed(() => state.theme === 'dark');

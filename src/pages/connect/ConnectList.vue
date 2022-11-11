@@ -27,6 +27,7 @@ import PageContainer from '@/components/PageContainer.vue';
 
 type SearchParams = GetConnectListParams;
 
+// form 实例放入 ref 中
 const searchFormRef = ref<FormInstance>();
 
 const searchFormdata = reactive<Pick<SearchParams, 'ip' | 'username' | 'type'>>({
@@ -34,6 +35,7 @@ const searchFormdata = reactive<Pick<SearchParams, 'ip' | 'username' | 'type'>>(
   username: '',
 });
 
+// 分页参数
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
   current: 1,
   pageSize: 15,
@@ -61,6 +63,7 @@ watch(
   },
 );
 
+// 监听分页参数变化, 发起请求
 watch(
   () => pagination.current,
   () => {
@@ -83,6 +86,7 @@ const tableData = computed(() => {
   return data.value?.data?.data;
 });
 
+// 搜索按钮点击事件
 const handleSearch = () => {
   const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
   if (searchFormdata.ip && searchFormdata.ip !== '') {
@@ -98,14 +102,25 @@ const handleSearch = () => {
   execute({ params });
 };
 
+// 重置 form 表单
 const handleFromReset = () => {
   searchFormRef.value?.resetFields();
+
+  if (pagination.current === 1) {
+    const params: SearchParams = { pg: pagination.current, size: pagination.pageSize };
+    execute({ params });
+    return;
+  }
+
+  pagination.current = 1;
 };
 
+// 更新分页参数, 触发请求
 const handlePageChange = (page: number) => {
   pagination.current = page;
 };
 
+// 删除连接数据
 const handleDeleteConnect = (uuid: string) => {
   deleteExecute({ data: { uuid } }).then(() => {
     execute({ params: { pg: pagination.current, size: pagination.pageSize } });
