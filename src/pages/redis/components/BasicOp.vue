@@ -76,7 +76,7 @@ const isAddKey = computed(() => {
   return !(basicOpForm.key in keyMap.value);
 });
 
-const basicFormRef = ref<FormInstance>;
+const basicFormRef = ref<FormInstance>();
 const basicOpForm = reactive<FormModel>({
   uuid: props.selectedKeys.split('@*@')[0],
   dbname: +props.selectedKeys.split('@*@')[1],
@@ -179,7 +179,11 @@ const concatRedisDbName = computed(() => {
   return `db${index < 10 ? '0' + index : index}`;
 });
 
-const handleExecuteButtonClick = () => {
+const handleExecuteButtonClick = async () => {
+  const res = await basicFormRef.value?.validate();
+  if (res) {
+    return;
+  }
   basicExecute({ data: { ...basicOpForm } });
 };
 
@@ -188,8 +192,11 @@ const handleResetButtonClick = async () => {
     console.log(basicOpForm.action);
     if (basicOpForm.action === 'delKey' || basicOpForm.action === 'moveKey') {
       basicOpForm.key = '';
+      await getKeyList(props.selectedKeys);
+    } else if (basicOpForm.parameter1) {
+      await getKeyList(props.selectedKeys);
+      basicOpForm.key = basicOpForm.parameter1;
     }
-    await getKeyList(props.selectedKeys);
   }
   basicOpForm.action = '';
   basicOpForm.parameter1 = '';
@@ -198,7 +205,7 @@ const handleResetButtonClick = async () => {
     await getKeyList(props.selectedKeys);
   }
 
-  handleExecuteButtonClick();
+  basicExecute({ data: { ...basicOpForm } });
 };
 
 const handleDefaultAddAction = (type: string) => {
@@ -226,7 +233,7 @@ const handleDefaultAddAction = (type: string) => {
 </script>
 
 <template>
-  <Form :ref="basicFormRef" :model="basicOpForm" label-align="left" layout="vertical">
+  <Form ref="basicFormRef" :model="basicOpForm" label-align="left" layout="vertical">
     <Card class="general-card" :bordered="false" :style="{ marginBottom: 0 }">
       <template #title>基础操作</template>
       <template #extra>
@@ -279,7 +286,11 @@ const handleDefaultAddAction = (type: string) => {
       </Row>
       <Row :gutter="16">
         <Col :span="8">
-          <FormItem label="操作类型" :rules="{ required: true }" field="action">
+          <FormItem
+            label="操作类型"
+            :rules="{ required: true, message: '请输入操作类型' }"
+            field="action"
+          >
             <Select v-model="basicOpForm.action">
               <Optgroup label="基础数据操作">
                 <Option
