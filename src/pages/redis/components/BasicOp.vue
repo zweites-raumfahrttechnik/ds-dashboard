@@ -12,9 +12,10 @@ import {
   Button,
   Space,
   Spin,
+  Optgroup,
 } from '@arco-design/web-vue';
 import { GetListDataItem, KeyItem } from '@/api/types';
-import { REDIS_OP_URL, REDIS_META_DB_SIZE_URL, REDIS_KEYS_URL } from '@/api/url';
+import { REDIS_OP_URL, REDIS_META_DB_SIZE_URL, REDIS_KEYS_URL, REDIS_METHODS_URL } from '@/api/url';
 import { instance, ResponseWrap } from '@/api';
 
 import { FormInstance } from '@arco-design/web-vue/es/form';
@@ -57,7 +58,15 @@ const { execute: keysExecute } = useAxios<ResponseWrap<RedisKeys>>(REDIS_KEYS_UR
   immediate: false,
 });
 
+const { data: methodData } = useAxios<ResponseWrap<Record<string, string[]>>>(
+  REDIS_METHODS_URL,
+  {},
+  instance,
+  { immediate: true },
+);
+
 const keyList = ref<KeyItem[]>([]);
+const methodList = ref<string[]>([]);
 const keyMap = ref<Record<string, KeyItem>>({});
 const json = computed(() => {
   return basicData.value?.data;
@@ -71,7 +80,7 @@ const basicFormRef = ref<FormInstance>;
 const basicOpForm = reactive<FormModel>({
   uuid: props.selectedKeys.split('@*@')[0],
   dbname: +props.selectedKeys.split('@*@')[1],
-  action: 'get',
+  action: '',
   keyType: '',
   key: '',
   parameter1: '',
@@ -84,9 +93,12 @@ onMounted(() => {
 
 watch(
   () => props.selectedKeys,
-  val => {
-    keyList.value = [];
-    getKeyList(val);
+  async val => {
+    basicOpForm.action = '';
+    basicOpForm.parameter1 = '';
+    basicOpForm.parameter2 = '';
+    basicOpForm.key = '';
+    await getKeyList(val);
   },
 );
 
@@ -94,26 +106,43 @@ watch(
   () => basicOpForm.key,
   val => {
     if (val && val !== '') {
-      if (basicOpForm.key in keyMap.value) {
-        console.log(2);
+      if (!isAddKey.value) {
         basicOpForm.keyType = keyMap.value[val].type;
+        if (methodData.value?.data) {
+          methodList.value = methodData.value?.data[basicOpForm.keyType];
+        }
         basicExecute({
           data: {
             uuid: basicOpForm.uuid,
             dbname: basicOpForm.dbname,
-            action: 'get',
+            action: '',
             keyType: basicOpForm.keyType,
             key: val,
+            parameter1: '',
+            parameter2: '',
           },
         });
       } else {
-        basicOpForm.action = 'set';
+        basicOpForm.action = handleDefaultAddAction(basicOpForm.keyType);
       }
     }
   },
 );
 
+watch(
+  () => basicOpForm.keyType,
+  () => {
+    if (isAddKey.value) {
+      if (methodData.value?.data) {
+        methodList.value = methodData.value?.data[basicOpForm.keyType];
+      }
+      basicOpForm.action = handleDefaultAddAction(basicOpForm.keyType);
+    }
+  },
+);
+
 const getKeyList = async (val: string) => {
+  keyList.value = [];
   const selectedKeys = val.split('@*@');
   basicOpForm.uuid = selectedKeys[0];
   basicOpForm.dbname = +selectedKeys[1];
@@ -123,7 +152,7 @@ const getKeyList = async (val: string) => {
       dbnumber: selectedKeys[1],
     },
   });
-  keysExecute({
+  await keysExecute({
     params: {
       uuid: selectedKeys[0],
       dbnumber: selectedKeys[1],
@@ -135,7 +164,7 @@ const getKeyList = async (val: string) => {
       keyList.value.push(val);
       keyMap.value[val.key] = val;
     });
-    if (keyList.value.length !== 0) {
+    if (keyList.value.length !== 0 && basicOpForm.key === '') {
       basicOpForm.key = keyList.value[0].key;
     }
   });
@@ -154,18 +183,45 @@ const handleExecuteButtonClick = () => {
   basicExecute({ data: { ...basicOpForm } });
 };
 
-const handleResetButtonClick = () => {
-  basicOpForm.action = 'get';
+const handleResetButtonClick = async () => {
+  if (basicOpForm.action.indexOf('Key') !== -1) {
+    console.log(basicOpForm.action);
+    if (basicOpForm.action === 'delKey' || basicOpForm.action === 'moveKey') {
+      basicOpForm.key = '';
+    }
+    await getKeyList(props.selectedKeys);
+  }
+  basicOpForm.action = '';
   basicOpForm.parameter1 = '';
   basicOpForm.parameter2 = '';
   if (isAddKey.value) {
-    if (keyList.value.length !== 0) {
-      basicOpForm.key = keyList.value[0].key;
-    }
-    return;
+    await getKeyList(props.selectedKeys);
   }
 
   handleExecuteButtonClick();
+};
+
+const handleDefaultAddAction = (type: string) => {
+  switch (type) {
+    case 'string': {
+      return 'set';
+    }
+    case 'set': {
+      return 'add';
+    }
+    case 'zset': {
+      return 'add';
+    }
+    case 'list': {
+      return 'set';
+    }
+    case 'hash': {
+      return 'set';
+    }
+    default: {
+      return '';
+    }
+  }
 };
 </script>
 
@@ -206,10 +262,6 @@ const handleResetButtonClick = () => {
                 <span>{{ item.key }}</span>
                 <span :style="{ float: 'right', color: '#909399' }">{{ item.type }}</span>
               </Option>
-
-              <template #append>
-                {{ basicOpForm.key }}
-              </template>
             </Select>
           </FormItem>
         </Col>
@@ -222,16 +274,28 @@ const handleResetButtonClick = () => {
               <Option>hash</Option>
               <Option>list</Option>
             </Select>
-          </FormItem></Col
-        >
+          </FormItem>
+        </Col>
       </Row>
       <Row :gutter="16">
         <Col :span="8">
           <FormItem label="操作类型" :rules="{ required: true }" field="action">
             <Select v-model="basicOpForm.action">
-              <Option>get</Option>
-              <Option>set</Option>
-              <Option>delete</Option>
+              <Optgroup label="基础数据操作">
+                <Option
+                  v-for="item in methodList"
+                  :key="item"
+                  :value="item"
+                  :label="item.toLocaleLowerCase()"
+                />
+              </Optgroup>
+              <Optgroup label="key操作">
+                <Option value="delKey" label="delete key" />
+                <Option value="moveKey" label="move key" />
+                <Option value="renameKey" label="rename key" />
+                <Option value="ttlKey" label="ttl key" />
+                <Option value="persistKey" label="persist key" />
+              </Optgroup>
             </Select>
           </FormItem>
         </Col>

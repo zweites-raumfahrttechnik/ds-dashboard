@@ -44,6 +44,7 @@ export const REDIS_OP_CUSTOM_URL = `${v1}/execute/redis/complex`;
 export const REDIS_META_DB_TOTAL_URL = `${v1}/execute/redis/meta/dbnumber`;
 export const REDIS_META_DB_SIZE_URL = `${v1}/execute/redis/meta/dbsize`;
 export const REDIS_KEYS_URL = `${v1}/execute/redis/meta/keys`;
+export const REDIS_METHODS_URL = `${v1}/execute/redis/meta/methods`;
 
 export const ES_META_INDEX = `${v1}/es/meta/index`;
 export const ES_META_MAPPING = `${v1}/es/meta/mapping`;
