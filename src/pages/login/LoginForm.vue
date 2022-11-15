@@ -19,12 +19,17 @@ const userInfo = reactive({
   username: '',
   password: '',
 });
+
+const router = useRouter();
+
+const login = () => {
+  router.push({ name: 'State' });
+};
 </script>
 
 <template>
   <div class="login-form-wrapper">
     <div class="login-form-title">登录 {{ title }}</div>
-    <div class="login-form-sub-title">登录 {{ title }}</div>
     <div class="login-form-error-msg"></div>
 
     <Form :model="userInfo" layout="vertical">
@@ -41,7 +46,7 @@ const userInfo = reactive({
         </Input>
       </FormItem>
       <FormItem
-        field="passowrd"
+        field="password"
         :rules="[{ required: true, message: '密码不能为空' }]"
         :validate-trigger="['change', 'blur']"
         hide-label
@@ -57,7 +62,7 @@ const userInfo = reactive({
         <div>
           <Checkbox>记住密码</Checkbox>
         </div>
-        <Button type="primary" html-type="submit" long>登录</Button>
+        <Button type="primary" html-type="submit" long @click="login">登录</Button>
       </Space>
     </Form>
   </div>
