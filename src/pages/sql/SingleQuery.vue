@@ -92,7 +92,7 @@ const concatQueryParams = (connectFormData: ConnectFormModel) => {
 
 const pagination = reactive<{ current: number; pageSize: number; total?: number }>({
   current: 1,
-  pageSize: 5,
+  pageSize: 10,
 });
 
 const { data, isLoading, execute } = useAxios<ResponseWrap<PostTableQueryData>>(
@@ -256,6 +256,7 @@ const handlePageChange = (page: number) => {
                   <Option>=</Option>
                   <Option>&le;</Option>
                   <Option>&ge;</Option>
+                  <Option label="!=" value="<>" />
                 </Select>
               </FormItem>
             </Col>

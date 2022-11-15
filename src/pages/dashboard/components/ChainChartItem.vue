@@ -38,9 +38,9 @@ const growth = computed(() => {
   }
 
   if (data.value.data.growth >= 0) {
-    return data.value.data.growth;
+    return data.value.data.growth.toFixed(2);
   }
-  return -data.value.data.growth;
+  return -data.value.data.growth.toFixed(2);
 });
 
 const isUp = computed(() => {

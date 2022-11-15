@@ -19,7 +19,7 @@ const { execute: executeDelete } = useAxios(MONGODB_QUERY_URL, { method: 'DELETE
   immediate: false,
 });
 
-const { execute: executePost } = useAxios(MONGODB_QUERY_URL, { method: 'POST' }, instance, {
+const { execute: executePost } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, instance, {
   immediate: false,
 });
 

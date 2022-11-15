@@ -218,7 +218,7 @@ const handleDeleteIndex = () => {
 
 const handleOkDeleteIndex = async () => {
   await deleteIndexExecute({
-    data: {
+    params: {
       uuid: contextMenuKey.value[0],
       index: contextMenuKey.value[1],
     },
