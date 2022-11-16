@@ -21,7 +21,7 @@ const handleConMap = (map: Record<string, GetListDataItem>) => {
 <template>
   <PageContainer>
     <Card class="general-card card-container" :bordered="false">
-      <template #title>Redis元数据视图</template>
+      <template #title>Redis操作面板</template>
 
       <Row :wrap="false">
         <Col class="col-height" :span="3">

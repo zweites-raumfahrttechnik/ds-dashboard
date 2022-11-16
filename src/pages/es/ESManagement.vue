@@ -16,7 +16,7 @@ const handleSelectKeys = (val: string[]) => {
 <template>
   <PageContainer>
     <Card class="general-card card-container" :bordered="false">
-      <template #title>ElasticSearch元数据视图</template>
+      <template #title>ElasticSearch操作面板</template>
 
       <Row :wrap="false">
         <Col class="col-height" :span="4">

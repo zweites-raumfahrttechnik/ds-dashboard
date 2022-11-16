@@ -4,8 +4,7 @@ import bannerImg from '@/assets/login/login-banner.png';
 
 const carouselItem = computed(() => [
   {
-    title: 'Buaaica 前端模板',
-    subTitle: '开箱即用，使用Vue3 Setup语法构建',
+    title: 'Powered by Buaaica',
     image: bannerImg,
   },
 ]);
@@ -18,7 +17,6 @@ const carouselItem = computed(() => [
         <CarouselItem v-for="item in carouselItem" :key="item.title">
           <div class="carousel-item">
             <div class="carousel-title">{{ item.title }}</div>
-            <div class="carousel-sub-title">{{ item.subTitle }}</div>
             <img class="carousel-img" :src="item.image" />
           </div>
         </CarouselItem>

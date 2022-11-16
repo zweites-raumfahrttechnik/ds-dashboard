@@ -64,7 +64,6 @@ const json = computed(() => {
 });
 
 const concatRedisAddress = computed(() => {
-  console.log(customOpForm);
   return props.conMap[customOpForm.uuid].ip + ':' + props.conMap[customOpForm.uuid].port;
 });
 

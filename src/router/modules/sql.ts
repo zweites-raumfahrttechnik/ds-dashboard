@@ -6,15 +6,6 @@ const sql: RouteRecordRaw = {
   name: 'SQL',
   component: MAIN_LAYOUT,
   children: [
-    // {
-    //   path: 'user',
-    //   name: 'UserManage',
-    //   component: () => import('@/pages/sql/UserManage.vue'),
-    //   meta: {
-    //     requireAuth: true,
-    //     locale: '用户管理',
-    //   },
-    // },
     {
       path: 'metadata',
       name: 'MetaDataQuery',
@@ -46,7 +37,7 @@ const sql: RouteRecordRaw = {
   meta: {
     requireAuth: true,
     locale: 'SQL数据库',
-    icon: 'icon-plus-circle',
+    icon: 'icon-nav',
     order: 3,
   },
 };

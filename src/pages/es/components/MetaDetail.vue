@@ -40,13 +40,17 @@ watch(
     if (val === 'mapping') {
       mappingExec({ params: { uuid: props.selectedKeys[0], index: props.selectedKeys[1] } }).then(
         val => {
-          json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.mappings;
+          json.value = JSON.parse(val.data.value?.data?.data || '{}')[
+            props.selectedKeys[1]
+          ]?.mappings;
         },
       );
     } else if (val === 'setting') {
       settingExec({ params: { uuid: props.selectedKeys[0], index: props.selectedKeys[1] } }).then(
         val => {
-          json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.settings;
+          json.value = JSON.parse(val.data.value?.data?.data || '{}')[
+            props.selectedKeys[1]
+          ]?.settings;
         },
       );
     }
@@ -57,13 +61,21 @@ watch(
   () => props.selectedKeys[1],
   () => {
     if (activeKey.value === 'mapping') {
-      mappingExec().then(val => {
-        json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.mappings;
-      });
+      mappingExec({ params: { uuid: props.selectedKeys[0], index: props.selectedKeys[1] } }).then(
+        val => {
+          json.value = JSON.parse(val.data.value?.data?.data || '{}')[
+            props.selectedKeys[1]
+          ]?.mappings;
+        },
+      );
     } else if (activeKey.value === 'setting') {
-      settingExec().then(val => {
-        json.value = JSON.parse(val.data.value?.data?.data || '{}')?.test?.settings;
-      });
+      settingExec({ params: { uuid: props.selectedKeys[0], index: props.selectedKeys[1] } }).then(
+        val => {
+          json.value = JSON.parse(val.data.value?.data?.data || '{}')[
+            props.selectedKeys[1]
+          ]?.settings;
+        },
+      );
     }
   },
 );

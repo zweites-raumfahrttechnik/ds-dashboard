@@ -18,7 +18,7 @@ import { instance, ResponseWrap } from '@/api';
 import { GetListData, GetListDataItem, MongodbDBInfo, MongodbCustom } from '@/api/types';
 import { BSON_URL, CONNECT_URL, MONGODB_DB_URL } from '@/api/url';
 
-import JsonEdit from './components/JsonEditor.vue';
+import JsonEdit from '@/components/JsonEditor.vue';
 
 const useLoadMoreConnect = () => {
   const { data, execute, isLoading } = useAxios<ResponseWrap<GetListData>>(
@@ -99,7 +99,7 @@ watch(
   () => form.uuid,
   newVal => {
     form.dbName = '';
-    dbExecute({ params: { newVal } });
+    dbExecute({ params: { uuid: newVal } });
   },
 );
 

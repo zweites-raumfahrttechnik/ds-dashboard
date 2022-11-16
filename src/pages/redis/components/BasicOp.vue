@@ -184,26 +184,26 @@ const handleExecuteButtonClick = async () => {
   if (res) {
     return;
   }
-  basicExecute({ data: { ...basicOpForm } });
+  basicExecute({ data: { ...basicOpForm } }).then(async () => {
+    if (basicOpForm.action.indexOf('Key') !== -1) {
+      if (basicOpForm.action === 'delKey' || basicOpForm.action === 'moveKey') {
+        basicOpForm.key = '';
+        await getKeyList(props.selectedKeys);
+      } else if (basicOpForm.parameter1) {
+        await getKeyList(props.selectedKeys);
+        basicOpForm.key = basicOpForm.parameter1;
+      }
+    }
+    if (isAddKey.value) {
+      await getKeyList(props.selectedKeys);
+    }
+  });
 };
 
 const handleResetButtonClick = async () => {
-  if (basicOpForm.action.indexOf('Key') !== -1) {
-    console.log(basicOpForm.action);
-    if (basicOpForm.action === 'delKey' || basicOpForm.action === 'moveKey') {
-      basicOpForm.key = '';
-      await getKeyList(props.selectedKeys);
-    } else if (basicOpForm.parameter1) {
-      await getKeyList(props.selectedKeys);
-      basicOpForm.key = basicOpForm.parameter1;
-    }
-  }
   basicOpForm.action = '';
   basicOpForm.parameter1 = '';
   basicOpForm.parameter2 = '';
-  if (isAddKey.value) {
-    await getKeyList(props.selectedKeys);
-  }
 
   basicExecute({ data: { ...basicOpForm } });
 };

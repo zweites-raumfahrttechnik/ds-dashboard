@@ -32,7 +32,7 @@ const { data, execute } = useAxios<ResponseWrap<MongdbDocInfo>>(
   { immediate: false },
 );
 
-const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'PUT' }, instance, {
+const { execute: executePut } = useAxios(MONGODB_QUERY_URL, { method: 'POST' }, instance, {
   immediate: false,
 });
 
