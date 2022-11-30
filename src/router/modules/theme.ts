@@ -7,21 +7,12 @@ const sql: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     {
-      path: 'create',
-      name: 'ThemeCreate',
-      component: () => import('@/pages/theme/OverviewPage.vue'),
+      path: 'generate',
+      name: 'ThemeGenerate',
+      component: () => import('@/pages/theme/ThemeGenerate.vue'),
       meta: {
         requireAuth: true,
         locale: '服务生成',
-      },
-    },
-    {
-      path: 'list',
-      name: 'ThemeList',
-      component: () => import('@/pages/theme/OverviewPage.vue'),
-      meta: {
-        requireAuth: true,
-        locale: '服务列表',
       },
     },
   ],
