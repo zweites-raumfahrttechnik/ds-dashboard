@@ -1,7 +1,7 @@
 import path from 'path';
 import { defineConfig } from 'vite';
 import createVuePlugin from './plugin/vue';
-import createAutoImportPlugin from './plugin/auotImport';
+import createAutoImportPlugin from './plugin/autoImport';
 import createArcoPlugin from './plugin/arco';
 import createMockPlugin from './plugin/mock';
 
