@@ -41,7 +41,7 @@ const login = () => {
     data: {
       username: userInfo.username,
       password: userInfo.password,
-      system: 'GVDSService',
+      system: 'GVDSServer',
     },
   }).then(item => {
     if (item.error.value || !item.data.value) {
