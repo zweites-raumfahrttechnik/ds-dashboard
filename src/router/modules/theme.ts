@@ -1,7 +1,7 @@
 import { RouteRecordRaw } from 'vue-router';
 import { MAIN_LAYOUT } from '@/router/constant';
 
-const sql: RouteRecordRaw = {
+const theme: RouteRecordRaw = {
   path: '/theme',
   name: 'Theme',
   component: MAIN_LAYOUT,
@@ -24,4 +24,4 @@ const sql: RouteRecordRaw = {
   },
 };
 
-export default sql;
+export default theme;
