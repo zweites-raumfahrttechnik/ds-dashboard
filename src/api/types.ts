@@ -127,3 +127,27 @@ export interface ESMetaInfo {
 export interface ESResInfo {
   data: string;
 }
+
+export interface UserVisibleListItem {
+  userConnectUuid: string;
+  ip: string;
+  port: string;
+  exportIp: string;
+  exportPort: string;
+  visible: number;
+  deletable: number;
+}
+
+export interface UserVisiableListData {
+  count: number;
+  data: UserVisibleListItem[];
+}
+
+export interface NormalUserListItem {
+  userUuid: string;
+  userName: string;
+}
+export interface NormalUserListData {
+  count: number;
+  data: NormalUserListItem[];
+}
