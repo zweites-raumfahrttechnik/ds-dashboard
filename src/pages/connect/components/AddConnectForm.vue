@@ -105,6 +105,25 @@ const handleSubmit = async () => {
         <InputNumber v-model="formdata.port" placeholder="请输入数据库运行端口" />
       </FormItem>
 
+      <FormItem
+        field="exportIp"
+        label="导出器运行地址"
+        :rules="[
+          { required: true, message: '请输入导出器地址' },
+          {
+            match:
+              /(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)\.(25[0-5]|2[0-4]\d|[0-1]\d{2}|[1-9]?\d)/,
+            message: 'IP地址格式不正确',
+          },
+        ]"
+      >
+        <Input v-model="formdata.exportIp" placeholder="请输入导出器运行地址" />
+      </FormItem>
+
+      <FormItem field="exportPort" label="导出器运行端口">
+        <InputNumber v-model="formdata.exportPort" placeholder="请输入导出器运行端口" />
+      </FormItem>
+
       <FormItem field="username" label="root用户名">
         <Input v-model="formdata.username" placeholder="请输入数据库Root用户名" />
       </FormItem>
