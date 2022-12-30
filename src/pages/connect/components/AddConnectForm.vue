@@ -120,8 +120,12 @@ const handleSubmit = async () => {
         <Input v-model="formdata.exportIp" placeholder="请输入导出器运行地址" />
       </FormItem>
 
-      <FormItem field="exportPort" label="导出器运行端口">
-        <InputNumber v-model="formdata.exportPort" placeholder="请输入导出器运行端口" />
+      <FormItem
+        field="exportPort"
+        label="导出器运行端口"
+        :rules="[{ required: true, message: '请输入导出器运行端口' }]"
+      >
+        <InputNumber v-model="formdata.exportPort" placeholder="请输入导出器端口" />
       </FormItem>
 
       <FormItem field="username" label="root用户名">
