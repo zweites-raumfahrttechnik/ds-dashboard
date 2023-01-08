@@ -7,13 +7,9 @@ import {
   Row,
   Col,
   Input,
-  Descriptions,
-  DescData,
   Button,
   Tabs,
   TabPane,
-  RadioGroup,
-  Radio,
   Select,
   Option,
   Optgroup,
@@ -49,28 +45,10 @@ import { GetSqlMetaData, PostTableQueryData } from '@/api/types';
 const buttonSize = 16;
 
 // meadata
-const metadata = ref<DescData[]>([
-  {
-    label: 'Project',
-    value: 'Maven Project',
-  },
-  {
-    label: 'Java',
-    value: '11',
-  },
-  {
-    label: 'Spring Boot',
-    value: '2.7.5',
-  },
-
-  {
-    label: 'Packaging',
-    value: 'Jar',
-  },
-]);
-const genCodeFormRef = ref<FormInstance>();
 
 const connectFormRef = ref<FormInstance>();
+
+const queryFormRef = ref<FormInstance>();
 
 const genCodeForm = reactive<GenCodeFormModel>({ ...defaultGenCodeFormValue });
 
@@ -85,12 +63,7 @@ const { data: file, execute: generate } = useAxios(
   },
 );
 
-const packageName = computed(() => {
-  return genCodeForm.group + '.' + genCodeForm.artifact;
-});
-
 const handleConnectChange = (uuid: string, type: number) => {
-  genCodeForm.uuid = uuid;
   connectFormData.type = type;
   connectFormData.uuid = uuid;
 };
@@ -112,7 +85,7 @@ watch(
   },
 );
 
-const selectedUrl = ref<string>();
+const selectedUrl = ref(QUERY_DATABASE_URL);
 
 //单表查询
 //模式
@@ -323,20 +296,11 @@ const handleDeleteOrder = (index: number) => {
 };
 
 //自定义操作
-const codeData = ref('');
-const getcode = (code: string) => {
-  codeData.value = code;
-};
 
 const handleSingleQuery = async () => {
-  //TODO  表单验证 表单清空 组件位置
-  const res1 = genCodeFormRef.value?.validate();
-  const res2 = connectFormRef.value?.validate();
+  const res = await connectFormRef.value?.validate();
 
-  if (!res1) {
-    return;
-  }
-  if (!res2) {
+  if (res) {
     return;
   }
 
@@ -348,17 +312,27 @@ const handleSingleQuery = async () => {
     data: {
       ...genCodeForm,
     },
+  }).then(() => {
+    connectFormRef.value?.resetFields();
+    queryFormRef.value?.resetFields();
   });
+};
+
+const codeData = ref('');
+const getcode = (code: string) => {
+  codeData.value = code;
 };
 
 const handleCustomizeQuery = async () => {
   genCodeForm.url = selectedUrl.value;
 
-  const params = reactive<{ type: number; code: string }>({
+  const params = reactive<{ uuid: string; type: number; code: string }>({
+    uuid: '',
     type: 1,
     code: '',
   });
 
+  params.uuid = connectFormData.uuid;
   params.type = connectFormData.type;
   params.code = codeData.value;
 
@@ -383,56 +357,10 @@ const handleCustomizeQuery = async () => {
 
     <Card class="general-card card-container" :bordered="false">
       <template #title>主题服务</template>
-      <Tabs type="line">
-        <TabPane key="1" title="元数据">
+      <Tabs v-model:active-key="selectedUrl" type="line">
+        <TabPane :key="QUERY_DATABASE_URL" title="单表查询">
           <Row :wrap="false">
             <Col class="col-height">
-              <div :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }">
-                <Descriptions
-                  size="large"
-                  :column="2"
-                  class="form"
-                  :data="metadata"
-                  title="元数据"
-                />
-              </div>
-
-              <div :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }">
-                <Form ref="genCodeFormRef" :model="genCodeForm" class="form" layout="vertical">
-                  <FormItem label="Group" field="group" :rules="[{ required: true }]">
-                    <Input v-model="genCodeForm.group" />
-                  </FormItem>
-
-                  <FormItem label="Artifact" field="artifact" :rules="[{ required: true }]">
-                    <Input v-model="genCodeForm.artifact" />
-                  </FormItem>
-
-                  <FormItem label="Name" field="name" :rules="[{ required: true }]">
-                    <Input v-model="genCodeForm.name" />
-                  </FormItem>
-
-                  <FormItem label="Describe" field="describe">
-                    <Input v-model="genCodeForm.describe" />
-                  </FormItem>
-
-                  <FormItem label="Package name">
-                    <Input v-model="packageName" readonly />
-                  </FormItem>
-                </Form>
-              </div>
-            </Col>
-          </Row>
-        </TabPane>
-        <TabPane key="2" title="数据库操作">
-          <Row :wrap="false">
-            <Col class="col-height">
-              <div :style="{ display: 'flex', justifyContent: 'center', alignItems: 'center' }">
-                <RadioGroup v-model="selectedUrl">
-                  <Radio :value="QUERY_DATABASE_URL">单表查询</Radio>
-                  <Radio :value="EXECUTE_DATABASE_URL">自定义操作</Radio>
-                </RadioGroup>
-              </div>
-
               <Card
                 v-if="selectedUrl === QUERY_DATABASE_URL"
                 class="general-card"
@@ -497,7 +425,7 @@ const handleCustomizeQuery = async () => {
                   </FormItem>
                 </Form>
 
-                <Form :model="queryForm">
+                <Form ref="queryFormRef" :model="queryForm">
                   <FormItem
                     label="查询列名"
                     :content-flex="false"
@@ -686,7 +614,12 @@ const handleCustomizeQuery = async () => {
                   </Col>
                 </Row>
               </Card>
-
+            </Col>
+          </Row>
+        </TabPane>
+        <TabPane :key="EXECUTE_DATABASE_URL" title="自定义操作">
+          <Row :wrap="false">
+            <Col class="col-height">
               <Card
                 v-if="selectedUrl === EXECUTE_DATABASE_URL"
                 class="general-card"
@@ -701,7 +634,7 @@ const handleCustomizeQuery = async () => {
                 </Card>
 
                 <Row>
-                  <Col :span="4" :offset="16">
+                  <Col :span="4" :offset="20">
                     <div :style="{ width: '100px', marginTop: '10px' }">
                       <Button type="primary" long @click="handleCustomizeQuery"> 生成</Button>
                     </div>

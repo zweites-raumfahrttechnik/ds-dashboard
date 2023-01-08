@@ -5,7 +5,6 @@ import { EditorState } from '@codemirror/state';
 import { Codemirror } from 'vue-codemirror';
 import { sql } from '@codemirror/lang-sql';
 import { format } from 'sql-formatter';
-import { IconRight } from '@arco-design/web-vue/es/icon';
 
 interface Payload {
   view: EditorView;
@@ -39,11 +38,17 @@ const handleExec = () => {
 const handleFormat = () => {
   code.value = format(code.value);
 };
+
+watch(
+  () => code.value,
+  () => {
+    handleExec();
+  },
+);
 </script>
 
 <template>
   <Space>
-    <Button type="primary" @click="handleExec"> 确认 </Button>
     <Button @click="handleFormat">格式化</Button>
   </Space>
 
