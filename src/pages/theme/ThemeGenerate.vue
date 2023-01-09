@@ -19,6 +19,7 @@ import { GEN_CODE } from '@/api/url';
 import PageContainer from '@/components/PageContainer.vue';
 import ConnectSelect from './components/ConnectSelect.vue';
 import { defaultGenCodeFormValue, GenCodeFormModel } from './types';
+import { useUserModel } from '@/model';
 
 const metadata = ref<DescData[]>([
   {
@@ -42,9 +43,15 @@ const metadata = ref<DescData[]>([
 const genCodeFormRef = ref<FormInstance>();
 const genCodeForm = reactive<GenCodeFormModel>({ ...defaultGenCodeFormValue });
 
+const { token } = useUserModel();
+
 const { data: file, execute: generate } = useAxios(
   '/api' + GEN_CODE,
-  { method: 'POST', responseType: 'blob' },
+  {
+    method: 'POST',
+    responseType: 'blob',
+    headers: { Authorization: `ASI ${token.value}` || 'ASI ' },
+  },
   {
     immediate: false,
   },
