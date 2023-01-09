@@ -17,11 +17,14 @@ export default defineConfig({
     ...createVuePlugin(),
     ...createAutoImportPlugin(),
     ...createArcoPlugin(),
-    ...createMockPlugin(),
+    // ...createMockPlugin(),
   ],
   server: {
     proxy: {
-      '/api/user': { target: 'http://10.212.67.8:8081', rewrite: path => path.replace(/^\/api\/user/, '') },
+      '/api/user': {
+        target: 'http://10.212.67.8:8081',
+        rewrite: path => path.replace(/^\/api\/user/, ''),
+      },
       '/api': { target: 'http://10.212.67.18:8080', rewrite: path => path.replace(/^\/api/, '') },
     },
   },

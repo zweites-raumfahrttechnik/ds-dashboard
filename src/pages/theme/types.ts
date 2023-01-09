@@ -1,10 +1,12 @@
 export interface GenCodeFormModel {
-  url: string;
+  uri: string;
   paramsJson?: any;
+  uuid: string;
 }
 
 export const defaultGenCodeFormValue: GenCodeFormModel = {
-  url: '',
+  uri: '',
+  uuid: '',
 };
 
 export interface QueryParams {
