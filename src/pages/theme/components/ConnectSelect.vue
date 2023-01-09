@@ -8,7 +8,7 @@ import { GetListData, GetListDataItem } from '@/api/types';
 import { useAxios } from '@vueuse/integrations/useAxios';
 
 const emit = defineEmits<{
-  (event: 'handleConnectChange', uuid: string): void;
+  (event: 'handleConnectChange', uuid: string, type: number): void;
 }>();
 
 const connectFormRef = ref<FormInstance>();
@@ -42,7 +42,7 @@ const {
 );
 
 const handleChange = () => {
-  emit('handleConnectChange', connectFormData.uuid);
+  emit('handleConnectChange', connectFormData.uuid, connectFormData.type);
 };
 
 watch(
