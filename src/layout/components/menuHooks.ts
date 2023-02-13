@@ -1,8 +1,11 @@
 import { ComputedRef } from 'vue';
 import { RouteRecordRaw } from 'vue-router';
 import { appMenu } from '@/router/route';
+import { useUserModel } from '@/model';
 
 const useMenuTree = () => {
+  const { role } = useUserModel();
+
   const travel = (_routes: RouteRecordRaw[], layer: number): RouteRecordRaw[] => {
     if (!_routes) {
       return [];
@@ -10,7 +13,12 @@ const useMenuTree = () => {
 
     const collector = _routes
       .map(el => {
-        // TODO access
+        // access
+        if (el.meta?.roles !== null && el.meta?.roles !== undefined && role.value !== undefined) {
+          if (!el.meta.roles.includes(role.value)) {
+            return null;
+          }
+        }
 
         // leaf node
         if (el.meta?.hideChildrenInMenu || !el.children) {
