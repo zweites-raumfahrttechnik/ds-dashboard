@@ -60,3 +60,7 @@ export const ES_DELETE_DOC = `${v1}/es/document/delete`;
 export const ES_SEARCH_DOC = `${v1}/es/document/search`;
 
 export const GEN_CODE = `${v1}/code/gen`;
+
+const userV1 = '/user/v1';
+
+export const LOGIN_URL = `${userV1}/login`;
