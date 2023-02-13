@@ -40,7 +40,9 @@ import {
   QueryFormModel,
   defaultQueryFormValue,
 } from './types';
+import { useUserModel } from '@/model';
 import { GetSqlMetaData, PostTableQueryData } from '@/api/types';
+import qs from 'qs';
 
 const buttonSize = 16;
 
@@ -52,12 +54,18 @@ const queryFormRef = ref<FormInstance>();
 
 const genCodeForm = reactive<GenCodeFormModel>({ ...defaultGenCodeFormValue });
 
+const { token } = useUserModel();
+
 const queryForm = reactive<QueryFormModel>({ ...defaultQueryFormValue });
 const connectFormData = reactive<ConnectFormModel>({ ...defaultConnectFormValue });
 
 const { data: file, execute: generate } = useAxios(
   '/api' + GEN_CODE,
-  { method: 'POST', responseType: 'blob' },
+  {
+    method: 'POST',
+    responseType: 'blob',
+    headers: { Authorization: `ASI ${token.value}` || 'ASI ' },
+  },
   {
     immediate: false,
   },
@@ -304,9 +312,10 @@ const handleSingleQuery = async () => {
     return;
   }
 
-  genCodeForm.url = selectedUrl.value;
+  genCodeForm.uuid = connectFormData.uuid;
+  genCodeForm.uri = selectedUrl.value;
   const params = concatQueryParams(connectFormData);
-  genCodeForm.paramsJson = params;
+  genCodeForm.paramsJson = JSON.stringify(params).replaceAll('"', '\\"');
 
   generate({
     data: {
@@ -324,7 +333,8 @@ const getcode = (code: string) => {
 };
 
 const handleCustomizeQuery = async () => {
-  genCodeForm.url = selectedUrl.value;
+  genCodeForm.uuid = connectFormData.uuid;
+  genCodeForm.uri = selectedUrl.value;
 
   const params = reactive<{ uuid: string; type: number; code: string }>({
     uuid: '',
@@ -336,7 +346,7 @@ const handleCustomizeQuery = async () => {
   params.type = connectFormData.type;
   params.code = codeData.value;
 
-  genCodeForm.paramsJson = params;
+  genCodeForm.paramsJson = JSON.stringify(params).replaceAll('\\n', ' ').replaceAll('"', '\\"');
 
   generate({
     data: {
