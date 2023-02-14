@@ -4,6 +4,8 @@ export interface FormModel {
   username?: string;
   password?: string;
   name?: string;
+  exportIp?: string;
+  exportPort?: number;
   others?: string;
   type: 1 | 2 | 3 | 4 | 5 | 6;
 
@@ -17,6 +19,7 @@ export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
     username: '',
     password: '',
     name: '',
+    exportIp: '',
     others: '',
   },
   2: {
@@ -25,6 +28,7 @@ export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
     username: '',
     password: '',
     name: '',
+    exportIp: '',
     others: '',
   },
   3: {
@@ -33,6 +37,7 @@ export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
     username: '',
     password: '',
     name: '',
+    exportIp: '',
     others: '',
   },
   4: {
@@ -40,6 +45,7 @@ export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
     port: 6379,
     username: '',
     password: '',
+    exportIp: '',
     name: '',
     others: '',
   },
@@ -49,6 +55,7 @@ export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
     username: '',
     password: '',
     name: '',
+    exportIp: '',
     others: '',
   },
   6: {
@@ -57,6 +64,7 @@ export const defaultFromValue: Record<number, Omit<FormModel, 'type'>> = {
     username: '',
     password: '',
     name: '',
+    exportIp: '',
     others: '',
   },
 };
