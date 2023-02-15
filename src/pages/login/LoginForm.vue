@@ -17,6 +17,7 @@ import { useAppModel, useUserModel } from '@/model';
 interface LoginResponse {
   token: string;
   role: number;
+  uuid: string;
 }
 
 const {
@@ -48,9 +49,9 @@ const login = () => {
       return;
     }
 
-    const { token, role } = item.data.value.data as LoginResponse;
+    const { token, role, uuid } = item.data.value.data as LoginResponse;
 
-    setUser(token, role === 1 ? 'admin' : 'user');
+    setUser(token, role === 1 ? 'admin' : 'user', uuid);
     router.push({ name: 'State' });
   });
 };
