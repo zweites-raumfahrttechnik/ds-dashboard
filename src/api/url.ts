@@ -64,3 +64,6 @@ export const GEN_CODE = `${v1}/code/gen`;
 const userV1 = '/user/v1';
 
 export const LOGIN_URL = `${userV1}/login`;
+
+export const USER_VISIBLE_URL = `${v1}/visible`;
+export const NORMAL_USER_URL = `${v1}/visible/userlist`;
