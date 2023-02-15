@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from 'axios';
-import qs from 'qs';
+import { stringify } from 'qs';
 import { Message } from '@arco-design/web-vue';
 import { useUserModel } from '@/model';
 
@@ -11,14 +11,17 @@ interface ResponseWrap<T> {
 
 const instance = axios.create({
   baseURL: '/api',
-  paramsSerializer: params => {
-    return qs.stringify(params, { indices: false });
+  paramsSerializer: {
+    serialize: params => {
+      return stringify(params, { indices: false });
+    },
   },
 });
 
 instance.interceptors.request.use(req => {
   const { token } = useUserModel();
-  req.headers = { ...req.headers, Authorization: `ASI ${token.value}` || 'ASI ' };
+
+  req.headers.Authorization = `ASI ${token.value}` || 'ASI ';
 
   return req;
 });
