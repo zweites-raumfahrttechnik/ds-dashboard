@@ -17,6 +17,8 @@ import {
   IconSettings,
   IconExport,
 } from '@arco-design/web-vue/es/icon';
+import Logo from '@/assets/login/logo.svg';
+import AvatarImg from '@/assets/avatar.jpg';
 import { useAppModel, useUserModel } from '@/model';
 
 const router = useRouter();
@@ -54,10 +56,7 @@ const handleLogout = () => {
   <div class="navbar">
     <div class="left-side">
       <Space>
-        <img
-          alt="logo"
-          src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-        />
+        <img alt="logo" :src="Logo" />
         <TypographyTitle :style="{ margin: 0, fontSize: '18px' }" :heading="5">
           {{ state.title }}
         </TypographyTitle>
@@ -105,10 +104,7 @@ const handleLogout = () => {
       <li>
         <Dropdown trigger="click">
           <Avatar :size="32" :style="{ marginRight: '8px', cursor: 'pointer' }">
-            <img
-              alt="avatar"
-              src="https://img.tt98.com/d/file/tt98/2020052011282860/87cad35d87.jpg"
-            />
+            <img alt="avatar" :src="AvatarImg" />
           </Avatar>
           <template #content>
             <!-- <Doption>

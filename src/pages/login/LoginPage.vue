@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import { useAppModel } from '@/model';
+import Logo from '@/assets/login/logo.svg';
 import Footer from '@/components/FooterComponent.vue';
 
 import Banner from './LoginBanner.vue';
@@ -13,10 +14,7 @@ const {
 <template>
   <div class="container">
     <div class="logo">
-      <img
-        src="//p3-armor.byteimg.com/tos-cn-i-49unhts6dw/dfdba5317c0c20ce20e64fac803d52bc.svg~tplv-49unhts6dw-image.image"
-        alt="logo"
-      />
+      <img :src="Logo" alt="logo" />
       <div class="logo-text">{{ title }}</div>
     </div>
 
