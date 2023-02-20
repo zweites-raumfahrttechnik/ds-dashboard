@@ -6,15 +6,15 @@ const dashboard: RouteRecordRaw = {
   name: 'Dashboard',
   component: MAIN_LAYOUT,
   children: [
-    {
-      path: 'overview',
-      name: 'Overview',
-      component: () => import('@/pages/dashboard/OverviewPage.vue'),
-      meta: {
-        requireAuth: true,
-        locale: '系统概览',
-      },
-    },
+    // {
+    //   path: 'overview',
+    //   name: 'Overview',
+    //   component: () => import('@/pages/dashboard/OverviewPage.vue'),
+    //   meta: {
+    //     requireAuth: true,
+    //     locale: '系统概览',
+    //   },
+    // },
     {
       path: 'state',
       name: 'State',

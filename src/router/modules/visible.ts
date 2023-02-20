@@ -7,23 +7,23 @@ const visible: RouteRecordRaw = {
   component: MAIN_LAYOUT,
   children: [
     {
-      path: 'adduservisible',
+      path: 'add',
       name: 'AddUserVisible',
       component: () => import('@/pages/visible/AddUserVisible.vue'),
       meta: {
         requireAuth: true,
-        locale: '添加用户可见可删性',
+        locale: '添加',
         roles: ['admin'],
         system: ['UserServer'],
       },
     },
     {
-      path: 'uservisiblelist',
-      name: 'UserVisiblelist',
+      path: 'list',
+      name: 'UserVisibleList',
       component: () => import('@/pages/visible/UserVisibleList.vue'),
       meta: {
         requireAuth: true,
-        locale: '用户可见可删性列表',
+        locale: '列表',
         roles: ['admin'],
         system: ['UserServer'],
       },

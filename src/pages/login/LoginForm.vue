@@ -84,7 +84,7 @@ const login = () => {
         const { authList } = item.data.value.data as UserAuthResponse;
 
         setUser(token, authList);
-        router.replace({ name: 'Overview' });
+        router.replace({ name: 'State' });
       });
     });
 };
