@@ -13,6 +13,8 @@ const visible: RouteRecordRaw = {
       meta: {
         requireAuth: true,
         locale: '添加用户可见可删性',
+        roles: ['admin'],
+        system: ['UserServer'],
       },
     },
     {
@@ -22,6 +24,8 @@ const visible: RouteRecordRaw = {
       meta: {
         requireAuth: true,
         locale: '用户可见可删性列表',
+        roles: ['admin'],
+        system: ['UserServer'],
       },
     },
   ],

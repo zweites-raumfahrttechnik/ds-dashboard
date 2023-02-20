@@ -11,13 +11,20 @@ import {
 } from '@arco-design/web-vue';
 import { IconUser, IconLock } from '@arco-design/web-vue/es/icon';
 import { instance, ResponseWrap } from '@/api';
-import { LOGIN_URL } from '@/api/url';
+import { LOGIN_URL, SOME_USER_AUTHORIZATION_URL } from '@/api/url';
 import { useAppModel, useUserModel } from '@/model';
 
 interface LoginResponse {
   token: string;
   role: number;
   uuid: string;
+}
+
+interface UserAuthResponse {
+  authList: {
+    system: string;
+    role: number;
+  }[];
 }
 
 const {
@@ -29,6 +36,12 @@ const { setUser } = useUserModel();
 const { execute } = useAxios<ResponseWrap<LoginResponse>>(LOGIN_URL, { method: 'POST' }, instance, {
   immediate: false,
 });
+
+const { execute: authExecute } = useAxios<ResponseWrap<UserAuthResponse>>(
+  `/api${SOME_USER_AUTHORIZATION_URL}`,
+  { method: 'GET' },
+  { immediate: false },
+);
 
 const userInfo = reactive({
   username: '',
@@ -44,16 +57,36 @@ const login = () => {
       password: userInfo.password,
       system: 'GVDSServer',
     },
-  }).then(item => {
-    if (item.error.value || !item.data.value) {
-      return;
-    }
+  })
+    .then(item => {
+      if (item.error.value || !item.data.value) {
+        return;
+      }
 
-    const { token, role, uuid } = item.data.value.data as LoginResponse;
+      const { token } = item.data.value.data as LoginResponse;
 
-    setUser(token, role === 1 ? 'admin' : 'user', uuid);
-    router.push({ name: 'State' });
-  });
+      return token;
+    })
+    .then(token => {
+      if (token === undefined) {
+        return;
+      }
+
+      authExecute({
+        headers: {
+          Authorization: `ASI ${token}`,
+        },
+      }).then(item => {
+        if (item.error.value || !item.data.value) {
+          return;
+        }
+
+        const { authList } = item.data.value.data as UserAuthResponse;
+
+        setUser(token, authList);
+        router.replace({ name: 'Overview' });
+      });
+    });
 };
 </script>
 
