@@ -3,9 +3,36 @@ import { RouteRecordRaw } from 'vue-router';
 import { appMenu } from '@/router/route';
 import { useUserModel } from '@/model';
 
-const useMenuTree = () => {
+const checkAuth = (to: RouteRecordRaw) => {
   const { role } = useUserModel();
 
+  if (to.meta?.system !== null && to.meta?.system !== undefined) {
+    const result = role.value?.some(item => {
+      return (
+        to.meta?.system?.includes(item.system) &&
+        to.meta?.roles?.includes(item.role === 1 ? 'admin' : 'user')
+      );
+    });
+
+    if (!result) {
+      return false;
+    }
+  }
+
+  if (to.meta?.roles !== null && to.meta?.roles !== undefined) {
+    const result = role.value?.some(item => {
+      return to.meta?.roles?.includes(item.role === 1 ? 'admin' : 'user');
+    });
+
+    if (!result) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
+const useMenuTree = () => {
   const travel = (_routes: RouteRecordRaw[], layer: number): RouteRecordRaw[] => {
     if (!_routes) {
       return [];
@@ -13,11 +40,9 @@ const useMenuTree = () => {
 
     const collector = _routes
       .map(el => {
-        // access
-        if (el.meta?.roles !== null && el.meta?.roles !== undefined && role.value !== undefined) {
-          if (!el.meta.roles.includes(role.value)) {
-            return null;
-          }
+        // TODO access
+        if (!checkAuth(el)) {
+          return null;
         }
 
         // leaf node

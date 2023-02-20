@@ -1,14 +1,15 @@
 const useUserModel = createGlobalState(() => {
-  const user = useLocalStorage<{ token?: string; role?: string; uuid?: string }>('user', {});
+  const user = useLocalStorage<{ token?: string; role?: { system: string; role: number }[] }>(
+    'user',
+    {},
+  );
 
   const token = computed(() => user.value.token);
   const role = computed(() => user.value.role);
-  const uuid = computed(() => user.value.uuid);
 
-  const setUser = (token: string, role: string, uuid: string) => {
+  const setUser = (token: string, role: { system: string; role: number }[]) => {
     user.value.token = token;
     user.value.role = role;
-    user.value.uuid = uuid;
   };
 
   const clearUser = () => {
